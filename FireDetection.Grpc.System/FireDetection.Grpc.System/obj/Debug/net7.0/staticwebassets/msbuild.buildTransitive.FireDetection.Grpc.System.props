@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\FireDetection.Grpc.System.props" />
+</Project>

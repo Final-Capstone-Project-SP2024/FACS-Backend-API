@@ -1,0 +1,2 @@
+obj\Debug\net7.0\Protos/Firedetection.cs \
+obj\Debug\net7.0\Protos/FiredetectionGrpc.cs: Protos/firedetection.proto

@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34003.232
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FireDetection.Grpc.System", "FireDetection.Grpc.System\FireDetection.Grpc.System.csproj", "{0590EABD-89C3-4399-9E60-52F6C639E3EA}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "FireDetection.System", "FireDetection.System\FireDetection.System.pyproj", "{67950C9E-609B-4D9E-BCF2-F665298FE06B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "api", "api", "{BE6C9EE3-7642-447E-98A3-1BC3C9F81C6A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{4737D49E-2BC3-49CB-A56F-1E2379D6637A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modelAI", "modelAI", "{7AF96F49-9DCA-48B7-BB16-EE91C04DCCEC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "grpc", "grpc", "{8CA76565-3CED-4198-8833-49A4F61B7E83}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "application", "application", "{1E8232E3-3CBB-48B3-8EE3-A76248CB1C1D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "domain", "domain", "{612B8690-6DB6-4E22-9400-67DAD58BDFF9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0590EABD-89C3-4399-9E60-52F6C639E3EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0590EABD-89C3-4399-9E60-52F6C639E3EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0590EABD-89C3-4399-9E60-52F6C639E3EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0590EABD-89C3-4399-9E60-52F6C639E3EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67950C9E-609B-4D9E-BCF2-F665298FE06B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67950C9E-609B-4D9E-BCF2-F665298FE06B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0590EABD-89C3-4399-9E60-52F6C639E3EA} = {8CA76565-3CED-4198-8833-49A4F61B7E83}
+		{67950C9E-609B-4D9E-BCF2-F665298FE06B} = {7AF96F49-9DCA-48B7-BB16-EE91C04DCCEC}
+		{8CA76565-3CED-4198-8833-49A4F61B7E83} = {BE6C9EE3-7642-447E-98A3-1BC3C9F81C6A}
+		{1E8232E3-3CBB-48B3-8EE3-A76248CB1C1D} = {BE6C9EE3-7642-447E-98A3-1BC3C9F81C6A}
+		{612B8690-6DB6-4E22-9400-67DAD58BDFF9} = {BE6C9EE3-7642-447E-98A3-1BC3C9F81C6A}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {79D54D9C-2FDD-4BA5-80D3-625FABC87A31}
+	EndGlobalSection
+EndGlobal
