@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\FireDetection.Backend.API.props" />
+</Project>

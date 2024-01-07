@@ -12,6 +12,7 @@ namespace FireDetection.Grpc.System.Services
 
         public override Task<ReturnResponse> TakeAlarm(GetRequest request, ServerCallContext context)
         {
+            Console.WriteLine(request.CameraID);
             return Task.FromResult(new ReturnResponse
             {
                 Message = "Take Alarm Successfully"
