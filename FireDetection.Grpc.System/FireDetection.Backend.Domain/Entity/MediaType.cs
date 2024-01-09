@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace FireDetection.Backend.Domain.Entity
 {
-    public class MediaType : BaseEntity
+    public class MediaType 
     {
+        public int MediaTypeID { get; set; }
         public string MediaName { get; set; } = null!;
 
-        public ICollection<MediaType> MediaTypes { get; set;}
+        public ICollection<MediaRecord> MediaRecords { get; set;}
     }
 }

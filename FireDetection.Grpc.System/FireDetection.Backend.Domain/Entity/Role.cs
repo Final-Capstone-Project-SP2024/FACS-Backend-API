@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace FireDetection.Backend.Domain.Entity
 {
-    public class Role : BaseEntity
+    public class Role 
     {
+        public int RoleId { get; set; }
         public string RoleName { get; set; } = null!;
 
         public ICollection<User> Users { get; set; }

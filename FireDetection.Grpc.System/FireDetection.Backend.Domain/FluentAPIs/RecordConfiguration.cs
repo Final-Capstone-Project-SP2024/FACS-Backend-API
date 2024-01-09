@@ -13,7 +13,11 @@ namespace FireDetection.Backend.Domain.FluentAPIs
     {
         public void Configure(EntityTypeBuilder<Record> builder)
         {
-            throw new NotImplementedException();
+            builder.HasKey(x => x.Id);
+
+            builder.Property(book => book.Id).ValueGeneratedOnAdd();
+
+            builder.HasMany(x => x.MediaRecords).WithOne(x => x.Record).HasForeignKey(x => x.RecordId);
         }
     }
 }

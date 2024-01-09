@@ -16,9 +16,9 @@ namespace FireDetection.Backend.Domain.Entity
         public Guid RecordId { get; set; }
 
 
-        public MediaType MediaType { get; set; }
+        public MediaType MediaType { get; set; } = null!;
 
-        public Guid MediaTypeId { get; set; }
+        public int MediaTypeId { get; set; }
 
     }
 }
