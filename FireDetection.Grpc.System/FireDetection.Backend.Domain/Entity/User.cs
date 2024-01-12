@@ -25,5 +25,6 @@ namespace FireDetection.Backend.Domain.Entity
         public int RoleId { get; set; }
 
         public ICollection<ControlCamera> ControlCameras { get; set; } 
+        public ICollection<RecordProcess> RecordProcesses { get; set; }
     }
 }

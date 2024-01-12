@@ -13,17 +13,18 @@ namespace FireDetection.Backend.Domain.Entity
 
         public string Status { get; set; } = null!;
 
-        public int Percent { get; set; } = 0;
+        public decimal UserRatingPercent { get; set; } = 0;
 
-        public User User { get; set; } = null!;
+        public decimal PredictedPercent { get; set; } = 0;
 
-        public Guid UserID { get; set; }
 
         public Camera Camera { get; set; } = null!; 
 
         public Guid CameraID { get; set; }
 
+        public ICollection<AlarmRate> AlarmRates { get; set; }
         public ICollection<MediaRecord> MediaRecords { get; set; }
+        public ICollection<RecordProcess> RecordProcesses { get; set; }
      
 
     }

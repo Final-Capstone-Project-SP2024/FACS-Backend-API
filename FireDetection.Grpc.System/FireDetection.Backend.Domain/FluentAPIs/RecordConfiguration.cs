@@ -18,6 +18,9 @@ namespace FireDetection.Backend.Domain.FluentAPIs
             builder.Property(book => book.Id).ValueGeneratedOnAdd();
 
             builder.HasMany(x => x.MediaRecords).WithOne(x => x.Record).HasForeignKey(x => x.RecordId);
+            builder.HasMany(x => x.RecordProcesses).WithOne(x => x.Record).HasForeignKey(x => x.RecordID);
+            builder.HasMany(x => x.AlarmRates).WithOne(x => x.Record).HasForeignKey(x => x.RecordID);
+         
         }
     }
 }

@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 
 namespace FireDetection.Backend.Domain.FluentAPIs
 {
-    public class CameraConfiguration : IEntityTypeConfiguration<Camera>
+    public class AlarmRateConfiguration : IEntityTypeConfiguration<AlarmRate>
     {
-        public void Configure(EntityTypeBuilder<Camera> builder)
+        public void Configure(EntityTypeBuilder<AlarmRate> builder)
         {
             builder.HasKey(x => x.Id);
 
-            builder.Property(book => book.Id).ValueGeneratedOnAdd();
+            builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
-
-            builder.HasMany(x => x.Records).WithOne(x => x.Camera).HasForeignKey(x => x.CameraID);
+            
+            
         }
     }
 }
