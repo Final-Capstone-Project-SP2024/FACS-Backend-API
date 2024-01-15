@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FireDetection.Backend.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9084c888ddaa932c11501c0cc5b51846fd913ddb")]
 [assembly: System.Reflection.AssemblyProductAttribute("FireDetection.Backend.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FireDetection.Backend.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,5 +1,13 @@
-﻿using FireDetection.Backend.Domain;
+﻿using AutoMapper;
+using FireDetection.Backend.API.Mapper;
+using FireDetection.Backend.Domain;
+using FireDetection.Backend.Infrastructure.Repository.IRepositories;
+using FireDetection.Backend.Infrastructure.Repository.Repositories;
+using FireDetection.Backend.Infrastructure.Service.IServices;
+using FireDetection.Backend.Infrastructure.Service.Serivces;
+using FireDetection.Backend.Infrastructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace FireDetection.Backend.API
 {
@@ -8,7 +16,16 @@ namespace FireDetection.Backend.API
         public static IServiceCollection AddWebAPIService(this IServiceCollection services)
         {
 
-             return services;
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserService, UserService>(); 
+            return services;
         }
     }
 }

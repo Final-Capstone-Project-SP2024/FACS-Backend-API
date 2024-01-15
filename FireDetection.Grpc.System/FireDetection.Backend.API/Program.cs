@@ -12,6 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var conn = builder.Configuration.GetConnectionString("DefaultConnections");
 builder.Services.AddDbContext<FireDetectionDbContext>(options => options.UseNpgsql(conn));
+
 builder.Services.AddWebAPIService();
 var app = builder.Build();
 
