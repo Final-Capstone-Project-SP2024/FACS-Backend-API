@@ -8,6 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = FireDetection.Backend.Domain
-build_property.ProjectDir = D:\FACS\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.Domain\
+build_property.ProjectDir = C:\Code\Practise_Coding\DemoFireDetection2\Demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.Domain\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
