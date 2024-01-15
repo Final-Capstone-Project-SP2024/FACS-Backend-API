@@ -41,15 +41,33 @@ namespace FireDetection.Backend.Domain.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("ActionType");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = 1,
+                            ActionDescription = "actiondes",
+                            ActionName = "action"
+                        },
+                        new
+                        {
+                            ID = 2,
+                            ActionDescription = "actiondes",
+                            ActionName = "action"
+                        },
+                        new
+                        {
+                            ID = 3,
+                            ActionDescription = "actiondes",
+                            ActionName = "action"
+                        });
                 });
 
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.AlarmRate", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uuid");
@@ -63,9 +81,6 @@ namespace FireDetection.Backend.Domain.Migrations
                     b.Property<Guid>("RecordID")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("RecordId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Time")
                         .IsRequired()
                         .HasColumnType("text");
@@ -73,33 +88,25 @@ namespace FireDetection.Backend.Domain.Migrations
                     b.Property<Guid>("UserID")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
                     b.HasIndex("LevelID");
 
-                    b.HasIndex("RecordId");
+                    b.HasIndex("RecordID");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserID");
 
                     b.ToTable("AlarmRate");
                 });
 
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.Camera", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("LocationID")
                         .HasColumnType("uuid");
-
-                    b.Property<int>("LocationId")
-                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -107,36 +114,28 @@ namespace FireDetection.Backend.Domain.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LocationId");
+                    b.HasIndex("LocationID");
 
                     b.ToTable("Cameras");
                 });
 
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.ControlCamera", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("LocationID")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("LocationId")
-                        .HasColumnType("integer");
-
                     b.Property<Guid>("UserID")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("LocationId");
+                    b.HasIndex("LocationID");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserID");
 
                     b.ToTable("ControlCameras");
                 });
@@ -160,15 +159,45 @@ namespace FireDetection.Backend.Domain.Migrations
                     b.HasKey("LevelID");
 
                     b.ToTable("Level");
+
+                    b.HasData(
+                        new
+                        {
+                            LevelID = 1,
+                            Description = "Small Fire",
+                            Name = "Level 1"
+                        },
+                        new
+                        {
+                            LevelID = 2,
+                            Description = "Fire ",
+                            Name = "Level 2"
+                        },
+                        new
+                        {
+                            LevelID = 3,
+                            Description = "Fire ",
+                            Name = "Level 3"
+                        },
+                        new
+                        {
+                            LevelID = 4,
+                            Description = "Fire ",
+                            Name = "Level 4"
+                        },
+                        new
+                        {
+                            LevelID = 5,
+                            Description = "Fire ",
+                            Name = "Level 5"
+                        });
                 });
 
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.Location", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uuid");
@@ -199,20 +228,15 @@ namespace FireDetection.Backend.Domain.Migrations
 
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.MediaRecord", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<int>("MediaTypeId")
                         .HasColumnType("integer");
 
                     b.Property<Guid>("RecordId")
                         .HasColumnType("uuid");
-
-                    b.Property<int>("RecordId1")
-                        .HasColumnType("integer");
 
                     b.Property<string>("Url")
                         .IsRequired()
@@ -222,7 +246,7 @@ namespace FireDetection.Backend.Domain.Migrations
 
                     b.HasIndex("MediaTypeId");
 
-                    b.HasIndex("RecordId1");
+                    b.HasIndex("RecordId");
 
                     b.ToTable("MediaRecords");
                 });
@@ -242,21 +266,28 @@ namespace FireDetection.Backend.Domain.Migrations
                     b.HasKey("MediaTypeID");
 
                     b.ToTable("MediaTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            MediaTypeID = 1,
+                            MediaName = "video"
+                        },
+                        new
+                        {
+                            MediaTypeID = 2,
+                            MediaName = "image"
+                        });
                 });
 
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.Record", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("CameraID")
                         .HasColumnType("uuid");
-
-                    b.Property<int>("CameraId")
-                        .HasColumnType("integer");
 
                     b.Property<decimal>("PredictedPercent")
                         .HasColumnType("numeric");
@@ -274,18 +305,16 @@ namespace FireDetection.Backend.Domain.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CameraId");
+                    b.HasIndex("CameraID");
 
                     b.ToTable("Records");
                 });
 
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.RecordProcess", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<int>("ActionTypeId")
                         .HasColumnType("integer");
@@ -299,22 +328,16 @@ namespace FireDetection.Backend.Domain.Migrations
                     b.Property<Guid>("RecordID")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("RecordId")
-                        .HasColumnType("integer");
-
                     b.Property<Guid>("UserID")
                         .HasColumnType("uuid");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ActionTypeId");
 
-                    b.HasIndex("RecordId");
+                    b.HasIndex("RecordID");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserID");
 
                     b.ToTable("RecordProcess");
                 });
@@ -334,19 +357,47 @@ namespace FireDetection.Backend.Domain.Migrations
                     b.HasKey("RoleId");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            RoleId = 1,
+                            RoleName = "Manager"
+                        },
+                        new
+                        {
+                            RoleId = 2,
+                            RoleName = "User"
+                        });
                 });
 
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("uuid");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("DeleteBy")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("ModifiedBy")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -362,6 +413,10 @@ namespace FireDetection.Backend.Domain.Migrations
 
                     b.Property<int>("RoleId")
                         .HasColumnType("integer");
+
+                    b.Property<string>("SecurityCode")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -387,13 +442,13 @@ namespace FireDetection.Backend.Domain.Migrations
 
                     b.HasOne("FireDetection.Backend.Domain.Entity.Record", "Record")
                         .WithMany("AlarmRates")
-                        .HasForeignKey("RecordId")
+                        .HasForeignKey("RecordID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("FireDetection.Backend.Domain.Entity.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -408,7 +463,7 @@ namespace FireDetection.Backend.Domain.Migrations
                 {
                     b.HasOne("FireDetection.Backend.Domain.Entity.Location", "Location")
                         .WithMany("Cameras")
-                        .HasForeignKey("LocationId")
+                        .HasForeignKey("LocationID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -419,13 +474,13 @@ namespace FireDetection.Backend.Domain.Migrations
                 {
                     b.HasOne("FireDetection.Backend.Domain.Entity.Location", "Location")
                         .WithMany("ControlCameras")
-                        .HasForeignKey("LocationId")
+                        .HasForeignKey("LocationID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("FireDetection.Backend.Domain.Entity.User", "User")
                         .WithMany("ControlCameras")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -444,7 +499,7 @@ namespace FireDetection.Backend.Domain.Migrations
 
                     b.HasOne("FireDetection.Backend.Domain.Entity.Record", "Record")
                         .WithMany("MediaRecords")
-                        .HasForeignKey("RecordId1")
+                        .HasForeignKey("RecordId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -457,7 +512,7 @@ namespace FireDetection.Backend.Domain.Migrations
                 {
                     b.HasOne("FireDetection.Backend.Domain.Entity.Camera", "Camera")
                         .WithMany("Records")
-                        .HasForeignKey("CameraId")
+                        .HasForeignKey("CameraID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -474,13 +529,13 @@ namespace FireDetection.Backend.Domain.Migrations
 
                     b.HasOne("FireDetection.Backend.Domain.Entity.Record", "Record")
                         .WithMany("RecordProcesses")
-                        .HasForeignKey("RecordId")
+                        .HasForeignKey("RecordID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("FireDetection.Backend.Domain.Entity.User", "User")
                         .WithMany("RecordProcesses")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -13,3 +13,4 @@ C:\Code\Practise_Coding\DemoFireDetection2\Demo1\FACS_Demo1\FireDetection.Grpc.S
 C:\Code\Practise_Coding\DemoFireDetection2\Demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.Infrastructure\obj\Debug\net7.0\refint\FireDetection.Backend.Infrastructure.dll
 C:\Code\Practise_Coding\DemoFireDetection2\Demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.Infrastructure\obj\Debug\net7.0\FireDetection.Backend.Infrastructure.pdb
 C:\Code\Practise_Coding\DemoFireDetection2\Demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.Infrastructure\obj\Debug\net7.0\ref\FireDetection.Backend.Infrastructure.dll
+C:\Code\Practise_Coding\DemoFireDetection2\Demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.Infrastructure\obj\Debug\net7.0\FireDetection.Backend.Infrastructure.sourcelink.json

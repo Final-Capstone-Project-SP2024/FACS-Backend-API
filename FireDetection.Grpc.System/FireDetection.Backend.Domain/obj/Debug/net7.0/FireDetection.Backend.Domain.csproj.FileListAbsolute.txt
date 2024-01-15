@@ -12,3 +12,4 @@ C:\Code\Practise_Coding\DemoFireDetection2\Demo1\FACS_Demo1\FireDetection.Grpc.S
 C:\Code\Practise_Coding\DemoFireDetection2\Demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.Domain\obj\Debug\net7.0\FireDetection.Backend.Domain.pdb
 C:\Code\Practise_Coding\DemoFireDetection2\Demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.Domain\obj\Debug\net7.0\FireDetection.Backend.Domain.genruntimeconfig.cache
 C:\Code\Practise_Coding\DemoFireDetection2\Demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.Domain\obj\Debug\net7.0\ref\FireDetection.Backend.Domain.dll
+C:\Code\Practise_Coding\DemoFireDetection2\Demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.Domain\obj\Debug\net7.0\FireDetection.Backend.Domain.sourcelink.json

@@ -13,18 +13,21 @@ namespace FireDetection.Backend.Domain.FluentAPIs
     {
         public void Configure(EntityTypeBuilder<Role> builder)
         {
-            builder.HasData(new Role
-            {
-                RoleId = 1,
-                RoleName = "Manager",
-
-            },
-            new Role
-            {
-                 RoleId = 2,
-                 RoleName = "User"
-            }
+            builder.HasData(
+                new Role
+                {
+                    RoleId = 1,
+                    RoleName = "Manager",
+                },
+                new Role
+                {
+                    RoleId = 2,
+                    RoleName = "User"
+                }
             );
+       builder.HasMany(x => x.Users).WithOne(x => x.Role).HasForeignKey(x => x.RoleId);
         }
+
+       
     }
 }

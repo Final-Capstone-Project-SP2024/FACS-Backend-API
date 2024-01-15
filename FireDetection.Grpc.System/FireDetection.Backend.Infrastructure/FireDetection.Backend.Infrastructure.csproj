@@ -7,11 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Repository\IRepositories\" />
-    <Folder Include="Repository\Repositories\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\FireDetection.Backend.Domain\FireDetection.Backend.Domain.csproj" />
   </ItemGroup>
 

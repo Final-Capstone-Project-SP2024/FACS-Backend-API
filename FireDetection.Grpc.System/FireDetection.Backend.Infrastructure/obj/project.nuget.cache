@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "G8CBA0ps8mGoUahW41ONN8PqO/RDIh4k/6g3KidPSOZvaMKvKO4il1+D4K0K4xZgwHR7S9H1xDiDnynnQvtnbQ==",
+  "dgSpecHash": "8jy2w1Y81/nHtVsPYBtJsklHbijg+qdB5yR8tkUv6kgKEDKOCKZCxr9sxSv8fsfpmyHRviQuk200lVos9mWhuw==",
   "success": true,
   "projectFilePath": "C:\\Code\\Practise_Coding\\DemoFireDetection2\\Demo1\\FACS_Demo1\\FireDetection.Grpc.System\\FireDetection.Backend.Infrastructure\\FireDetection.Backend.Infrastructure.csproj",
   "expectedPackageFiles": [

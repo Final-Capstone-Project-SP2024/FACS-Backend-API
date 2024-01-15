@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FireDetection.Backend.Infrastructure.Repository.IRepositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,9 @@ namespace FireDetection.Backend.Infrastructure.UnitOfWork
 {
     public interface IUnitOfWork
     {
-        
+     
+        public IUserRepository UserRepository { get;  }
+
+        public Task<int> SaveChangeAsync();
     }
 }
