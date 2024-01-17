@@ -13,7 +13,7 @@ namespace FireDetection.Backend.Domain.Entity
         public string Name { get; set; } = null!;
 
         public string Description { get; set; } = null!;
-        public ICollection<AlarmRate> AlarmRates { get; set; }  
+        public ICollection<AlarmRate>? AlarmRates { get; set; }  
 
     }
 }

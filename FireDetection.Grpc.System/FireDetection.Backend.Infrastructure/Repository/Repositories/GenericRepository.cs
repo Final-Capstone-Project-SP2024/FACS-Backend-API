@@ -2,9 +2,11 @@
 using FireDetection.Backend.Domain.EntitySetting;
 using FireDetection.Backend.Infrastructure.Repository.IRepositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,6 +35,17 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
             _dbSet.Remove(obj);
         }
 
+        public IQueryable<T> Include(params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = _dbSet;
+
+            if (includes != null)
+            {
+                query = includes.Aggregate(query, (current, include) => current.Include(include));
+            }
+            return query;
+        }
+
         public async void InsertAsync(T obj)
         {
             await _dbSet.AddAsync(obj);
@@ -46,6 +59,11 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
         public void Update(T obj)
         {
             _dbSet.Update(obj);
+        }
+
+        public IQueryable<T> Where(Expression<Func<T, bool>> predicate)
+        {
+            return _dbSet.Where(predicate);
         }
     }
 }

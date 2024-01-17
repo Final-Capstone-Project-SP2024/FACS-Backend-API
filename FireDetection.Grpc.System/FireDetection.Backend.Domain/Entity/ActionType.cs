@@ -14,6 +14,6 @@ namespace FireDetection.Backend.Domain.Entity
 
         public string ActionDescription { get; set; } = null!;
 
-        public ICollection<RecordProcess> RecordProcesses { get; set; }
+        public ICollection<RecordProcess>? RecordProcesses { get; set; }
     }
 }

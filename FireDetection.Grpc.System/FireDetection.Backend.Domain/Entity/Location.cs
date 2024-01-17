@@ -18,7 +18,7 @@ namespace FireDetection.Backend.Domain.Entity
         public Guid CreatedBy { get; set; }
 
         
-        public virtual ICollection<Camera> Cameras { get; set; }    
-        public  virtual ICollection<ControlCamera> ControlCameras { get; set; }
+        public virtual ICollection<Camera>? Cameras { get; set; }    
+        public  virtual ICollection<ControlCamera>? ControlCameras { get; set; }
     }
 }

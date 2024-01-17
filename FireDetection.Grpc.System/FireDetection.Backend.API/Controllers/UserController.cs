@@ -15,7 +15,6 @@ namespace FireDetection.Backend.API.Controllers
         private readonly IUserService _userService;
         public UserController(IUserService userService)
         {
-
             _userService = userService;
         }
 
@@ -36,6 +35,20 @@ namespace FireDetection.Backend.API.Controllers
                         Request.Scheme)!,
                     "self",
                     "Post")
+                }
+            };
+        }
+        [HttpPost("/login")]
+        public async Task<ActionResult<RestDTO<UserLoginResponse>>> Login(UserLoginRequest req)
+        {
+            UserLoginResponse response = await _userService.Login(req);
+            return new RestDTO<UserLoginResponse>()
+            {
+                Message = "Login Successfully!",
+                Data = response,
+                Links = new List<LinkDTO>
+                {
+                    new LinkDTO(Url.Action("login","UserController",req, Request.Scheme)!,"self","Post")
                 }
             };
         }

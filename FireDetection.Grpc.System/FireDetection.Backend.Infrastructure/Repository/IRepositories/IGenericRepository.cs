@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,5 +16,7 @@ namespace FireDetection.Backend.Infrastructure.Repository.IRepositories
         void Update(T obj);
         void SoftDelete(T obj);
         void HardDelete(T obj);
+        IQueryable<T> Where(Expression<Func<T, bool>> predicate);
+        IQueryable<T> Include(params Expression<Func<T, object>>[] includes);
     }
 }

@@ -12,6 +12,6 @@ namespace FireDetection.Backend.Domain.Entity
         public int MediaTypeID { get; set; }
         public string MediaName { get; set; } = null!;
 
-        public ICollection<MediaRecord> MediaRecords { get; set;}
+        public ICollection<MediaRecord>? MediaRecords { get; set;}
     }
 }
