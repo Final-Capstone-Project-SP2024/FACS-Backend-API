@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\buildMultiTargeting\FireDetection.Backend.API.props" />
-</Project>
