@@ -11,7 +11,7 @@ namespace FireDetection.Backend.Domain.Entity
     {
         public string Status { get; set; } = null!;
         public string CameraDestination { get; set; } = null!;
-        public Location Location { get; set; } = null!;
+        public virtual Location Location { get; set; } 
 
         public Guid LocationID { get; set; }
 

@@ -15,7 +15,7 @@ namespace FireDetection.Backend.Domain
         {
             
         }
-
+        public DbSet<Location> Locations { get; set; }
         public DbSet<Record> Records { get; set; }
 
         public DbSet<User> Users { get; set; }

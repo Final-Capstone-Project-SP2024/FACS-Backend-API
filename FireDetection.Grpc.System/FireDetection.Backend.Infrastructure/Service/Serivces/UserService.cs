@@ -28,9 +28,17 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             _unitOfWork = unitOfWork;
             _configuration = config;
         }
-        public Task<bool> ActiveUser(Guid userId)
+        public async Task<bool> ActiveUser(Guid userId)
         {
-            throw new NotImplementedException();
+            User user = await GetUserById(userId);
+            user.LastModified = DateTime.UtcNow;
+            user.Status = "Active";
+
+             _unitOfWork.UserRepository.Update(user);
+            await _unitOfWork.SaveChangeAsync();
+
+            return true;
+
         }
 
         public async Task<UserInformationResponse> CreateUser(CreateUserRequest request)
@@ -56,9 +64,17 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             return _mapper.Map<UserInformationResponse>(data.FirstOrDefault(x => x.Email  == request.Email));
         }
 
-        public Task<bool> InactiveUser(Guid userId)
+        public async Task<bool> InactiveUser(Guid userId)
         {
-            throw new NotImplementedException();
+
+            User user = await GetUserById(userId);
+            user.LastModified = DateTime.UtcNow;
+            user.Status = "Banned";
+
+            _unitOfWork.UserRepository.Update(user);
+            await _unitOfWork.SaveChangeAsync();
+
+            return true;
         }
 
         public async Task<UserLoginResponse> Login(UserLoginRequest req)
@@ -110,9 +126,28 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public Task<UserInformationResponse> UpdateUser()
+       
+
+        public async Task<UserInformationResponse> UpdateUser(Guid id, UpdateUserRequest req)
         {
-            throw new NotImplementedException();
+            User user = await GetUserById(id);
+            if (user == null)
+            {
+                throw new Exception();
+            }
+            _mapper.Map(user, req);
+            _unitOfWork.UserRepository.Update(user);
+            await _unitOfWork.SaveChangeAsync();
+
+            return _mapper.Map<UserInformationResponse>(_unitOfWork.UserRepository.Where(x => x.Id == id).FirstOrDefault());
+            
         }
+
+        private async Task<User> GetUserById(Guid id)
+        {
+            IQueryable<User> users = await _unitOfWork.UserRepository.GetAll();
+
+            return users.FirstOrDefault(x => x.Id == id);
+         }
     }
 }

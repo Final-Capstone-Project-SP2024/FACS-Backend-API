@@ -11,7 +11,7 @@ namespace FireDetection.Backend.Domain.Entity
         public User User { get; set; }  = new User();
         public Guid UserID { get; set; }
 
-        public Location Location { get; set; } = new Location();
+        public virtual Location Location { get; set; } 
         public Guid LocationID { get; set; }
     }
 }

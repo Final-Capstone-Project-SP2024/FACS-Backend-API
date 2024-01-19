@@ -245,7 +245,7 @@ namespace FireDetection.Backend.Domain.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Location");
+                    b.ToTable("Locations");
                 });
 
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.MediaRecord", b =>

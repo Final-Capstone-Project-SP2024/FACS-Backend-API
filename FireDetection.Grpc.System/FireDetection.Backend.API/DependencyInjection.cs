@@ -27,6 +27,8 @@ namespace FireDetection.Backend.API
             services.AddScoped<IUserService, UserService>(); 
             services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<ILocationRepository,LocationRepository>();
+            services.AddScoped<ICameraRepository, CameraRepository>();
+            services.AddScoped<ICameraService, CameraService>();
             return services;
         }
     }

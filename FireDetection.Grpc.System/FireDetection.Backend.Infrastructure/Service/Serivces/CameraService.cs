@@ -62,9 +62,18 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         }
 
-        public Task<CameInformationResponse> Update(AddCameraRequest request)
+        public async Task<CameInformationResponse> Update(Guid id,AddCameraRequest request)
         {
-            throw new NotImplementedException();
+           Camera camera  = await GetCameraById(id);
+            camera.CameraDestination = request.Destination;
+            camera.Status = request.Status;
+            camera.LastModified = DateTime.UtcNow;
+
+            _unitOfWork.CameraRepository.Update(camera);
+            await _unitOfWork.SaveChangeAsync();
+
+            return _mapper.Map<CameInformationResponse>(_unitOfWork.CameraRepository.Where(x => x.Id == id));
+
         }
 
         public async Task<Camera> GetCameraByName(string cameraName)

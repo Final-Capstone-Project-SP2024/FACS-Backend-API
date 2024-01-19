@@ -137,3 +137,4 @@ C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Grpc.Syste
 C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Grpc.System\obj\Debug\net7.0\FireDetection.Grpc.System.pdb
 C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Grpc.System\obj\Debug\net7.0\FireDetection.Grpc.System.genruntimeconfig.cache
 C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Grpc.System\obj\Debug\net7.0\ref\FireDetection.Grpc.System.dll
+C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Grpc.System\bin\Debug\net7.0\Newtonsoft.Json.dll
