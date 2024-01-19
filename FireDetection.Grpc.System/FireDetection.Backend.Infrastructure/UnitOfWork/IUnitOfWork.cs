@@ -10,8 +10,11 @@ namespace FireDetection.Backend.Infrastructure.UnitOfWork
     public interface IUnitOfWork
     {
      
+       
         public IUserRepository UserRepository { get;  }
 
+        public ILocationRepository LocationRepository { get; }
+        public ICameraRepository CameraRepository { get; }
         public Task<int> SaveChangeAsync();
     }
 }

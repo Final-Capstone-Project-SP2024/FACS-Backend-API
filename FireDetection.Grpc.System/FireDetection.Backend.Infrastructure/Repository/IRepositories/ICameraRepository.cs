@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FireDetection.Backend.Infrastructure.Repository.IRepositories
 {
-    internal interface ICameraRepository : IGenericRepository<Camera>
+    public interface ICameraRepository : IGenericRepository<Camera>
     {
     }
 }

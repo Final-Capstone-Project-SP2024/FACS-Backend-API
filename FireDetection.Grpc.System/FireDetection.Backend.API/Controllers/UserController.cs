@@ -13,9 +13,11 @@ namespace FireDetection.Backend.API.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        public UserController(IUserService userService)
+        private readonly LinkGenerator _linkGenerator;
+        public UserController(IUserService userService, LinkGenerator linkGenerator)
         {
             _userService = userService;
+            _linkGenerator = linkGenerator;
         }
 
         [HttpPost]
@@ -29,10 +31,9 @@ namespace FireDetection.Backend.API.Controllers
                 Links = new List<LinkDTO> {
                     new LinkDTO(
                     Url.Action(
-                        null,
-                        "Add New User",
+                        _linkGenerator.GetUriByAction(HttpContext,nameof(Add),"UserController", 
                         request,
-                        Request.Scheme)!,
+                        Request.Scheme))!,
                     "self",
                     "Post")
                 }

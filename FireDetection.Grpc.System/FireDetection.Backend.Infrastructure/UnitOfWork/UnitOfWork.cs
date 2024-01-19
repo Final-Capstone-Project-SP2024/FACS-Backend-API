@@ -12,20 +12,32 @@ namespace FireDetection.Backend.Infrastructure.UnitOfWork
     {
         private readonly FireDetectionDbContext _context;
         private readonly IUserRepository _userRepository;
+        private readonly ILocationRepository _locationRepository;
+        private readonly ICameraRepository _cameraRepository;
+
 
         public UnitOfWork(FireDetectionDbContext context,
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            ILocationRepository locationRepository,
+            ICameraRepository cameraRepository)
         {
             _context = context;
             _userRepository = userRepository;
+            _locationRepository = locationRepository;
+            _cameraRepository = cameraRepository;
         }
-        public IUserRepository UserRepository  => _userRepository;
+        public IUserRepository UserRepository => _userRepository;
 
-        
+        public ILocationRepository LocationRepository => _locationRepository;
 
-        public  async Task<int> SaveChangeAsync()
+        public ICameraRepository CameraRepository => _cameraRepository;
+
+
+
+        public async Task<int> SaveChangeAsync()
         {
             return await _context.SaveChangesAsync();
         }
+
     }
 }

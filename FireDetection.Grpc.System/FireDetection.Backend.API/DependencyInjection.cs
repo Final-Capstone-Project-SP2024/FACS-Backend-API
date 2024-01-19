@@ -25,6 +25,8 @@ namespace FireDetection.Backend.API
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>(); 
+            services.AddScoped<ILocationService, LocationService>();
+            services.AddScoped<ILocationRepository,LocationRepository>();
             return services;
         }
     }

@@ -1,4 +1,11 @@
-﻿using System;
+﻿using AutoMapper;
+using FireDetection.Backend.Domain.DTOs.Request;
+using FireDetection.Backend.Domain.DTOs.Response;
+using FireDetection.Backend.Domain.Entity;
+using FireDetection.Backend.Infrastructure.Service.IServices;
+using FireDetection.Backend.Infrastructure.UnitOfWork;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +13,71 @@ using System.Threading.Tasks;
 
 namespace FireDetection.Backend.Infrastructure.Service.Serivces
 {
-    internal class CameraService
+    public class CameraService : ICameraService
     {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        public async Task<CameInformationResponse> Active(Guid id)
+        {
+            Camera camera = await _unitOfWork.CameraRepository.GetById(id);
+            if (camera is null) throw new Exception();
+
+            camera.Status = "Active";
+            camera.LastModified = DateTime.UtcNow;
+
+            _unitOfWork.CameraRepository.Update(camera);
+            await _unitOfWork.SaveChangeAsync();
+
+            return _mapper.Map<CameInformationResponse>(camera);
+        }
+
+        public async Task<CameInformationResponse> Add(AddCameraRequest request)
+        {
+           Camera camera = _mapper.Map<Camera>(request);
+            camera.CreatedDate = DateTime.UtcNow;
+            _unitOfWork.CameraRepository.InsertAsync(camera);
+            await _unitOfWork.SaveChangeAsync();
+            Camera cameraCheck = await GetCameraByName(request.Destination);
+            return _mapper.Map<CameInformationResponse>(cameraCheck);
+        }
+
+        public  async Task<IQueryable<CameInformationResponse>> Get()
+        {
+           IQueryable<Camera> cameras = await _unitOfWork.CameraRepository.GetAll();
+            return (IQueryable<CameInformationResponse>)cameras;
+        }
+
+        public async Task<CameInformationResponse> Inactive(Guid id)
+        {
+           Camera camera  = await _unitOfWork.CameraRepository.GetById(id);
+            if (camera is null) throw new Exception();
+
+            camera.Status = "Banned";
+            camera.LastModified = DateTime.UtcNow;
+
+            _unitOfWork.CameraRepository.Update(camera);
+             await _unitOfWork.SaveChangeAsync();
+
+            return _mapper.Map<CameInformationResponse>(camera);
+
+        }
+
+        public Task<CameInformationResponse> Update(AddCameraRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<Camera> GetCameraByName(string cameraName)
+        {
+           IQueryable<Camera> cameras  = await _unitOfWork.CameraRepository.GetAll();
+            return cameras.FirstOrDefault(x => x.CameraDestination == cameraName);
+        }
+
+
+        public async Task<Camera> GetCameraById(Guid cameraId)
+        {
+            IQueryable<Camera> cameras = await _unitOfWork.CameraRepository.GetAll();
+            return cameras.FirstOrDefault(x => x.Id == cameraId);
+        }
     }
 }
