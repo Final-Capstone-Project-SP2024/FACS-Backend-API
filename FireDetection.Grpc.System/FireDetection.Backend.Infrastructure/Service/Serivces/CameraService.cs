@@ -17,6 +17,11 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        public CameraService(IUnitOfWork unitOfWork, IMapper mapper)
+        {
+            _mapper = mapper;
+            _unitOfWork = unitOfWork;
+        }
         public async Task<CameInformationResponse> Active(Guid id)
         {
             Camera camera = await _unitOfWork.CameraRepository.GetById(id);
@@ -33,12 +38,12 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<CameInformationResponse> Add(AddCameraRequest request)
         {
-           Camera camera = _mapper.Map<Camera>(request);
-            camera.CreatedDate = DateTime.UtcNow;
-            _unitOfWork.CameraRepository.InsertAsync(camera);
+            if(! await CheckDuplicateDestination(request.Destination)) throw new Exception();
+            _unitOfWork.CameraRepository.InsertAsync(_mapper.Map<Camera>(request));
             await _unitOfWork.SaveChangeAsync();
-            Camera cameraCheck = await GetCameraByName(request.Destination);
-            return _mapper.Map<CameInformationResponse>(cameraCheck);
+
+
+            return _mapper.Map<CameInformationResponse>(await GetCameraByName(request.Destination));
         }
 
         public  async Task<IQueryable<CameInformationResponse>> Get()
@@ -87,6 +92,17 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         {
             IQueryable<Camera> cameras = await _unitOfWork.CameraRepository.GetAll();
             return cameras.FirstOrDefault(x => x.Id == cameraId);
+        }
+
+
+        private async Task<bool> CheckDuplicateDestination(string CameraLocation)
+        {
+            IQueryable<Camera> cameras =   await _unitOfWork.CameraRepository.GetAll();
+            var destination = cameras.FirstOrDefault(x => x.CameraDestination == CameraLocation);
+            if(destination != null) {
+                return false;
+            }
+            return true;
         }
     }
 }

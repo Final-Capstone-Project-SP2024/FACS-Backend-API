@@ -22,9 +22,14 @@ namespace FireDetection.Backend.Domain.Entity
 
         public Guid CameraID { get; set; }
 
+        public RecordType RecordType { get; set; } 
+
+        public int RecordTypeID { get; set; }
         public ICollection<AlarmRate> AlarmRates { get; set; }
         public ICollection<MediaRecord> MediaRecords { get; set; }
         public ICollection<RecordProcess> RecordProcesses { get; set; }
+
+         
      
 
     }

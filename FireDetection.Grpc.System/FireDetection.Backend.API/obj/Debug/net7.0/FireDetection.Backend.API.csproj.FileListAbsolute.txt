@@ -142,3 +142,14 @@ C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.AP
 C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\HotChocolate.Data.dll
 C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\HotChocolate.Data.EntityFramework.dll
 C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Newtonsoft.Json.dll
+C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Firebase.Auth.dll
+C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\FirebaseAdmin.dll
+C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Firebase.Storage.dll
+C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Google.Api.Gax.dll
+C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Google.Api.Gax.Rest.dll
+C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Google.Apis.dll
+C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Google.Apis.Auth.PlatformServices.dll
+C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Google.Apis.Auth.dll
+C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Google.Apis.Core.dll
+C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\System.ServiceModel.dll

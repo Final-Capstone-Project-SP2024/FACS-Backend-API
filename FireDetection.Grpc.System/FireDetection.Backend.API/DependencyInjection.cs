@@ -23,12 +23,29 @@ namespace FireDetection.Backend.API
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            // User
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>(); 
+            
+            //Alarm 
+            services.AddScoped<IAlarmService ,AlarmService>();
+            services.AddScoped<IAlarmRepository, AlarmRepository>();
+            //Location
             services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<ILocationRepository,LocationRepository>();
+            //Camera
             services.AddScoped<ICameraRepository, CameraRepository>();
             services.AddScoped<ICameraService, CameraService>();
+
+            services.AddScoped<IControlCameraRepository, ControlCameraRepository>();
+
+            // Record
+            services.AddScoped<IRecordRepository, RecordRepository>();
+            //services.AddScoped<IRecordS, CameraService>();
+
+            //Media Record
+            services.AddScoped<IMediaRecordRepository, MediaRecordRepository>();
+            //services.AddScoped<IMediaRecordS, MediaRecordRepository>();
             return services;
         }
     }

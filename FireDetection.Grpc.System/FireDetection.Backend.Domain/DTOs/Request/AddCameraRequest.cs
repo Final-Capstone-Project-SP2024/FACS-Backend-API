@@ -8,8 +8,10 @@ namespace FireDetection.Backend.Domain.DTOs.Request
 {
     public class AddCameraRequest
     {
-        public string Status { get; set; }= null!;
+        public string Status { get; set; } = null!;
 
-        public string Destination { get; set; }= null!;
+        public string Destination { get; set; } = null!;
+
+        public Guid LocationId { get; set; }
     }
 }

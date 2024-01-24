@@ -32,7 +32,7 @@ namespace FireDetection.Backend.API.Controllers
                 Links = new List<LinkDTO> {
                     new LinkDTO(
                     Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Add),"UserController", 
+                        _linkGenerator.GetUriByAction(HttpContext,nameof(Add),"UserController",
                         request,
                         Request.Scheme))!,
                     "self",
@@ -55,12 +55,12 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-/*
-        [HttpPatch("/{id}")]
-        public async Task<ActionResult<RestDTO<UserInformationResponse>>> Update(Guid id, [FromBody] JsonPatchDocument<UpdateUserRequest> request)
-        {
-            throw new NotImplementedException();
-        }*/
+        /*
+                [HttpPatch("/{id}")]
+                public async Task<ActionResult<RestDTO<UserInformationResponse>>> Update(Guid id, [FromBody] JsonPatchDocument<UpdateUserRequest> request)
+                {
+                    throw new NotImplementedException();
+                }*/
 
         [HttpPost("/active/{id}")]
         public async Task<ActionResult<RestDTO<UserInformationResponse>>> Active(Guid id)
@@ -112,7 +112,7 @@ namespace FireDetection.Backend.API.Controllers
                 return new BadRequestObjectResult(details);
             }
 
-                  UserInformationResponse  response =  await       _userService.UpdateUser(id, request);
+            UserInformationResponse response = await _userService.UpdateUser(id, request);
             return new RestDTO<UserInformationResponse>()
             {
                 Message = "Login Successfully!",

@@ -86,11 +86,25 @@ namespace FireDetection.Backend.API.Controllers
                 Message = "Update Location Successfully!",
                 Data = location,
                 Links = new List<LinkDTO>
-     {
-         new LinkDTO(Url.Action("Update","LocationController",null, Request.Scheme)!,"self","Patch")
-     }
+                {
+                       new LinkDTO(Url.Action("Update","LocationController",null, Request.Scheme)!,"self","Patch")
+                }
             };
         }
 
+        [HttpPost("/add/{id}")]
+        public async Task<ActionResult<RestDTO<LocationInformationResponse>>> AddStaff(Guid id, AddStaffRequest request)
+        {
+            var result = await _context.AddStaffToLocation(id, request);
+            return new RestDTO<LocationInformationResponse>()
+            {
+                Message = "Add User to Controler Location Successfully!",
+                Data = result,
+                Links = new List<LinkDTO>
+                {
+                       new LinkDTO(Url.Action("Update","LocationController",null, Request.Scheme)!,"self","Post")
+                }
+            };
+        }
     }
 }

@@ -6,6 +6,6 @@ namespace FireDetection.Backend.API.Controllers
     [Route("[controller]")]
     public class AlarmController : ControllerBase   
     {
-       
+      
     }
 }

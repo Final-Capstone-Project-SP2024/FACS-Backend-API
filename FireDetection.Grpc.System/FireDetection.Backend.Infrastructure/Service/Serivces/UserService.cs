@@ -4,6 +4,7 @@ using FireDetection.Backend.Domain.DTOs.Response;
 using FireDetection.Backend.Domain.Entity;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using FireDetection.Backend.Infrastructure.UnitOfWork;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -28,6 +29,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             _unitOfWork = unitOfWork;
             _configuration = config;
         }
+
         public async Task<bool> ActiveUser(Guid userId)
         {
             User user = await GetUserById(userId);
@@ -43,20 +45,12 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<UserInformationResponse> CreateUser(CreateUserRequest request)
         {
-          User user = _mapper.Map<User>(request);
-            user.RoleId = request.UserRole;
+
+            if (!await CheckDuplicateEmail(request.Email)) throw new Exception();
+
+            User user = _mapper.Map<User>(request);
+            user.SecurityCode =  await GenerateSecurityCode();
             user.Status = "None";
-          /*  User userT = new User()
-            {
-                RoleId = 1,
-                Name = "comsuonhocmon",
-                SecurityCode = "2lv",
-                Phone = "030303",
-                Password = "23"
-                ,
-                Email = "comsuonhocmon@gmail.com",
-                Status = "Check"
-            };*/
             _unitOfWork.UserRepository.InsertAsync(user);
             await _unitOfWork.SaveChangeAsync();
 
@@ -147,7 +141,39 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         {
             IQueryable<User> users = await _unitOfWork.UserRepository.GetAll();
 
-            return users.FirstOrDefault(x => x.Id == id);
+            return  users.FirstOrDefault(x => x.Id == id);
          }
+
+        private async Task<string> GenerateSecurityCode()
+        {
+            var users = await _unitOfWork.UserRepository.GetAll();
+            User user =  users.OrderByDescending(x => x.CreatedDate).FirstOrDefault();
+            if(user is null)
+            {
+                return "XXX_001";
+            }
+            else
+            {
+                if (int.TryParse(user.SecurityCode.Substring(4), out int numericPart))
+                {
+                    // Increment the numeric part
+                    numericPart++;
+
+                  
+                }
+                return $"XXX_{numericPart:D3}";
+            }
+        }
+
+        private async Task<bool> CheckDuplicateEmail(string email)
+        {
+            var users = await _unitOfWork.UserRepository.GetAll();
+            var user =  users.FirstOrDefault(x => x.Email == email);
+            if (user is null)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

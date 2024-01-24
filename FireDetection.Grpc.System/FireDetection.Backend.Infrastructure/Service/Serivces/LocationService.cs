@@ -23,23 +23,23 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         private readonly IUnitOfWork _context;
         private readonly IMapper _mapper;
 
-        public LocationService(IUnitOfWork context,IMapper mapper)
+        public LocationService(IUnitOfWork context, IMapper mapper)
         {
             _context = context;
-            _mapper = mapper;   
+            _mapper = mapper;
         }
         public async Task<LocationInformationResponse> AddNewLocation(AddLocationRequest request)
         {
 
-            if(!await checkDuplicateLocationName(request.LocationName))
+            if (!await checkDuplicateLocationName(request.LocationName))
             {
                 throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Have already this location in system");
             };
-          
+
             _context.LocationRepository.InsertAsync(_mapper.Map<Location>(request));
             await _context.SaveChangeAsync();
 
-            return _mapper.Map<LocationInformationResponse>(await GetLocationByName(request.LocationName));  
+            return _mapper.Map<LocationInformationResponse>(await GetLocationByName(request.LocationName));
         }
 
         public async Task<bool> DeleteLocation(Guid id)
@@ -83,12 +83,47 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         }
 
 
-        private  async Task<bool> checkDuplicateLocationName(string locationName)
+        private async Task<bool> checkDuplicateLocationName(string locationName)
         {
-            IQueryable<Location> locations =  await _context.LocationRepository.GetAll();
-            if (locations.Where(x => x.LocationName == locationName) is null) return true;
+            IQueryable<Location> locations = await _context.LocationRepository.GetAll();
+            if (locations.FirstOrDefault(x => x.LocationName == locationName) is null) return true;
 
             return false;
+        }
+
+        public async Task<LocationInformationResponse> AddStaffToLocation(Guid locationId, AddStaffRequest request)
+        {
+            foreach (var staff in request.staff)
+            {
+
+                ControlCamera controlCamera = new ControlCamera()
+                {
+                    LocationID = locationId,
+                    UserID = staff
+                };
+                _context.ControlCameraRepository.InsertAsync(controlCamera);
+                await _context.SaveChangeAsync();
+
+            }
+
+            var data = await _context.LocationRepository.GetStaffInLocation(locationId);
+            return new LocationInformationResponse()
+            {
+                LocationId = locationId,
+                Users = data
+            };
+        }
+
+
+        private async Task<bool> CheckDuplicateUserInControlCamera(Guid locationId, Guid userId)
+        {
+            var check = _context.ControlCameraRepository.Where(x => x.LocationID == locationId && x.UserID == userId);
+            if (check is not null)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
