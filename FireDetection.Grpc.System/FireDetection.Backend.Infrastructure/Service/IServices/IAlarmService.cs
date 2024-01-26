@@ -9,6 +9,13 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
 {
     public interface IAlarmService
     {
-        public Task<string> TakeAlarm(TakeAlarmRequest request);
+        public Task<bool> TakeAlarm(TakeAlarmRequest request);
+
+        public Task<string> TakeElectricalBreakdownAlarm(ElectricalBreakdownRequest request);
+
+        public Task<string> RateAlarm(RateAlarmRequest request);
+
+
+
     }
 }

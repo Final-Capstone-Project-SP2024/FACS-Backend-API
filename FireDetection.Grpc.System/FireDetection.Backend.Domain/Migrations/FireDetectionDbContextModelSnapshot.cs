@@ -180,7 +180,7 @@ namespace FireDetection.Backend.Domain.Migrations
 
                     b.HasKey("LevelID");
 
-                    b.ToTable("Level");
+                    b.ToTable("Levels");
 
                     b.HasData(
                         new
@@ -245,7 +245,7 @@ namespace FireDetection.Backend.Domain.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Location");
+                    b.ToTable("Locations");
                 });
 
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.MediaRecord", b =>
@@ -318,6 +318,9 @@ namespace FireDetection.Backend.Domain.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("RecordTypeID")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("text");
@@ -328,6 +331,8 @@ namespace FireDetection.Backend.Domain.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CameraID");
+
+                    b.HasIndex("RecordTypeID");
 
                     b.ToTable("Records");
                 });
@@ -361,7 +366,36 @@ namespace FireDetection.Backend.Domain.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("RecordProcess");
+                    b.ToTable("RecordProcesses");
+                });
+
+            modelBuilder.Entity("FireDetection.Backend.Domain.Entity.RecordType", b =>
+                {
+                    b.Property<int>("RecordTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("RecordTypeId"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("RecordTypeId");
+
+                    b.ToTable("RecordTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            RecordTypeId = 1,
+                            Name = "Detection"
+                        },
+                        new
+                        {
+                            RecordTypeId = 2,
+                            Name = "ElectricalIncident"
+                        });
                 });
 
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.Role", b =>
@@ -538,7 +572,15 @@ namespace FireDetection.Backend.Domain.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("FireDetection.Backend.Domain.Entity.RecordType", "RecordType")
+                        .WithMany("Records")
+                        .HasForeignKey("RecordTypeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Camera");
+
+                    b.Navigation("RecordType");
                 });
 
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.RecordProcess", b =>
@@ -613,6 +655,11 @@ namespace FireDetection.Backend.Domain.Migrations
                     b.Navigation("MediaRecords");
 
                     b.Navigation("RecordProcesses");
+                });
+
+            modelBuilder.Entity("FireDetection.Backend.Domain.Entity.RecordType", b =>
+                {
+                    b.Navigation("Records");
                 });
 
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.Role", b =>

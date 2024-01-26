@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 namespace FireDetection.Backend.Domain.Entity
 {
     public class ControlCamera : BaseEntity {
-        public User User { get; set; }  = new User();
+        public User User { get; set; }  
         public Guid UserID { get; set; }
 
-        public Location Location { get; set; } = new Location();
+        public  Location Location { get; set; }
         public Guid LocationID { get; set; }
     }
 }

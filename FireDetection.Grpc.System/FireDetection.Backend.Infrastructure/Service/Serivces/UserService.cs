@@ -4,6 +4,7 @@ using FireDetection.Backend.Domain.DTOs.Response;
 using FireDetection.Backend.Domain.Entity;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using FireDetection.Backend.Infrastructure.UnitOfWork;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -28,27 +29,28 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             _unitOfWork = unitOfWork;
             _configuration = config;
         }
-        public Task<bool> ActiveUser(Guid userId)
+
+        public async Task<bool> ActiveUser(Guid userId)
         {
-            throw new NotImplementedException();
+            User user = await GetUserById(userId);
+            user.LastModified = DateTime.UtcNow;
+            user.Status = "Active";
+
+             _unitOfWork.UserRepository.Update(user);
+            await _unitOfWork.SaveChangeAsync();
+
+            return true;
+
         }
 
         public async Task<UserInformationResponse> CreateUser(CreateUserRequest request)
         {
-          User user = _mapper.Map<User>(request);
-            user.RoleId = request.UserRole;
+
+            if (!await CheckDuplicateEmail(request.Email)) throw new Exception();
+
+            User user = _mapper.Map<User>(request);
+            user.SecurityCode =  await GenerateSecurityCode();
             user.Status = "None";
-          /*  User userT = new User()
-            {
-                RoleId = 1,
-                Name = "comsuonhocmon",
-                SecurityCode = "2lv",
-                Phone = "030303",
-                Password = "23"
-                ,
-                Email = "comsuonhocmon@gmail.com",
-                Status = "Check"
-            };*/
             _unitOfWork.UserRepository.InsertAsync(user);
             await _unitOfWork.SaveChangeAsync();
 
@@ -56,9 +58,17 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             return _mapper.Map<UserInformationResponse>(data.FirstOrDefault(x => x.Email  == request.Email));
         }
 
-        public Task<bool> InactiveUser(Guid userId)
+        public async Task<bool> InactiveUser(Guid userId)
         {
-            throw new NotImplementedException();
+
+            User user = await GetUserById(userId);
+            user.LastModified = DateTime.UtcNow;
+            user.Status = "Banned";
+
+            _unitOfWork.UserRepository.Update(user);
+            await _unitOfWork.SaveChangeAsync();
+
+            return true;
         }
 
         public async Task<UserLoginResponse> Login(UserLoginRequest req)
@@ -110,9 +120,60 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public Task<UserInformationResponse> UpdateUser()
+       
+
+        public async Task<UserInformationResponse> UpdateUser(Guid id, UpdateUserRequest req)
         {
-            throw new NotImplementedException();
+            User user = await GetUserById(id);
+            if (user == null)
+            {
+                throw new Exception();
+            }
+            _mapper.Map(user, req);
+            _unitOfWork.UserRepository.Update(user);
+            await _unitOfWork.SaveChangeAsync();
+
+            return _mapper.Map<UserInformationResponse>(_unitOfWork.UserRepository.Where(x => x.Id == id).FirstOrDefault());
+            
+        }
+
+        private async Task<User> GetUserById(Guid id)
+        {
+            IQueryable<User> users = await _unitOfWork.UserRepository.GetAll();
+
+            return  users.FirstOrDefault(x => x.Id == id);
+         }
+
+        private async Task<string> GenerateSecurityCode()
+        {
+            var users = await _unitOfWork.UserRepository.GetAll();
+            User user =  users.OrderByDescending(x => x.CreatedDate).FirstOrDefault();
+            if(user is null)
+            {
+                return "XXX_001";
+            }
+            else
+            {
+                if (int.TryParse(user.SecurityCode.Substring(4), out int numericPart))
+                {
+                    // Increment the numeric part
+                    numericPart++;
+
+                  
+                }
+                return $"XXX_{numericPart:D3}";
+            }
+        }
+
+        private async Task<bool> CheckDuplicateEmail(string email)
+        {
+            var users = await _unitOfWork.UserRepository.GetAll();
+            var user =  users.FirstOrDefault(x => x.Email == email);
+            if (user is null)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

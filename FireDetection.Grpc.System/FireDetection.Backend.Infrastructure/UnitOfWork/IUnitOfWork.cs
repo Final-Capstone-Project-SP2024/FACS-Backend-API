@@ -9,12 +9,16 @@ namespace FireDetection.Backend.Infrastructure.UnitOfWork
 {
     public interface IUnitOfWork
     {
-     
-       
-        public IUserRepository UserRepository { get;  }
 
+        public IAlarmRateRepository AlarmRateRepository { get; }
+        public IRecordProcessRepository RecordProcessRepository { get; }
+        public IUserRepository UserRepository { get;  }
+        public IMediaRecordRepository MediaRecordRepository { get; }
         public ILocationRepository LocationRepository { get; }
         public ICameraRepository CameraRepository { get; }
+        public IRecordRepository RecordRepository { get; }
+        public IAlarmRepository AlarmRepository { get; }
+       public IControlCameraRepository ControlCameraRepository { get; }
         public Task<int> SaveChangeAsync();
     }
 }

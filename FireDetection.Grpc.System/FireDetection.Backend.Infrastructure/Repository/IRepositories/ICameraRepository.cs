@@ -9,5 +9,7 @@ namespace FireDetection.Backend.Infrastructure.Repository.IRepositories
 {
     public interface ICameraRepository : IGenericRepository<Camera>
     {
+
+        public  Task<List<Guid>> GetUsersByCameraId(Guid cameraId);
     }
 }

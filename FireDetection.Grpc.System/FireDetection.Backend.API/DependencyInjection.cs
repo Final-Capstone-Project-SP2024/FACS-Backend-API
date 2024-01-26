@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FireDetection.Backend.API.Mapper;
 using FireDetection.Backend.Domain;
+using FireDetection.Backend.Domain.Entity;
 using FireDetection.Backend.Infrastructure.Repository.IRepositories;
 using FireDetection.Backend.Infrastructure.Repository.Repositories;
 using FireDetection.Backend.Infrastructure.Service.IServices;
@@ -23,10 +24,31 @@ namespace FireDetection.Backend.API
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            // User
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>(); 
+            
+            //Alarm 
+            services.AddScoped<IAlarmService ,AlarmService>();
+            services.AddScoped<IAlarmRepository, AlarmRepository>();
+            //Location
             services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<ILocationRepository,LocationRepository>();
+            //Camera
+            services.AddScoped<ICameraRepository, CameraRepository>();
+            services.AddScoped<ICameraService, CameraService>();
+
+            services.AddScoped<IControlCameraRepository, ControlCameraRepository>();
+            //Alarm Rate
+            services.AddScoped<IAlarmRateRepository, AlarmRateRepository>();
+            services.AddScoped<IRecordService,RecordService>();
+            // Record
+            services.AddScoped<IRecordRepository, RecordRepository>();
+            //services.AddScoped<IRecordS, CameraService>();
+
+            //Media Record
+            services.AddScoped<IMediaRecordRepository, MediaRecordRepository>();
+            services.AddScoped<IMediaRecordService, MediaRecordService>();
             return services;
         }
     }

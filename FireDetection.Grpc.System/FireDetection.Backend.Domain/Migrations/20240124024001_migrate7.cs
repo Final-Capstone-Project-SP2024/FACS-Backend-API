@@ -4,10 +4,12 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace FireDetection.Backend.Domain.Migrations
 {
     /// <inheritdoc />
-    public partial class second_initial : Migration
+    public partial class migrate7 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -27,7 +29,7 @@ namespace FireDetection.Backend.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Level",
+                name: "Levels",
                 columns: table => new
                 {
                     LevelID = table.Column<int>(type: "integer", nullable: false)
@@ -37,11 +39,11 @@ namespace FireDetection.Backend.Domain.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Level", x => x.LevelID);
+                    table.PrimaryKey("PK_Levels", x => x.LevelID);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Location",
+                name: "Locations",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -55,7 +57,7 @@ namespace FireDetection.Backend.Domain.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Location", x => x.Id);
+                    table.PrimaryKey("PK_Locations", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -69,6 +71,19 @@ namespace FireDetection.Backend.Domain.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MediaTypes", x => x.MediaTypeID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RecordTypes",
+                columns: table => new
+                {
+                    RecordTypeId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecordTypes", x => x.RecordTypeId);
                 });
 
             migrationBuilder.CreateTable(
@@ -90,15 +105,22 @@ namespace FireDetection.Backend.Domain.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Status = table.Column<string>(type: "text", nullable: false),
-                    LocationID = table.Column<Guid>(type: "uuid", nullable: false)
+                    CameraDestination = table.Column<string>(type: "text", nullable: false),
+                    LocationID = table.Column<Guid>(type: "uuid", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ModifiedBy = table.Column<Guid>(type: "uuid", nullable: false),
+                    DeleteBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Cameras", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Cameras_Location_LocationID",
+                        name: "FK_Cameras_Locations_LocationID",
                         column: x => x.LocationID,
-                        principalTable: "Location",
+                        principalTable: "Locations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -115,13 +137,13 @@ namespace FireDetection.Backend.Domain.Migrations
                     isActive = table.Column<bool>(type: "boolean", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Password = table.Column<string>(type: "text", nullable: false),
-                    RoleId = table.Column<int>(type: "integer", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uuid", nullable: false),
                     LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ModifiedBy = table.Column<Guid>(type: "uuid", nullable: false),
                     DeleteBy = table.Column<Guid>(type: "uuid", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    RoleId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -143,7 +165,8 @@ namespace FireDetection.Backend.Domain.Migrations
                     Status = table.Column<string>(type: "text", nullable: false),
                     UserRatingPercent = table.Column<decimal>(type: "numeric", nullable: false),
                     PredictedPercent = table.Column<decimal>(type: "numeric", nullable: false),
-                    CameraID = table.Column<Guid>(type: "uuid", nullable: false)
+                    CameraID = table.Column<Guid>(type: "uuid", nullable: false),
+                    RecordTypeID = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -153,6 +176,12 @@ namespace FireDetection.Backend.Domain.Migrations
                         column: x => x.CameraID,
                         principalTable: "Cameras",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Records_RecordTypes_RecordTypeID",
+                        column: x => x.RecordTypeID,
+                        principalTable: "RecordTypes",
+                        principalColumn: "RecordTypeId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -168,9 +197,9 @@ namespace FireDetection.Backend.Domain.Migrations
                 {
                     table.PrimaryKey("PK_ControlCameras", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ControlCameras_Location_LocationID",
+                        name: "FK_ControlCameras_Locations_LocationID",
                         column: x => x.LocationID,
-                        principalTable: "Location",
+                        principalTable: "Locations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -197,9 +226,9 @@ namespace FireDetection.Backend.Domain.Migrations
                 {
                     table.PrimaryKey("PK_AlarmRate", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AlarmRate_Level_LevelID",
+                        name: "FK_AlarmRate_Levels_LevelID",
                         column: x => x.LevelID,
-                        principalTable: "Level",
+                        principalTable: "Levels",
                         principalColumn: "LevelID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -243,7 +272,7 @@ namespace FireDetection.Backend.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RecordProcess",
+                name: "RecordProcesses",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -255,25 +284,74 @@ namespace FireDetection.Backend.Domain.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RecordProcess", x => x.Id);
+                    table.PrimaryKey("PK_RecordProcesses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RecordProcess_ActionType_ActionTypeId",
+                        name: "FK_RecordProcesses_ActionType_ActionTypeId",
                         column: x => x.ActionTypeId,
                         principalTable: "ActionType",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_RecordProcess_Records_RecordID",
+                        name: "FK_RecordProcesses_Records_RecordID",
                         column: x => x.RecordID,
                         principalTable: "Records",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_RecordProcess_Users_UserID",
+                        name: "FK_RecordProcesses_Users_UserID",
                         column: x => x.UserID,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "ActionType",
+                columns: new[] { "ID", "ActionDescription", "ActionName" },
+                values: new object[,]
+                {
+                    { 1, "actiondes", "action" },
+                    { 2, "actiondes", "action" },
+                    { 3, "actiondes", "action" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Levels",
+                columns: new[] { "LevelID", "Description", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Small Fire", "Level 1" },
+                    { 2, "Fire ", "Level 2" },
+                    { 3, "Fire ", "Level 3" },
+                    { 4, "Fire ", "Level 4" },
+                    { 5, "Fire ", "Level 5" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "MediaTypes",
+                columns: new[] { "MediaTypeID", "MediaName" },
+                values: new object[,]
+                {
+                    { 1, "video" },
+                    { 2, "image" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "RecordTypes",
+                columns: new[] { "RecordTypeId", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Detection" },
+                    { 2, "ElectricalIncident" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Roles",
+                columns: new[] { "RoleId", "RoleName" },
+                values: new object[,]
+                {
+                    { 1, "Manager" },
+                    { 2, "User" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -317,24 +395,29 @@ namespace FireDetection.Backend.Domain.Migrations
                 column: "RecordId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RecordProcess_ActionTypeId",
-                table: "RecordProcess",
+                name: "IX_RecordProcesses_ActionTypeId",
+                table: "RecordProcesses",
                 column: "ActionTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RecordProcess_RecordID",
-                table: "RecordProcess",
+                name: "IX_RecordProcesses_RecordID",
+                table: "RecordProcesses",
                 column: "RecordID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RecordProcess_UserID",
-                table: "RecordProcess",
+                name: "IX_RecordProcesses_UserID",
+                table: "RecordProcesses",
                 column: "UserID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Records_CameraID",
                 table: "Records",
                 column: "CameraID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Records_RecordTypeID",
+                table: "Records",
+                column: "RecordTypeID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_RoleId",
@@ -355,10 +438,10 @@ namespace FireDetection.Backend.Domain.Migrations
                 name: "MediaRecords");
 
             migrationBuilder.DropTable(
-                name: "RecordProcess");
+                name: "RecordProcesses");
 
             migrationBuilder.DropTable(
-                name: "Level");
+                name: "Levels");
 
             migrationBuilder.DropTable(
                 name: "MediaTypes");
@@ -376,10 +459,13 @@ namespace FireDetection.Backend.Domain.Migrations
                 name: "Cameras");
 
             migrationBuilder.DropTable(
+                name: "RecordTypes");
+
+            migrationBuilder.DropTable(
                 name: "Roles");
 
             migrationBuilder.DropTable(
-                name: "Location");
+                name: "Locations");
         }
     }
 }
