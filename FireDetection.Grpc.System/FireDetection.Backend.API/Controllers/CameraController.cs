@@ -2,8 +2,10 @@
 using FireDetection.Backend.Domain.DTOs.Core;
 using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.DTOs.Response;
+using FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using Microsoft.AspNetCore.Mvc;
+using static Google.Apis.Requests.BatchRequest;
 
 namespace FireDetection.Backend.API.Controllers
 {
@@ -20,7 +22,7 @@ namespace FireDetection.Backend.API.Controllers
         [HttpGet]
         public async Task<ActionResult<RestDTO<IQueryable<CameInformationResponse>>>> Get()
         {
-           IQueryable<CameInformationResponse> response = await  _cameraService.Get();
+            IQueryable<CameInformationResponse> response = await _cameraService.Get();
 
             return new RestDTO<IQueryable<CameInformationResponse>>()
             {
@@ -37,7 +39,7 @@ namespace FireDetection.Backend.API.Controllers
         [HttpPost]
         public async Task<ActionResult<RestDTO<CameInformationResponse>>> Add(AddCameraRequest request)
         {
-            CameInformationResponse response = await  _cameraService.Add(request);
+            CameInformationResponse response = await _cameraService.Add(request);
             return new RestDTO<CameInformationResponse>()
             {
                 Message = "Add Cameras Successfully!",
@@ -50,9 +52,9 @@ namespace FireDetection.Backend.API.Controllers
         }
 
         [HttpPatch("{id}")]
-        public async Task<ActionResult<RestDTO<CameInformationResponse>>> Update(Guid id,AddCameraRequest request)
+        public async Task<ActionResult<RestDTO<CameInformationResponse>>> Update(Guid id, AddCameraRequest request)
         {
-           CameInformationResponse response = await _cameraService.Update(id,request);
+            CameInformationResponse response = await _cameraService.Update(id, request);
             return new RestDTO<CameInformationResponse>()
             {
                 Message = "Add Cameras Successfully!",
@@ -67,7 +69,7 @@ namespace FireDetection.Backend.API.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<RestDTO<CameInformationResponse>>> Delete(Guid id)
         {
-          CameInformationResponse response =  await _cameraService.Inactive(id);
+            CameInformationResponse response = await _cameraService.Inactive(id);
 
             return new RestDTO<CameInformationResponse>()
             {
@@ -78,6 +80,46 @@ namespace FireDetection.Backend.API.Controllers
                     new LinkDTO(Url.Action("Delete","/CameraController",response, Request.Scheme)!,"self","Delete")
                 }
             };
-        }    
+        }
+
+
+
+        [HttpPost("{id}/detect")]
+        public async Task<ActionResult<RestDTO<DetectFireResponse>>> DetectFire(Guid id, TakeAlarmRequest request)
+        {
+            DetectFireResponse detectFire = await _cameraService.DetectFire(id, request);
+            return new RestDTO<DetectFireResponse>()
+            {
+                Message = "Take Fire Detection  Successfully!",
+                Data = detectFire,
+                Links = new List<LinkDTO>
+                {
+                    new LinkDTO(Url.Action("Take","/CameraController",detectFire, Request.Scheme)!,"self","Delete")
+                }
+            };
+        }
+
+
+        [HttpPost("{id}/disconnect")]
+        public async Task<ActionResult<RestDTO<DetectElectricalIncidentResponse>>> ElectricalIncident(Guid id, TakeElectricalIncidentRequest request)
+        {
+            DetectElectricalIncidentResponse response = await _cameraService.DetectElectricalIncident(id, request);
+            return new RestDTO<DetectElectricalIncidentResponse>()
+            {
+                Message = "Take Electrical Incident  Detection  Successfully!",
+                Data = response,
+                Links = new List<LinkDTO>
+                {
+                    new LinkDTO(Url.Action("Take","/CameraController",response, Request.Scheme)!,"self","Delete")
+                }
+            };
+        }
+
+
+        [HttpPost("{id}}/record")]
+        public async Task<ActionResult<RestDTO<DetectElectricalIncidentResponse>>> Record(Guid id, TakeElectricalIncidentRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

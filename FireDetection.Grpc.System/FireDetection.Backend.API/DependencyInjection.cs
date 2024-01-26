@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FireDetection.Backend.API.Mapper;
 using FireDetection.Backend.Domain;
+using FireDetection.Backend.Domain.Entity;
 using FireDetection.Backend.Infrastructure.Repository.IRepositories;
 using FireDetection.Backend.Infrastructure.Repository.Repositories;
 using FireDetection.Backend.Infrastructure.Service.IServices;
@@ -38,14 +39,16 @@ namespace FireDetection.Backend.API
             services.AddScoped<ICameraService, CameraService>();
 
             services.AddScoped<IControlCameraRepository, ControlCameraRepository>();
-
+            //Alarm Rate
+            services.AddScoped<IAlarmRateRepository, AlarmRateRepository>();
+            services.AddScoped<IRecordService,RecordService>();
             // Record
             services.AddScoped<IRecordRepository, RecordRepository>();
             //services.AddScoped<IRecordS, CameraService>();
 
             //Media Record
             services.AddScoped<IMediaRecordRepository, MediaRecordRepository>();
-            //services.AddScoped<IMediaRecordS, MediaRecordRepository>();
+            services.AddScoped<IMediaRecordService, MediaRecordService>();
             return services;
         }
     }

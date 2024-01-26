@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,7 +13,7 @@ namespace FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler
     public static class CloudMessagingHandlers
     {
 
-        public  static void CloudMessaging(string? titleInput = "Fire Alarm Detect",string? bodyInput = "Finding Alarm in Location B",string fcm_token = "dEOCNL8DRsyu6d92SIXOKa:APA91bHw9YmvPBAVNSqtyTkytqUeu64evv4azkd6WJnoSSBMhP5A2GwJEEiKO52lYAN5nBbmlG1PCNfxqsEj6AUuMp1R76wbMkfVUIDnYpSumJ61ItfGLYlwGllyHPT9Fiw9WsSY5mGT")
+        public  static async Task CloudMessaging(string? titleInput = "Fire Alarm Detect",string? bodyInput = "Finding Alarm in Location B",string fcm_token = "dEOCNL8DRsyu6d92SIXOKa:APA91bHw9YmvPBAVNSqtyTkytqUeu64evv4azkd6WJnoSSBMhP5A2GwJEEiKO52lYAN5nBbmlG1PCNfxqsEj6AUuMp1R76wbMkfVUIDnYpSumJ61ItfGLYlwGllyHPT9Fiw9WsSY5mGT")
         {
             WebRequest tRequest = WebRequest.Create("https://fcm.googleapis.com/fcm/send");
             tRequest.Method = "post";

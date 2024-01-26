@@ -8,11 +8,9 @@ namespace FireDetection.Backend.API.Controllers
     [Route("[controller]")]
     public class FireDetectionController : ControllerBase
     {
-        [HttpGet]
-        public async Task<IActionResult> TakeAlarmDetect(TakeAlarmRequest request)
-        {
-            CloudMessagingHandlers.CloudMessaging("Tap gym","Tap gym xuong 70kg cua nhu");
-            return Ok(" hi hi");
-        }
+    
+
+
+      
     }
 }

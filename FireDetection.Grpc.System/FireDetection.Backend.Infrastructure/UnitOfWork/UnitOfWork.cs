@@ -12,6 +12,9 @@ namespace FireDetection.Backend.Infrastructure.UnitOfWork
     {
         private readonly FireDetectionDbContext _context;
         private readonly IUserRepository _userRepository;
+        
+        private readonly IAlarmRateRepository _alarmRateRepository;
+        private readonly IRecordProcessRepository _processRepository;
         private readonly IMediaRecordRepository _mediaRecordRepository;
         private readonly ILocationRepository _locationRepository;
         private readonly ICameraRepository _cameraRepository;
@@ -27,7 +30,9 @@ namespace FireDetection.Backend.Infrastructure.UnitOfWork
             IMediaRecordRepository mediaRecordRepository,
             IRecordRepository recordRepository,
             IControlCameraRepository controlCameraRepository,
-            IAlarmRepository alarmRepository)
+            IAlarmRepository alarmRepository,
+            IRecordProcessRepository processRepository,
+            IAlarmRateRepository alarmRateRepository)
         {
             _context = context;
             _userRepository = userRepository;
@@ -37,13 +42,16 @@ namespace FireDetection.Backend.Infrastructure.UnitOfWork
             _recordRepository = recordRepository;
             _controlCameraRepository = controlCameraRepository;
             _alarmRepository = alarmRepository;
+            _processRepository = processRepository;
+            _alarmRateRepository = alarmRateRepository;
         }
         public IUserRepository UserRepository => _userRepository;
 
+        public IAlarmRateRepository AlarmRateRepository => _alarmRateRepository;
         public ILocationRepository LocationRepository => _locationRepository;
 
         public ICameraRepository CameraRepository => _cameraRepository;
-
+        public IRecordProcessRepository RecordProcessRepository => _processRepository;
         public IRecordRepository RecordRepository => _recordRepository;
         public IControlCameraRepository ControlCameraRepository => _controlCameraRepository;
         public IMediaRecordRepository MediaRecordRepository => _mediaRecordRepository;  

@@ -8,5 +8,11 @@ namespace FireDetection.Backend.Domain.DTOs.Request
 {
     public class RateAlarmRequest
     {
+
+        public Guid UserId { get; set; }
+
+        public int Level { get; set; }
+
+  
     }
 }

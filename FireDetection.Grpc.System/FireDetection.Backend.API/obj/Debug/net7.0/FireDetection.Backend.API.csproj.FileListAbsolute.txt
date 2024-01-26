@@ -153,3 +153,9 @@ C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.AP
 C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Google.Apis.Core.dll
 C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\System.ServiceModel.dll
+C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\FireSharp.dll
+C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Microsoft.Threading.Tasks.Extensions.Desktop.dll
+C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Microsoft.Threading.Tasks.Extensions.dll
+C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Microsoft.Threading.Tasks.dll
+C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\System.Net.Http.Extensions.dll
+C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\System.Net.Http.Primitives.dll

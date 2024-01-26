@@ -9,7 +9,7 @@ namespace FireDetection.Backend.Domain.Entity
 {
     public class AlarmRate : BaseEntity, IBaseCreated
     {
-        public string Time { get; set; } = null!;
+        public DateTime Time { get; set; }
         public DateTime CreatedDate { get; set; }
         public Guid CreatedBy { get; set; }
 
