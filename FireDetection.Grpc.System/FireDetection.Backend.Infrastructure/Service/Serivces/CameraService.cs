@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Firebase.Auth;
 using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.DTOs.Response;
 using FireDetection.Backend.Domain.Entity;
+using FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using FireDetection.Backend.Infrastructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +19,13 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IMediaRecordService _mediaRecordService;
+        public CameraService(IUnitOfWork unitOfWork, IMapper mapper, IMediaRecordService mediaRecordService)
+        {
+            _mapper = mapper;
+            _unitOfWork = unitOfWork;
+            _mediaRecordService = mediaRecordService;
+        }
         public async Task<CameInformationResponse> Active(Guid id)
         {
             Camera camera = await _unitOfWork.CameraRepository.GetById(id);
@@ -33,43 +42,52 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<CameInformationResponse> Add(AddCameraRequest request)
         {
-           Camera camera = _mapper.Map<Camera>(request);
-            camera.CreatedDate = DateTime.UtcNow;
-            _unitOfWork.CameraRepository.InsertAsync(camera);
+            if (!await CheckDuplicateDestination(request.Destination)) throw new Exception();
+            _unitOfWork.CameraRepository.InsertAsync(_mapper.Map<Camera>(request));
             await _unitOfWork.SaveChangeAsync();
-            Camera cameraCheck = await GetCameraByName(request.Destination);
-            return _mapper.Map<CameInformationResponse>(cameraCheck);
+
+
+            return _mapper.Map<CameInformationResponse>(await GetCameraByName(request.Destination));
         }
 
-        public  async Task<IQueryable<CameInformationResponse>> Get()
+        public async Task<IQueryable<CameInformationResponse>> Get()
         {
-           IQueryable<Camera> cameras = await _unitOfWork.CameraRepository.GetAll();
+            IQueryable<Camera> cameras = await _unitOfWork.CameraRepository.GetAll();
             return (IQueryable<CameInformationResponse>)cameras;
         }
 
         public async Task<CameInformationResponse> Inactive(Guid id)
         {
-           Camera camera  = await _unitOfWork.CameraRepository.GetById(id);
+            Camera camera = await _unitOfWork.CameraRepository.GetById(id);
             if (camera is null) throw new Exception();
 
             camera.Status = "Banned";
             camera.LastModified = DateTime.UtcNow;
 
             _unitOfWork.CameraRepository.Update(camera);
-             await _unitOfWork.SaveChangeAsync();
+            await _unitOfWork.SaveChangeAsync();
 
             return _mapper.Map<CameInformationResponse>(camera);
 
         }
 
-        public Task<CameInformationResponse> Update(AddCameraRequest request)
+        public async Task<CameInformationResponse> Update(Guid id, AddCameraRequest request)
         {
-            throw new NotImplementedException();
+            Camera camera = await GetCameraById(id);
+            camera.CameraDestination = request.Destination;
+            camera.Status = request.Status;
+            camera.LastModified = DateTime.UtcNow;
+
+            _unitOfWork.CameraRepository.Update(camera);
+            await _unitOfWork.SaveChangeAsync();
+
+            return _mapper.Map<CameInformationResponse>(_unitOfWork.CameraRepository.Where(x => x.Id == id));
+
         }
 
         public async Task<Camera> GetCameraByName(string cameraName)
         {
-           IQueryable<Camera> cameras  = await _unitOfWork.CameraRepository.GetAll();
+            IQueryable<Camera> cameras = await _unitOfWork.CameraRepository.GetAll();
             return cameras.FirstOrDefault(x => x.CameraDestination == cameraName);
         }
 
@@ -78,6 +96,68 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         {
             IQueryable<Camera> cameras = await _unitOfWork.CameraRepository.GetAll();
             return cameras.FirstOrDefault(x => x.Id == cameraId);
+        }
+
+
+        private async Task<bool> CheckDuplicateDestination(string CameraLocation)
+        {
+            IQueryable<Camera> cameras = await _unitOfWork.CameraRepository.GetAll();
+            var destination = cameras.FirstOrDefault(x => x.CameraDestination == CameraLocation);
+            if (destination != null)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public async Task<DetectFireResponse> DetectFire(Guid id, TakeAlarmRequest request)
+        {
+            //1.get the people who have responsibility in this camreId,
+            List<Guid> userIds = await _unitOfWork.CameraRepository.GetUsersByCameraId(id);
+
+
+            foreach (var userId in userIds)
+            {
+                //2. get fcmtoken from their userid
+                await RealtimeDatabaseHandlers.GetFCMTokenByUserID(userId);
+                // 3. push notification to their with messaging setting
+                await CloudMessagingHandlers.CloudMessaging();
+
+            }
+
+
+            // 5. save record to database
+            Record record = _mapper.Map<Record>(request);
+            record.Id = new Guid();
+
+            _unitOfWork.RecordRepository.InsertAsync(record);
+            await _unitOfWork.SaveChangeAsync();
+            // 4. save image and video to database 
+            await _mediaRecordService.AddImage(request.PictureUrl, record.Id);
+            await _mediaRecordService.Addvideo(request.VideoUrl, record.Id);
+
+            return _mapper.Map<DetectFireResponse>(record);
+        }
+
+        public async Task<DetectElectricalIncidentResponse> DetectElectricalIncident(Guid id, TakeElectricalIncidentRequest request)
+        {
+
+            await RealtimeDatabaseHandlers.GetFCMTokenByUserID();
+            // 3. push notification to their with messaging setting
+            await CloudMessagingHandlers.CloudMessaging();
+            Record record = _mapper.Map<Record>(request);
+            record.Id = new Guid();
+            _unitOfWork.RecordRepository.InsertAsync(_mapper.Map<Record>(request));
+            await _unitOfWork.SaveChangeAsync();
+
+            return _mapper.Map<DetectElectricalIncidentResponse>(record);
+        }
+
+
+        private async Task SaveRecord(Record record)
+        {
+            _unitOfWork.RecordRepository.InsertAsync(record);
+            await _unitOfWork.SaveChangeAsync();
         }
     }
 }

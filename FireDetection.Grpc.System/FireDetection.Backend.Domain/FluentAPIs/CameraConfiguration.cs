@@ -15,7 +15,7 @@ namespace FireDetection.Backend.Domain.FluentAPIs
         {
             builder.HasKey(x => x.Id);
 
-            builder.Property(book => book.Id).ValueGeneratedOnAdd();
+            builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
 
             builder.HasMany(x => x.Records).WithOne(x => x.Camera).HasForeignKey(x => x.CameraID);

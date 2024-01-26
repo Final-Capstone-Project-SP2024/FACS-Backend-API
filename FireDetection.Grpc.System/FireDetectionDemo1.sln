@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34003.232
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FireDetection.Grpc.System", "FireDetection.Grpc.System\FireDetection.Grpc.System.csproj", "{0590EABD-89C3-4399-9E60-52F6C639E3EA}"
-EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "FireDetection.System", "FireDetection.System\FireDetection.System.pyproj", "{67950C9E-609B-4D9E-BCF2-F665298FE06B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "api", "api", "{BE6C9EE3-7642-447E-98A3-1BC3C9F81C6A}"
@@ -13,24 +11,22 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{4737D49E-2
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modelAI", "modelAI", "{7AF96F49-9DCA-48B7-BB16-EE91C04DCCEC}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "grpc", "grpc", "{8CA76565-3CED-4198-8833-49A4F61B7E83}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "application", "application", "{1E8232E3-3CBB-48B3-8EE3-A76248CB1C1D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "domain", "domain", "{612B8690-6DB6-4E22-9400-67DAD58BDFF9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FireDetection.Backend.Domain", "FireDetection.Backend.Domain\FireDetection.Backend.Domain.csproj", "{CCC40075-C465-4972-9244-BA830460B252}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FireDetection.Backend.Domain", "FireDetection.Backend.Domain\FireDetection.Backend.Domain.csproj", "{CCC40075-C465-4972-9244-BA830460B252}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "infrastructure", "infrastructure", "{C7BBDC7E-6F27-44DD-B3D5-9576A269D3D7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "template", "template", "{79A29FF4-0571-4096-B67D-BD213695B08C}"
 	ProjectSection(SolutionItems) = preProject
-		..\..\..\..\..\..\Users\manda\Downloads\b2d8e715-b4f1-4680-aa7f-51c6fb0b7c3d.png = ..\..\..\..\..\..\Users\manda\Downloads\b2d8e715-b4f1-4680-aa7f-51c6fb0b7c3d.png
+		..\..\..\..\..\Users\manda\Downloads\b2d8e715-b4f1-4680-aa7f-51c6fb0b7c3d.png = ..\..\..\..\..\Users\manda\Downloads\b2d8e715-b4f1-4680-aa7f-51c6fb0b7c3d.png
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FireDetection.Backend.Infrastructure", "FireDetection.Backend.Infrastructure\FireDetection.Backend.Infrastructure.csproj", "{8FBFAA21-54BB-4ECC-B528-83A755441038}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FireDetection.Backend.Infrastructure", "FireDetection.Backend.Infrastructure\FireDetection.Backend.Infrastructure.csproj", "{8FBFAA21-54BB-4ECC-B528-83A755441038}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FireDetection.Backend.API", "FireDetection.Backend.API\FireDetection.Backend.API.csproj", "{573BD7DC-1F12-42D8-851C-04CEC38A9070}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FireDetection.Backend.API", "FireDetection.Backend.API\FireDetection.Backend.API.csproj", "{573BD7DC-1F12-42D8-851C-04CEC38A9070}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,10 +34,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0590EABD-89C3-4399-9E60-52F6C639E3EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0590EABD-89C3-4399-9E60-52F6C639E3EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0590EABD-89C3-4399-9E60-52F6C639E3EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0590EABD-89C3-4399-9E60-52F6C639E3EA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{67950C9E-609B-4D9E-BCF2-F665298FE06B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{67950C9E-609B-4D9E-BCF2-F665298FE06B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CCC40075-C465-4972-9244-BA830460B252}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -61,9 +53,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{0590EABD-89C3-4399-9E60-52F6C639E3EA} = {8CA76565-3CED-4198-8833-49A4F61B7E83}
 		{67950C9E-609B-4D9E-BCF2-F665298FE06B} = {7AF96F49-9DCA-48B7-BB16-EE91C04DCCEC}
-		{8CA76565-3CED-4198-8833-49A4F61B7E83} = {BE6C9EE3-7642-447E-98A3-1BC3C9F81C6A}
 		{1E8232E3-3CBB-48B3-8EE3-A76248CB1C1D} = {BE6C9EE3-7642-447E-98A3-1BC3C9F81C6A}
 		{612B8690-6DB6-4E22-9400-67DAD58BDFF9} = {BE6C9EE3-7642-447E-98A3-1BC3C9F81C6A}
 		{CCC40075-C465-4972-9244-BA830460B252} = {612B8690-6DB6-4E22-9400-67DAD58BDFF9}

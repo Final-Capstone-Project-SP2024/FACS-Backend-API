@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FireDetection.Backend.Infrastructure.Helpers
+namespace FireDetection.Backend.Domain.DTOs.Response
 {
-    public class StorageHandlers
+    public class DetectElectricalIncidentResponse
     {
-
     }
 }

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FireDetection.Backend.Domain.DTOs.Request;
+using FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FireDetection.Backend.API.Controllers
 {
@@ -6,5 +8,9 @@ namespace FireDetection.Backend.API.Controllers
     [Route("[controller]")]
     public class FireDetectionController : ControllerBase
     {
+    
+
+
+      
     }
 }

@@ -8,12 +8,13 @@ using System.Threading.Tasks;
 
 namespace FireDetection.Backend.Infrastructure.Service.IServices
 {
-    public interface IUserService 
+    public interface IUserService
     {
         public Task<UserInformationResponse> CreateUser(CreateUserRequest request);
         public Task<bool> ActiveUser(Guid userId);
         public Task<bool> InactiveUser(Guid userId);
-        public Task<UserInformationResponse> UpdateUser();
         public Task<UserLoginResponse> Login(UserLoginRequest req);
+
+        public Task<UserInformationResponse> UpdateUser(Guid id, UpdateUserRequest req);
     }
 }

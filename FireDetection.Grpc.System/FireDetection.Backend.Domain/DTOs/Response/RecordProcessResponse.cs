@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FireDetection.Backend.Infrastructure.Helpers
+namespace FireDetection.Backend.Domain.DTOs.Response
 {
-    public class CloudMessagingHandlers
+    public class RecordProcessResponse
     {
     }
 }

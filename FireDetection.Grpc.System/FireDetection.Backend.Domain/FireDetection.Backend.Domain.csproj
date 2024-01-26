@@ -6,8 +6,18 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="DAOs\**" />
+    <EmbeddedResource Remove="DAOs\**" />
+    <None Remove="DAOs\**" />
+  </ItemGroup>
+
 	 <ItemGroup>
+		 <PackageReference Include="Firebase.Auth" Version="1.0.0" />
+		 <PackageReference Include="FirebaseAdmin" Version="2.3.0" />
+		 <PackageReference Include="FirebaseStorage.net" Version="1.0.3" />
 		 <PackageReference Include="AutoMapper" Version="12.0.1" />
+		 <PackageReference Include="FireSharp" Version="2.0.4" />
 		 <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
 		 <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.11" />
 		 <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.11" />
@@ -25,7 +35,6 @@
 	 </ItemGroup>
 	 
   <ItemGroup>
-    <Folder Include="DAOs\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 

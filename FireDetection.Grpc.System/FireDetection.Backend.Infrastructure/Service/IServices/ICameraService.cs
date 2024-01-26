@@ -12,7 +12,7 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
     {
         Task<CameInformationResponse> Add(AddCameraRequest request);
 
-        Task<CameInformationResponse> Update(AddCameraRequest request);
+        Task<CameInformationResponse> Update(Guid id ,AddCameraRequest request);
 
         Task<CameInformationResponse> Active(Guid id);
 
@@ -20,5 +20,10 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
 
 
         Task<IQueryable<CameInformationResponse>> Get();
+
+        Task<DetectFireResponse> DetectFire(Guid id, TakeAlarmRequest request);
+
+
+        Task<DetectElectricalIncidentResponse> DetectElectricalIncident(Guid id, TakeElectricalIncidentRequest request);
     }
 }

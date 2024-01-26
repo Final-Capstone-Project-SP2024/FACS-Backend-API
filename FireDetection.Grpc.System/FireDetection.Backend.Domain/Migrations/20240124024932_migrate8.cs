@@ -5,7 +5,7 @@
 namespace FireDetection.Backend.Domain.Migrations
 {
     /// <inheritdoc />
-    public partial class fourth_initial : Migration
+    public partial class migrate8 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

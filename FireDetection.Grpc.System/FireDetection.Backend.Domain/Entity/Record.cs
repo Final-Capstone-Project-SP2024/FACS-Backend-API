@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FireDetection.Backend.Domain.Entity
 {
-    public class Record : BaseEntity
+    public class Record : BaseEntity, IBaseCreated
     {
         public string RecordTime { get; set; } = null!;
 
@@ -22,10 +22,13 @@ namespace FireDetection.Backend.Domain.Entity
 
         public Guid CameraID { get; set; }
 
+        public RecordType RecordType { get; set; } 
+
+        public int RecordTypeID { get; set; }
         public ICollection<AlarmRate> AlarmRates { get; set; }
         public ICollection<MediaRecord> MediaRecords { get; set; }
         public ICollection<RecordProcess> RecordProcesses { get; set; }
-     
-
+        public DateTime CreatedDate { get ; set; }
+        public Guid CreatedBy { get ; set ; }
     }
 }
