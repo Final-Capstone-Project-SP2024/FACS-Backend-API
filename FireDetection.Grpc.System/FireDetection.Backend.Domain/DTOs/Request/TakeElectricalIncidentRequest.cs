@@ -8,7 +8,6 @@ namespace FireDetection.Backend.Domain.DTOs.Request
 {
     public class TakeElectricalIncidentRequest
     {
-        public Guid CameraID { get; set; }
-        public string Time {  get; set; }
+        public DateTime Time {  get; set; }
     }
 }

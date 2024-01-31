@@ -27,7 +27,11 @@ namespace FireDetection.Backend.API
             // User
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>(); 
-            
+            //Record Process
+            services.AddScoped<IRecordProcessRepository, RecordProcessRepository>();
+
+            //Record 
+            services.AddScoped<IRecordRepository, RecordRepository>();
             //Alarm 
             services.AddScoped<IAlarmService ,AlarmService>();
             services.AddScoped<IAlarmRepository, AlarmRepository>();
@@ -49,6 +53,8 @@ namespace FireDetection.Backend.API
             //Media Record
             services.AddScoped<IMediaRecordRepository, MediaRecordRepository>();
             services.AddScoped<IMediaRecordService, MediaRecordService>();
+
+            services.AddScoped<ITimerService, TimerService>();
             return services;
         }
     }

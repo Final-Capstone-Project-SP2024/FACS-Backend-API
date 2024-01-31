@@ -58,6 +58,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         public async Task<LocationInformationResponse> UpdateLocation(Guid locationId, AddLocationRequest request)
         {
             Location location = await GetLocationByID(locationId);
+            if(location is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, " Not found this locations");
             location.LocationName = request.LocationName;
             location.LastModified = DateTime.UtcNow;
 
@@ -99,7 +100,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 ControlCamera controlCamera = new ControlCamera()
                 {
                     LocationID = locationId,
-                    UserID = staff
+                    UserID = staff  
                 };
                 _context.ControlCameraRepository.InsertAsync(controlCamera);
                 await _context.SaveChangeAsync();

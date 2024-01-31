@@ -40,26 +40,44 @@ namespace FireDetection.Backend.Domain.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("ActionType");
+                    b.ToTable("ActionTypes");
 
                     b.HasData(
                         new
                         {
                             ID = 1,
-                            ActionDescription = "actiondes",
-                            ActionName = "action"
+                            ActionDescription = "Small fire can be extinguished immediately",
+                            ActionName = "Alarm Level 1"
                         },
                         new
                         {
                             ID = 2,
-                            ActionDescription = "actiondes",
-                            ActionName = "action"
+                            ActionDescription = "the fire needs to mobilize more people in the nearby area",
+                            ActionName = "Alarm Level 2"
                         },
                         new
                         {
                             ID = 3,
-                            ActionDescription = "actiondes",
-                            ActionName = "action"
+                            ActionDescription = "a large fire can affect and cause damage, mobilizing everyone",
+                            ActionName = "Alarm Level 3"
+                        },
+                        new
+                        {
+                            ID = 4,
+                            ActionDescription = "a large fire can affect and cause damage, mobilizing everyone",
+                            ActionName = "End Action"
+                        },
+                        new
+                        {
+                            ID = 5,
+                            ActionDescription = "",
+                            ActionName = "Fake  Alarm"
+                        },
+                        new
+                        {
+                            ID = 6,
+                            ActionDescription = "AI model is disconnected from the camera",
+                            ActionName = "Repair the camera"
                         });
                 });
 
@@ -81,9 +99,8 @@ namespace FireDetection.Backend.Domain.Migrations
                     b.Property<Guid>("RecordID")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Time")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<DateTime>("Time")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("UserID")
                         .HasColumnType("uuid");
@@ -96,7 +113,7 @@ namespace FireDetection.Backend.Domain.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("AlarmRate");
+                    b.ToTable("AlarmRates");
                 });
 
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.Camera", b =>
@@ -311,12 +328,17 @@ namespace FireDetection.Backend.Domain.Migrations
                     b.Property<Guid>("CameraID")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<decimal>("PredictedPercent")
                         .HasColumnType("numeric");
 
-                    b.Property<string>("RecordTime")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<DateTime>("RecordTime")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("RecordTypeID")
                         .HasColumnType("integer");

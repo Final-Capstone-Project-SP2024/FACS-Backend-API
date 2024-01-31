@@ -1,4 +1,8 @@
-﻿using FireDetection.Backend.Domain;
+﻿using AutoMapper;
+using FireDetection.Backend.Domain;
+using FireDetection.Backend.Domain.DTOs.Filter;
+using FireDetection.Backend.Domain.DTOs.Request;
+using FireDetection.Backend.Domain.DTOs.Response;
 using FireDetection.Backend.Domain.Entity;
 using FireDetection.Backend.Infrastructure.Repository.IRepositories;
 using System;
@@ -12,9 +16,10 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
     public class UserRepository : GenericRepository<User>, IUserRepository
     {
         private readonly FireDetectionDbContext _context;
-        public UserRepository(FireDetectionDbContext context) : base(context) 
+        public UserRepository(FireDetectionDbContext context) : base(context)
         {
-            _context = context;   
+            _context = context;
         }
+
     }
 }

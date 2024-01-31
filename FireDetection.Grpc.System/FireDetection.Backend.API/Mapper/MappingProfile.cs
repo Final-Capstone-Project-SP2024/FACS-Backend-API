@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FireDetection.Backend.Domain.DTOs.Filter;
 using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.DTOs.Response;
 using FireDetection.Backend.Domain.Entity;
@@ -18,6 +19,7 @@ namespace FireDetection.Backend.API.Mapper
                 .ForMember(x => x.Password, src => src.MapFrom(x => x.Password))
                 .ForMember(x => x.RoleId, src => src.MapFrom(x => x.UserRole))
                 .ForMember(x => x.CreatedDate, src => src.MapFrom(x => DateTime.UtcNow))
+                .ForMember(x => x.Status, src => src.MapFrom(x => "actived"))
                 .ReverseMap();
 
             CreateMap<User, UserInformationResponse>()
@@ -52,9 +54,9 @@ namespace FireDetection.Backend.API.Mapper
 
 
             CreateMap<TakeAlarmRequest, Record>()
-                .ForMember(x => x.CameraID, src => src.MapFrom(x => x.CameraId))
                 .ForMember(x => x.Status, src => src.MapFrom(x => "InAlarm"))
                 .ForMember(x => x.PredictedPercent, src => src.MapFrom(x => x.PredictedPercent))
+                .ForMember(x => x.CreatedDate, src => src.MapFrom(x => DateTime.UtcNow))
                 .ForMember(x => x.RecordTime, src => src.MapFrom(x => x.Time))
                  .ForMember(x => x.RecordTypeID, src => src.MapFrom(x => 1))
                 .ReverseMap();
@@ -69,7 +71,6 @@ namespace FireDetection.Backend.API.Mapper
 
             CreateMap<TakeElectricalIncidentRequest, Record>()
                  .ForMember(x => x.RecordTime, src => src.MapFrom(x => x.Time))
-                  .ForMember(x => x.CameraID, src => src.MapFrom(x => x.CameraID))
                    .ForMember(x => x.Status, src => src.MapFrom(x => "InAlarm"))
                      .ForMember(x => x.RecordTypeID, src => src.MapFrom(x => 2))
                   .ReverseMap();
@@ -78,14 +79,17 @@ namespace FireDetection.Backend.API.Mapper
             CreateMap<RateAlarmRequest, AlarmRate>()
                  .ForMember(x => x.Time, src => src.MapFrom(x => DateTime.UtcNow))
                  .ForMember(x => x.CreatedDate, src => src.MapFrom(x => DateTime.UtcNow))
-                 .ForMember(x => x.LevelID, src => src.MapFrom(x => x.Level))
+                 .ForMember(x => x.LevelID, src => src.MapFrom(x => x.LevelRating))
                  .ForMember(x => x.UserID, src => src.MapFrom(x => x.UserId))
-                   .ReverseMap();
+                 .ReverseMap();
 
             CreateMap<AddRecordActionRequest, RecordProcess>()
                 .ForMember(x => x.ActionTypeId, src => src.MapFrom(x => x.ActionId))
                 .ForMember(x => x.UserID, src => src.MapFrom(x => x.UserID))
                 .ReverseMap();
+
+            CreateMap<UserInformationResponse, UserFilter>();
+
         }
 
     }

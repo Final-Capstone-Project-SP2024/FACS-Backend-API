@@ -14,10 +14,12 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
+        private static FireDetectionDbContext _context;
         protected DbSet<T> _dbSet;
-        public GenericRepository(FireDetectionDbContext context )
+        public GenericRepository(FireDetectionDbContext context)
         {
-         _dbSet  = context.Set<T>();   
+            _context = context;
+            _dbSet = _context.Set<T>();
         }
         public async Task<IQueryable<T>> GetAll()
         {
@@ -28,6 +30,11 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
         {
             var result = await _dbSet.FirstOrDefaultAsync(x => x.Id == id);
             return result;
+        }
+
+        public DbSet<T> GetQuery()
+        {
+            return _dbSet;
         }
 
         public void HardDelete(T obj)

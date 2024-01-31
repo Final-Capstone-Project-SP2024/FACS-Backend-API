@@ -11,7 +11,7 @@ namespace FireDetection.Backend.Domain.DTOs.Request
 
         public Guid UserId { get; set; }
 
-        public int Level { get; set; }
+        public int LevelRating { get; set; }
 
   
     }

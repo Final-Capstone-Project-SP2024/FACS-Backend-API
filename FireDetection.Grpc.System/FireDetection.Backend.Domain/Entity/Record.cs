@@ -9,7 +9,7 @@ namespace FireDetection.Backend.Domain.Entity
 {
     public class Record : BaseEntity, IBaseCreated
     {
-        public string RecordTime { get; set; } = null!;
+        public DateTime RecordTime { get; set; }
 
         public string Status { get; set; } = null!;
 
@@ -18,7 +18,7 @@ namespace FireDetection.Backend.Domain.Entity
         public decimal PredictedPercent { get; set; } = 0;
 
 
-        public Camera Camera { get; set; } = null!; 
+        public Camera Camera { get; set; }  
 
         public Guid CameraID { get; set; }
 

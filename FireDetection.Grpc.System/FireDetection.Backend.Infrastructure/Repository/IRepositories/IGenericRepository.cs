@@ -1,4 +1,5 @@
 ﻿using FireDetection.Backend.Domain.EntitySetting;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,5 +19,7 @@ namespace FireDetection.Backend.Infrastructure.Repository.IRepositories
         void HardDelete(T obj);
         IQueryable<T> Where(Expression<Func<T, bool>> predicate);
         IQueryable<T> Include(params Expression<Func<T, object>>[] includes);
+
+        DbSet<T> GetQuery();
     }
 }

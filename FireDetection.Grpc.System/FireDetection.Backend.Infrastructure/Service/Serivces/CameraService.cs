@@ -19,12 +19,15 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly ITimerService _timerService;
         private readonly IMediaRecordService _mediaRecordService;
-        public CameraService(IUnitOfWork unitOfWork, IMapper mapper, IMediaRecordService mediaRecordService)
+
+        public CameraService(IUnitOfWork unitOfWork, IMapper mapper, IMediaRecordService mediaRecordService, ITimerService timerService)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _mediaRecordService = mediaRecordService;
+            _timerService = timerService;
         }
         public async Task<CameInformationResponse> Active(Guid id)
         {
@@ -114,20 +117,21 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         {
             //1.get the people who have responsibility in this camreId,
             List<Guid> userIds = await _unitOfWork.CameraRepository.GetUsersByCameraId(id);
+           
 
-
-            foreach (var userId in userIds)
+         /*   foreach (var userId in userIds)
             {
                 //2. get fcmtoken from their userid
                 await RealtimeDatabaseHandlers.GetFCMTokenByUserID(userId);
                 // 3. push notification to their with messaging setting
                 await CloudMessagingHandlers.CloudMessaging();
 
-            }
-
+            }*/
+            
 
             // 5. save record to database
             Record record = _mapper.Map<Record>(request);
+            record.CameraID = id;
             record.Id = new Guid();
 
             _unitOfWork.RecordRepository.InsertAsync(record);
@@ -135,7 +139,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             // 4. save image and video to database 
             await _mediaRecordService.AddImage(request.PictureUrl, record.Id);
             await _mediaRecordService.Addvideo(request.VideoUrl, record.Id);
-
+             _timerService.CheckIsVoting(record.Id);
             return _mapper.Map<DetectFireResponse>(record);
         }
 
@@ -146,8 +150,9 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             // 3. push notification to their with messaging setting
             await CloudMessagingHandlers.CloudMessaging();
             Record record = _mapper.Map<Record>(request);
+            record.CameraID = id;
             record.Id = new Guid();
-            _unitOfWork.RecordRepository.InsertAsync(_mapper.Map<Record>(request));
+            _unitOfWork.RecordRepository.InsertAsync(record);
             await _unitOfWork.SaveChangeAsync();
 
             return _mapper.Map<DetectElectricalIncidentResponse>(record);

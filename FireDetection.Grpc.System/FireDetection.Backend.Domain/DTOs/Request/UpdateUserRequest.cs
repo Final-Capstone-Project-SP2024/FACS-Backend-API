@@ -16,7 +16,6 @@ namespace FireDetection.Backend.Domain.DTOs.Request
 
         public string Name { get; set; } = null!;
 
-        public string Status { get; set; } = null!;
 
     }
 }

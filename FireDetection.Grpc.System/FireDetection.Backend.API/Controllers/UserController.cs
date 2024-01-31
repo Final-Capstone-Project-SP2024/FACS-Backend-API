@@ -1,4 +1,5 @@
 ﻿using FireDetection.Backend.Domain.DTOs.Core;
+using FireDetection.Backend.Domain.DTOs.Filter;
 using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.DTOs.Response;
 using FireDetection.Backend.Infrastructure.Repository.IRepositories;
@@ -55,14 +56,8 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        /*
-                [HttpPatch("/{id}")]
-                public async Task<ActionResult<RestDTO<UserInformationResponse>>> Update(Guid id, [FromBody] JsonPatchDocument<UpdateUserRequest> request)
-                {
-                    throw new NotImplementedException();
-                }*/
 
-        [HttpPost("/active/{id}")]
+        [HttpPost("{id}/active")]
         public async Task<ActionResult<RestDTO<UserInformationResponse>>> Active(Guid id)
         {
             await _userService.ActiveUser(id);
@@ -72,23 +67,23 @@ namespace FireDetection.Backend.API.Controllers
                 Data = null,
                 Links = new List<LinkDTO>
                 {
-                    new LinkDTO(Url.Action("Active", "UserController", null, Request.Scheme)!, "self", "Post")
+                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(Active), "UserController", null, Request.Scheme))  !, "self", "Post")
                 }
             };
         }
 
 
-        [HttpPost("/inactive/{id}")]
+        [HttpPost("{id}/inactive")]
         public async Task<ActionResult<RestDTO<UserInformationResponse>>> Inactive(Guid id)
         {
-            await _userService.ActiveUser(id);
+            await _userService.InactiveUser(id);
             return new RestDTO<UserInformationResponse>()
             {
                 Message = "Inactive Account Successfully!",
                 Data = null,
                 Links = new List<LinkDTO>
                 {
-                    new LinkDTO(Url.Action("Active", "UserController", null, Request.Scheme)!, "self", "Post")
+                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(Inactive), "UserController", null, Request.Scheme))!, "self", "Post")
                 }
             };
         }
@@ -122,8 +117,11 @@ namespace FireDetection.Backend.API.Controllers
                     new LinkDTO(Url.Action("login","UserController",response, Request.Scheme)!,"self","Post")
                 }
             };
+        }
 
-
+        [HttpGet]
+        public async Task<ActionResult<RestDTO<UserInformationResponse>>> GetUsers([FromBody] PagingRequest pagingRequest, [FromQuery]UserFilter filter){
+            throw new NotImplementedException();
         }
     }
 }

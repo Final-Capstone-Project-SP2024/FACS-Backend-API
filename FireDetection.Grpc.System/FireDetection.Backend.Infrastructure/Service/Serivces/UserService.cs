@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using FireDetection.Backend.Domain.DTOs.Filter;
 using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.DTOs.Response;
 using FireDetection.Backend.Domain.Entity;
+using FireDetection.Backend.Infrastructure.Helpers.ErrorHandler;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using FireDetection.Backend.Infrastructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
@@ -32,11 +34,12 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<bool> ActiveUser(Guid userId)
         {
+            if(!await CheckUserStatus(userId, "actived")) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Have already actived in system");
             User user = await GetUserById(userId);
             user.LastModified = DateTime.UtcNow;
-            user.Status = "Active";
+            user.Status = "actived";
 
-             _unitOfWork.UserRepository.Update(user);
+            _unitOfWork.UserRepository.Update(user);
             await _unitOfWork.SaveChangeAsync();
 
             return true;
@@ -46,24 +49,26 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         public async Task<UserInformationResponse> CreateUser(CreateUserRequest request)
         {
 
-            if (!await CheckDuplicateEmail(request.Email)) throw new Exception();
+            if (!await CheckDuplicateEmail(request.Email)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Have already this email in system");
+
+
+            if (!await CheckDuplicatePhone(request.Phone)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Have already this phone number   in system");
 
             User user = _mapper.Map<User>(request);
-            user.SecurityCode =  await GenerateSecurityCode();
-            user.Status = "None";
+            user.SecurityCode = await GenerateSecurityCode();
             _unitOfWork.UserRepository.InsertAsync(user);
             await _unitOfWork.SaveChangeAsync();
 
-            IQueryable<User> data =  await _unitOfWork.UserRepository.GetAll();
-            return _mapper.Map<UserInformationResponse>(data.FirstOrDefault(x => x.Email  == request.Email));
+            IQueryable<User> data = await _unitOfWork.UserRepository.GetAll();
+            return _mapper.Map<UserInformationResponse>(data.FirstOrDefault(x => x.Email == request.Email));
         }
 
         public async Task<bool> InactiveUser(Guid userId)
         {
-
+            if (!await CheckUserStatus(userId, "banned")) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Have already banned in system");
             User user = await GetUserById(userId);
             user.LastModified = DateTime.UtcNow;
-            user.Status = "Banned";
+            user.Status = "banned";
 
             _unitOfWork.UserRepository.Update(user);
             await _unitOfWork.SaveChangeAsync();
@@ -120,7 +125,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-       
+
 
         public async Task<UserInformationResponse> UpdateUser(Guid id, UpdateUserRequest req)
         {
@@ -134,21 +139,21 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             await _unitOfWork.SaveChangeAsync();
 
             return _mapper.Map<UserInformationResponse>(_unitOfWork.UserRepository.Where(x => x.Id == id).FirstOrDefault());
-            
+
         }
 
         private async Task<User> GetUserById(Guid id)
         {
             IQueryable<User> users = await _unitOfWork.UserRepository.GetAll();
 
-            return  users.FirstOrDefault(x => x.Id == id);
-         }
+            return users.FirstOrDefault(x => x.Id == id);
+        }
 
         private async Task<string> GenerateSecurityCode()
         {
             var users = await _unitOfWork.UserRepository.GetAll();
-            User user =  users.OrderByDescending(x => x.CreatedDate).FirstOrDefault();
-            if(user is null)
+            User user = users.OrderByDescending(x => x.CreatedDate).FirstOrDefault();
+            if (user is null)
             {
                 return "XXX_001";
             }
@@ -159,21 +164,49 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                     // Increment the numeric part
                     numericPart++;
 
-                  
+
                 }
                 return $"XXX_{numericPart:D3}";
             }
         }
 
-        private async Task<bool> CheckDuplicateEmail(string email)
+        private async Task<bool> CheckDuplicatePhone(string phone)
         {
             var users = await _unitOfWork.UserRepository.GetAll();
-            var user =  users.FirstOrDefault(x => x.Email == email);
+            var user = users.FirstOrDefault(x => x.Phone == phone);
             if (user is null)
             {
                 return true;
             }
             return false;
         }
+
+        private async Task<bool> CheckDuplicateEmail(string email)
+        {
+            var users = await _unitOfWork.UserRepository.GetAll();
+            var user = users.FirstOrDefault(x => x.Email == email);
+            if (user is null)
+            {
+                return true;
+            }
+            return false;
+        }
+
+
+        private async Task<bool> CheckUserStatus(Guid id, string status)
+        {
+            var users = await _unitOfWork.UserRepository.GetAll();
+            var user = users.FirstOrDefault(x => x.Status == status && x.Id == id);
+            if (user is null)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public Task<UserInformationResponse> GetUsers(PagingRequest pagingRequest, UserFilter request)
+        {
+            throw new NotImplementedException(); 
+        }   
     }
 }

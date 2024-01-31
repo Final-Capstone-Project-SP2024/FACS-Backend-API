@@ -1,4 +1,5 @@
-﻿using FireDetection.Backend.Domain.DTOs.Request;
+﻿using FireDetection.Backend.Domain.DTOs.Filter;
+using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.DTOs.Response;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,8 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
         public Task<bool> InactiveUser(Guid userId);
         public Task<UserLoginResponse> Login(UserLoginRequest req);
 
+        public Task<UserInformationResponse> GetUsers(PagingRequest pagingRequest,UserFilter filter);
+        
         public Task<UserInformationResponse> UpdateUser(Guid id, UpdateUserRequest req);
     }
 }

@@ -159,3 +159,7 @@ C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.AP
 C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Microsoft.Threading.Tasks.dll
 C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\System.Net.Http.Extensions.dll
 C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\System.Net.Http.Primitives.dll
+C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Microsoft.AspNetCore.Mvc.Versioning.dll
+C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer.dll
+C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\NTQ.Sdk.Core.dll
+C:\Code\code\demo1\FACS_Demo1\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\System.Linq.Dynamic.Core.dll
