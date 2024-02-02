@@ -35,7 +35,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         {
             MediaRecord mediaRecord = new MediaRecord()
             {
-                MediaTypeId = 2,
+                MediaTypeId = 1,
                 Url = urlVideo,
                 RecordId = recordId
             };

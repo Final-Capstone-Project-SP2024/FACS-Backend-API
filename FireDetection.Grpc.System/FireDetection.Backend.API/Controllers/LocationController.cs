@@ -14,11 +14,15 @@ namespace FireDetection.Backend.API.Controllers
     public class LocationController : ControllerBase
     {
         private readonly ILocationService _context;
+        private readonly LinkGenerator _linkGenerator;
 
-        public LocationController(ILocationService context)
+        public LocationController(ILocationService context, LinkGenerator linkGenerator)
         {
             _context = context;
+            _linkGenerator = linkGenerator;
         }
+
+
         [HttpPost]
         public async Task<ActionResult<RestDTO<LocationInformationResponse>>> Add(AddLocationRequest request)
         {
@@ -33,11 +37,16 @@ namespace FireDetection.Backend.API.Controllers
             LocationInformationResponse response = await _context.AddNewLocation(request);
             return new RestDTO<LocationInformationResponse>()
             {
-                Message = "Add Location Successfully!",
+                Message = "Add Location Successfully",
                 Data = response,
-                Links = new List<LinkDTO>
-                {
-                    new LinkDTO(Url.Action("Add","/LocationController",response, Request.Scheme)!,"self","Post")
+                Links = new List<LinkDTO> {
+                    new LinkDTO(
+                    Url.Action(
+                        _linkGenerator.GetUriByAction(HttpContext,nameof(Add),"/LocationController",
+                        request,
+                        Request.Scheme))!,
+                    "self",
+                    "Post")
                 }
             };
 
@@ -51,11 +60,16 @@ namespace FireDetection.Backend.API.Controllers
 
             return new RestDTO<LocationInformationResponse>()
             {
-                Message = "Update Location Successfully!",
+                Message = "Vote Record Successfully",
                 Data = response,
-                Links = new List<LinkDTO>
-                {
-                    new LinkDTO(Url.Action("Update","LocationController",response, Request.Scheme)!,"self","Patch")
+                Links = new List<LinkDTO> {
+                    new LinkDTO(
+                    Url.Action(
+                        _linkGenerator.GetUriByAction(HttpContext,nameof(Update),"/LocationController",
+                        request,
+                        Request.Scheme))!,
+                    "self",
+                    "Patch")
                 }
             };
         }
@@ -67,11 +81,14 @@ namespace FireDetection.Backend.API.Controllers
             await _context.DeleteLocation(id);
             return new RestDTO<LocationInformationResponse>()
             {
-                Message = "Delete Location Successfully!",
+                Message = "Delete Location Successfully",
                 Data = null,
-                Links = new List<LinkDTO>
-                {
-                    new LinkDTO(Url.Action("Delete","LocationController",null, Request.Scheme)!,"self","Delete")
+                Links = new List<LinkDTO> {
+                    new LinkDTO(
+                    Url.Action(
+                        _linkGenerator.GetUriByAction(HttpContext,nameof(Delete),"RecordController",Request.Scheme))!,
+                    "self",
+                    "Delete")
                 }
             };
         }
@@ -83,27 +100,35 @@ namespace FireDetection.Backend.API.Controllers
 
             return new RestDTO<IQueryable<Domain.Entity.Location>>()
             {
-                Message = "Update Location Successfully!",
+                Message = "Delete Location Successfully",
                 Data = location,
-                Links = new List<LinkDTO>
-                {
-                       new LinkDTO(Url.Action("Update","LocationController",null, Request.Scheme)!,"self","Patch")
+                Links = new List<LinkDTO> {
+                    new LinkDTO(
+                    Url.Action(
+                        _linkGenerator.GetUriByAction(HttpContext,nameof(Get),"RecordController",Request.Scheme))!,
+                    "self",
+                    "Get")
                 }
             };
         }
 
-        [HttpPost("/add/{id}")]
+        [HttpPost("/{id}/add")]
         public async Task<ActionResult<RestDTO<LocationInformationResponse>>> AddStaff(Guid id, AddStaffRequest request)
         {
             var result = await _context.AddStaffToLocation(id, request);
             return new RestDTO<LocationInformationResponse>()
             {
-                Message = "Add User to Controler Location Successfully!",
+                Message = "Add Staff Successfully",
                 Data = result,
-                Links = new List<LinkDTO>
-                {
-                       new LinkDTO(Url.Action("Update","LocationController",null, Request.Scheme)!,"self","Post")
-                }
+                Links = new List<LinkDTO> {
+                  new LinkDTO(
+                    Url.Action(
+                     _linkGenerator.GetUriByAction(HttpContext,nameof(AddStaff),"/LocationController",
+                      request,
+                      Request.Scheme))!,
+                "self",
+                 "Post")
+    }
             };
         }
     }

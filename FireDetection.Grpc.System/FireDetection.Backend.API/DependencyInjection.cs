@@ -55,6 +55,7 @@ namespace FireDetection.Backend.API
             services.AddScoped<IMediaRecordService, MediaRecordService>();
 
             services.AddScoped<ITimerService, TimerService>();
+            services.AddScoped<IMemoryCacheService, MemoryCacheService>();
             return services;
         }
     }

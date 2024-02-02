@@ -1,6 +1,7 @@
 using FireDetection.Backend.API;
 using FireDetection.Backend.API.Middleware.GraphQL;
 using FireDetection.Backend.Domain;
+using FireDetection.Backend.Domain.Helpers;
 using FireDetection.Backend.Infrastructure.Helpers.ErrorHandler;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -76,6 +77,8 @@ builder.Services.AddDbContext<FireDetectionDbContext>(options =>
     options.UseNpgsql(conn),
     ServiceLifetime.Scoped);
 
+builder.Services.AddMemoryCache();
+builder.Services.AddSingleton<MyMemoryCache>();
 builder.Services.AddWebAPIService();
 var app = builder.Build();
 

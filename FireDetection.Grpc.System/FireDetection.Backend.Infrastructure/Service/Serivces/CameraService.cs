@@ -21,13 +21,15 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         private readonly IMapper _mapper;
         private readonly ITimerService _timerService;
         private readonly IMediaRecordService _mediaRecordService;
+        private readonly IMemoryCacheService _memoryCacheService;
 
-        public CameraService(IUnitOfWork unitOfWork, IMapper mapper, IMediaRecordService mediaRecordService, ITimerService timerService)
+        public CameraService(IUnitOfWork unitOfWork, IMapper mapper, IMediaRecordService mediaRecordService, ITimerService timerService, IMemoryCacheService memoryCacheService)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _mediaRecordService = mediaRecordService;
             _timerService = timerService;
+            _memoryCacheService = memoryCacheService;
         }
         public async Task<CameInformationResponse> Active(Guid id)
         {
@@ -117,29 +119,30 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         {
             //1.get the people who have responsibility in this camreId,
             List<Guid> userIds = await _unitOfWork.CameraRepository.GetUsersByCameraId(id);
-           
 
-         /*   foreach (var userId in userIds)
-            {
-                //2. get fcmtoken from their userid
-                await RealtimeDatabaseHandlers.GetFCMTokenByUserID(userId);
-                // 3. push notification to their with messaging setting
-                await CloudMessagingHandlers.CloudMessaging();
 
-            }*/
-            
+            /*   foreach (var userId in userIds)
+               {
+                   //2. get fcmtoken from their userid
+                   await RealtimeDatabaseHandlers.GetFCMTokenByUserID(userId);
+                   // 3. push notification to their with messaging setting
+                   await CloudMessagingHandlers.CloudMessaging();
+
+               }*/
+
 
             // 5. save record to database
             Record record = _mapper.Map<Record>(request);
             record.CameraID = id;
-            record.Id = new Guid();
+            record.Id = Guid.NewGuid();
+            await _memoryCacheService.CreateRecordKey(record.Id);
 
             _unitOfWork.RecordRepository.InsertAsync(record);
             await _unitOfWork.SaveChangeAsync();
             // 4. save image and video to database 
             await _mediaRecordService.AddImage(request.PictureUrl, record.Id);
             await _mediaRecordService.Addvideo(request.VideoUrl, record.Id);
-             _timerService.CheckIsVoting(record.Id);
+            _timerService.CheckIsVoting(record.Id);
             return _mapper.Map<DetectFireResponse>(record);
         }
 

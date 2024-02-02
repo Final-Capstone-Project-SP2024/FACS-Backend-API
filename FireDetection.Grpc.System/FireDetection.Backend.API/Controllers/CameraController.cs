@@ -14,10 +14,12 @@ namespace FireDetection.Backend.API.Controllers
     public class CameraController : ControllerBase
     {
         private readonly ICameraService _cameraService;
+        private readonly LinkGenerator _linkGenerator;
 
-        public CameraController(ICameraService cameraService)
+        public CameraController(ICameraService cameraService, LinkGenerator linkGenerator)
         {
             _cameraService = cameraService;
+            _linkGenerator = linkGenerator;
         }
         [HttpGet]
         public async Task<ActionResult<RestDTO<IQueryable<CameInformationResponse>>>> Get()
@@ -26,11 +28,14 @@ namespace FireDetection.Backend.API.Controllers
 
             return new RestDTO<IQueryable<CameInformationResponse>>()
             {
-                Message = "Get Cameras Successfully!",
+                Message = "Get All Camera  Successfully",
                 Data = response,
-                Links = new List<LinkDTO>
-                {
-                    new LinkDTO(Url.Action("Get","/CameraController",response, Request.Scheme)!,"self","Get")
+                Links = new List<LinkDTO> {
+                    new LinkDTO(
+                    Url.Action(
+                        _linkGenerator.GetUriByAction(HttpContext,nameof(Get),"/CameraController",Request.Scheme))!,
+                    "self",
+                    "Get")
                 }
             };
         }
@@ -42,11 +47,14 @@ namespace FireDetection.Backend.API.Controllers
             CameInformationResponse response = await _cameraService.Add(request);
             return new RestDTO<CameInformationResponse>()
             {
-                Message = "Add Cameras Successfully!",
+                Message = "Add Camera Successfully",
                 Data = response,
-                Links = new List<LinkDTO>
-                {
-                    new LinkDTO(Url.Action("Add","/CameraController",response, Request.Scheme)!,"self","Post")
+                Links = new List<LinkDTO> {
+                    new LinkDTO(
+                    Url.Action(
+                        _linkGenerator.GetUriByAction(HttpContext,nameof(Delete),"CameraController",Request.Scheme))!,
+                    "self",
+                    "Add")
                 }
             };
         }
@@ -57,11 +65,14 @@ namespace FireDetection.Backend.API.Controllers
             CameInformationResponse response = await _cameraService.Update(id, request);
             return new RestDTO<CameInformationResponse>()
             {
-                Message = "Add Cameras Successfully!",
+                Message = "Delete Location Successfully",
                 Data = response,
-                Links = new List<LinkDTO>
-                {
-                    new LinkDTO(Url.Action("Update","/CameraController",response, Request.Scheme)!,"self","Patch")
+                Links = new List<LinkDTO> {
+                    new LinkDTO(
+                    Url.Action(
+                        _linkGenerator.GetUriByAction(HttpContext,nameof(Update),"Location",Request.Scheme))!,
+                    "self",
+                    "Patch")
                 }
             };
         }
@@ -73,11 +84,14 @@ namespace FireDetection.Backend.API.Controllers
 
             return new RestDTO<CameInformationResponse>()
             {
-                Message = "Delete Cameras Successfully!",
+                Message = "Delete Camera Successfully",
                 Data = response,
-                Links = new List<LinkDTO>
-                {
-                    new LinkDTO(Url.Action("Delete","/CameraController",response, Request.Scheme)!,"self","Delete")
+                Links = new List<LinkDTO> {
+                    new LinkDTO(
+                    Url.Action(
+                        _linkGenerator.GetUriByAction(HttpContext,nameof(Delete),"Location",Request.Scheme))!,
+                    "self",
+                    "Delete")
                 }
             };
         }
@@ -87,14 +101,17 @@ namespace FireDetection.Backend.API.Controllers
         [HttpPost("{id}/detect")]
         public async Task<ActionResult<RestDTO<DetectFireResponse>>> DetectFire(Guid id, TakeAlarmRequest request)
         {
-            DetectFireResponse detectFire = await _cameraService.DetectFire(id, request);
+            DetectFireResponse response = await _cameraService.DetectFire(id, request);
             return new RestDTO<DetectFireResponse>()
             {
-                Message = "Take Fire Detection  Successfully!",
-                Data = detectFire,
-                Links = new List<LinkDTO>
-                {
-                    new LinkDTO(Url.Action("Take","/CameraController",detectFire, Request.Scheme)!,"self","Delete")
+                Message = "Detect Fire  Successfully",
+                Data = response,
+                Links = new List<LinkDTO> {
+                    new LinkDTO(
+                    Url.Action(
+                        _linkGenerator.GetUriByAction(HttpContext,nameof(DetectFire),"CameraController",Request.Scheme))!,
+                    "self",
+                    "Post")
                 }
             };
         }
@@ -106,11 +123,14 @@ namespace FireDetection.Backend.API.Controllers
             DetectElectricalIncidentResponse response = await _cameraService.DetectElectricalIncident(id, request);
             return new RestDTO<DetectElectricalIncidentResponse>()
             {
-                Message = "Take Electrical Incident  Detection  Successfully!",
+                Message = "Take Camera Disconnect  Successfully",
                 Data = response,
-                Links = new List<LinkDTO>
-                {
-                    new LinkDTO(Url.Action("Take","/CameraController",response, Request.Scheme)!,"self","Delete")
+                Links = new List<LinkDTO> {
+                    new LinkDTO(
+                    Url.Action(
+                        _linkGenerator.GetUriByAction(HttpContext,nameof(Update),"Location",Request.Scheme))!,
+                    "self",
+                    "Patch")
                 }
             };
         }

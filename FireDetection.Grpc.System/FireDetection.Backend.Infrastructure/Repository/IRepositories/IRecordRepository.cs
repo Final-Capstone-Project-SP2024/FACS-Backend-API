@@ -1,4 +1,5 @@
-﻿using FireDetection.Backend.Domain.Entity;
+﻿using FireDetection.Backend.Domain.DTOs.Response;
+using FireDetection.Backend.Domain.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,8 @@ namespace FireDetection.Backend.Infrastructure.Repository.IRepositories
 {
     public interface IRecordRepository : IGenericRepository<Record>
     {
+        public IEnumerable<RecordResponse> Get();
+
+        public RecordDetailResponse RecordDetailResponse(Guid recordId);
     }
 }

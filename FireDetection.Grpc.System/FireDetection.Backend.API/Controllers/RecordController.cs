@@ -1,10 +1,10 @@
 ﻿using FireDetection.Backend.Domain.DTOs.Core;
 using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.DTOs.Response;
+using FireDetection.Backend.Domain.Entity;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
-using static Google.Apis.Requests.BatchRequest;
+
 
 namespace FireDetection.Backend.API.Controllers
 {
@@ -23,7 +23,7 @@ namespace FireDetection.Backend.API.Controllers
         [HttpPost("{RecordId}/vote")]
         public async Task<ActionResult<RestDTO<VoteAlarmResponse>>> Vote(Guid RecordId, RateAlarmRequest request)
         {
-           await _recordService.VoteAlarmLevel(RecordId, request);
+            await _recordService.VoteAlarmLevel(RecordId, request);
 
             return new RestDTO<VoteAlarmResponse>()
             {
@@ -42,9 +42,9 @@ namespace FireDetection.Backend.API.Controllers
         }
 
         [HttpPost("{RecordId}/action")]
-        public async Task<ActionResult<RestDTO<ActionProcessResponse>>> Action(Guid RecordID, AddRecordActionRequest request)
+        public async Task<ActionResult<RestDTO<ActionProcessResponse>>> Action(Guid RecordId, AddRecordActionRequest request)
         {
-            await _recordService.ActionInAlarm(RecordID, request);
+            await _recordService.ActionInAlarm(RecordId, request);
             return new RestDTO<ActionProcessResponse>()
             {
                 Message = "Action Successfully",
@@ -60,6 +60,47 @@ namespace FireDetection.Backend.API.Controllers
                 }
             };
         }
-      
+
+        [HttpGet]
+        public async Task<ActionResult<RestDTO<IEnumerable<RecordResponse>>>> Get()
+        {
+
+            IEnumerable<RecordResponse> response = await _recordService.Get();
+
+            return new RestDTO<IEnumerable<RecordResponse>>()
+            {
+                Message = "Action Successfully",
+                Data = response,
+                Links = new List<LinkDTO> {
+                    new LinkDTO(
+                    Url.Action(
+                        _linkGenerator.GetUriByAction(HttpContext,nameof(Get),"RecordController",
+                        Request.Scheme))!,
+                    "self",
+                    "Get")
+                }
+            };
+        }
+
+
+        [HttpGet("{recordId}")]
+        public async Task<ActionResult<RestDTO<RecordDetailResponse>>> GetDetail(Guid recordId)
+        {
+            RecordDetailResponse  response = await _recordService.GetDetail(recordId);
+            return new RestDTO<RecordDetailResponse>()
+            {
+                Message = "View RecordDetail Successfully",
+                Data = response,
+                Links = new List<LinkDTO> {
+                    new LinkDTO(
+                    Url.Action(
+                        _linkGenerator.GetUriByAction(HttpContext,nameof(GetDetail),"RecordController",
+                        Request.Scheme))!,
+                    "self",
+                    "Get")
+                }
+            };
+        }
+
     }
 }

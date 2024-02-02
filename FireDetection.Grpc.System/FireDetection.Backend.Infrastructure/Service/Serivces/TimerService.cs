@@ -16,45 +16,51 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
     public class TimerService : ITimerService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private Timer _timer;
-        public TimerService(IUnitOfWork unitOfWork)
+        private readonly IMemoryCacheService _memorycachedservice;
+        public TimerService(IUnitOfWork unitOfWork,IMemoryCacheService memoryCacheService)
         {
             _unitOfWork = unitOfWork;
+            _memorycachedservice = memoryCacheService;
 
 
         }
         public void CheckIsVoting(Guid recordId)
         {
-            _timer = new Timer(async _ => await CheckAndSendNotification(recordId), null, 0, 5000);
+            Task.Run(async () => await CheckAndSendNotification(recordId));
         }
 
 
 
         private async Task CheckAndSendNotification(Guid recorid)
         {
-            try
+            bool   check  = true;
+            while (check)
             {
-                if (await Checked(recorid))
+                try
                 {
-                    // Data not found, send notification
-                    await CloudMessagingHandlers.CloudMessaging();
+                    if (!await _memorycachedservice.CheckRecordKeyIsVote(recorid))
+                    {
+                        // Data not found, send notification
+                  //     await CloudMessagingHandlers.CloudMessaging();
+                        Console.WriteLine("=====================");
+                    }
+                    else
+                    {
+                       check = false;
+                    }
                 }
+                catch (Exception ex)
+                {
+                    // Handle exceptions appropriately
+                    Console.WriteLine($"Error: {ex.Message}");
+                }
+
+                await Task.Delay(5000);
             }
-            catch (Exception ex)
-            {
-                // Handle exceptions appropriately
-                Console.WriteLine($"Error: {ex.Message}");
-            }
+            
         }
 
-        private async Task<bool> Checked(Guid recordID)
-        {
-            var recordProcesses = await _unitOfWork.RecordProcessRepository.GetAll();
-            bool conditionMet = recordProcesses.Any(x => x.RecordID == recordID);
-
-            // Additional logic based on your actual condition
-            return conditionMet;
-        }
+     
 
 
     }
