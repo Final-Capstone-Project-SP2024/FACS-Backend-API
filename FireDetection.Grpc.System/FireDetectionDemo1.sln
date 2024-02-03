@@ -28,6 +28,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FireDetection.Backend.Infra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FireDetection.Backend.API", "FireDetection.Backend.API\FireDetection.Backend.API.csproj", "{573BD7DC-1F12-42D8-851C-04CEC38A9070}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{3A333542-3E22-4AF0-9379-DEE87C92774E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +50,10 @@ Global
 		{573BD7DC-1F12-42D8-851C-04CEC38A9070}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{573BD7DC-1F12-42D8-851C-04CEC38A9070}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{573BD7DC-1F12-42D8-851C-04CEC38A9070}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A333542-3E22-4AF0-9379-DEE87C92774E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A333542-3E22-4AF0-9379-DEE87C92774E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A333542-3E22-4AF0-9379-DEE87C92774E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A333542-3E22-4AF0-9379-DEE87C92774E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

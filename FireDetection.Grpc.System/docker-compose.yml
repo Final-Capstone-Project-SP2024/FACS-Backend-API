@@ -1,0 +1,46 @@
+version: '3.4'
+
+
+networks: 
+  apinet:
+    driver: bridge
+
+
+services:
+  firedetection.backend.api:
+    image: ${DOCKER_REGISTRY-}firedetectionbackendapi
+    build:
+      context: .
+      dockerfile: FireDetection.Backend.API/Dockerfile
+    tty: true
+    environment: 
+       -  ConnectionStrings__DefaultConnection=User ID=postgres;Password=postgres;Server=database;Port=5447;Database=FireDetectionDatabase; IntegratedSecurity=true;Pooling=true
+    depends_on:
+        -  "firedetection_database"
+    ports:
+      - "4211:80"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker
+    networks:
+      - apinet
+  firedetection_database:
+    image: postgres:latest
+    container_name: firedetection_database
+    ports:
+      - 5447:5448
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=FireDetectionDatabase
+    restart: always
+    networks:
+      - apinet
+    volumes:
+      - app_data:/var/lib/postgresql/data
+
+
+volumes:
+  app_data: {}
+
+
