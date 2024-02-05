@@ -2,6 +2,7 @@ using FireDetection.Backend.API;
 using FireDetection.Backend.API.Middleware.GraphQL;
 using FireDetection.Backend.Domain;
 using FireDetection.Backend.Domain.Helpers;
+using FireDetection.Backend.Infrastructure;
 using FireDetection.Backend.Infrastructure.Helpers.ErrorHandler;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -15,11 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 
-builder.Services.AddGraphQLServer() 
-    .AddQueryType<Query>()
-    .AddProjections()
-    .AddFiltering()
-    .AddSorting();
+
 // Add authentication and configure JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -78,7 +75,9 @@ builder.Services.AddDbContext<FireDetectionDbContext>(options =>
     ServiceLifetime.Scoped);
 
 builder.Services.AddMemoryCache();
+
 builder.Services.AddSingleton<MyMemoryCache>();
+builder.Services.AddInfrastructuresService(conn);
 builder.Services.AddWebAPIService();
 var app = builder.Build();
 
@@ -124,3 +123,7 @@ app.UseHttpsRedirection();
 app.MapControllers();
 
 app.Run();
+
+
+
+public partial class Program { }

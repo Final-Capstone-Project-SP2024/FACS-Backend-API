@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FireDetection.Backend.API.Mapper;
+using FireDetection.Backend.API.Middleware.GraphQL;
 using FireDetection.Backend.Domain;
 using FireDetection.Backend.Domain.Entity;
 using FireDetection.Backend.Infrastructure.Repository.IRepositories;
@@ -26,18 +27,18 @@ namespace FireDetection.Backend.API
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             // User
             services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IUserService, UserService>(); 
+            services.AddScoped<IUserService, UserService>();
             //Record Process
             services.AddScoped<IRecordProcessRepository, RecordProcessRepository>();
 
             //Record 
             services.AddScoped<IRecordRepository, RecordRepository>();
             //Alarm 
-            services.AddScoped<IAlarmService ,AlarmService>();
+            services.AddScoped<IAlarmService, AlarmService>();
             services.AddScoped<IAlarmRepository, AlarmRepository>();
             //Location
             services.AddScoped<ILocationService, LocationService>();
-            services.AddScoped<ILocationRepository,LocationRepository>();
+            services.AddScoped<ILocationRepository, LocationRepository>();
             //Camera
             services.AddScoped<ICameraRepository, CameraRepository>();
             services.AddScoped<ICameraService, CameraService>();
@@ -45,9 +46,9 @@ namespace FireDetection.Backend.API
             services.AddScoped<IControlCameraRepository, ControlCameraRepository>();
             //Alarm Rate
             services.AddScoped<IAlarmRateRepository, AlarmRateRepository>();
-            services.AddScoped<IRecordService,RecordService>();
+            services.AddScoped<IRecordService, RecordService>();
             // Record
-            services.AddScoped<IRecordRepository, RecordRepository>();
+            //services.AddScoped<IRecordRepository, RecordRepository>();
             //services.AddScoped<IRecordS, CameraService>();
 
             //Media Record
@@ -56,6 +57,13 @@ namespace FireDetection.Backend.API
 
             services.AddScoped<ITimerService, TimerService>();
             services.AddScoped<IMemoryCacheService, MemoryCacheService>();
+
+
+            services.AddGraphQLServer()
+                    .AddQueryType<Query>()
+                    .AddProjections()
+                    .AddFiltering()
+                    .AddSorting();
             return services;
         }
     }

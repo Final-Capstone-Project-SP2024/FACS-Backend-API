@@ -44,7 +44,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<bool> DeleteLocation(Guid id)
         {
-            Location location = await GetLocationByID(id);
+            Location location = await _context.LocationRepository.GetById(id);
             location.IsDeleted = true;
             await _context.SaveChangeAsync();
             return true;

@@ -21,5 +21,7 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
         Task<IQueryable<Location>> GetLocation();
 
         Task<LocationInformationResponse> AddStaffToLocation(Guid locationId, AddStaffRequest request);
+
+         
     }
 }
