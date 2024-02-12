@@ -16,7 +16,7 @@ namespace FireDetection.Backend.Infrastructure
     {
         public  static IServiceCollection AddInfrastructuresService(this IServiceCollection services,string databaseConnection)
         {
-            services.AddScoped<IUserRepository, IUserRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IRecordProcessRepository, RecordProcessRepository>();
             services.AddScoped<IRecordRepository, RecordRepository>();
             services.AddScoped<IMediaRecordRepository, MediaRecordRepository>();
