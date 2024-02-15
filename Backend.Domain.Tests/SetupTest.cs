@@ -22,33 +22,33 @@ namespace Backend.Domain.Tests
         protected readonly Fixture _fixture;
         protected readonly IMapper _mapperConfig;
         protected readonly Mock<IUnitOfWork> _unitOfWork;
-        protected readonly Mock<ILocationRepository> _locationRepository;
-        protected readonly Mock<ILocationService> _locationService;
+        protected readonly Mock<ILocationRepository> _locationRepositoryTest;
+        protected readonly Mock<ILocationService> _locationServiceTest;
 
-        protected readonly Mock<IUserRepository> _userRepository;
-        protected readonly Mock<IUserService> _userService;
+        protected readonly Mock<IUserRepository> _userRepositoryTest;
+        protected readonly Mock<IUserService> _userServiceTest;
 
-        protected readonly Mock<IAlarmRepository> _alarmRepository;
-        protected readonly Mock<IAlarmService> _alarmService;
+        protected readonly Mock<IAlarmRepository> _alarmRepositoryTest;
+        protected readonly Mock<IAlarmService> _alarmServiceTest;
 
-        protected readonly Mock<IRecordProcessRepository> _recordProcessRepository;
+        protected readonly Mock<IRecordProcessRepository> _recordProcessRepositoryTest;
 
-        protected readonly Mock<IRecordRepository> _recordRepository;
+        protected readonly Mock<IRecordRepository> _recordRepositoryTest;
 
-        protected readonly Mock<ICameraRepository> _cameraRepository;
-        protected readonly Mock<ICameraService> _cameraService;
+        protected readonly Mock<ICameraRepository> _cameraRepositoryTest;
+        protected readonly Mock<ICameraService> _cameraServiceTest;
 
-        protected readonly Mock<IControlCameraRepository> _controlCameraRepository;
-        protected readonly Mock<IAlarmRateRepository> _alarmrateRepository;
-        protected readonly Mock<IRecordService> _recordService;
+        protected readonly Mock<IControlCameraRepository> _controlCameraRepositoryTest;
+        protected readonly Mock<IAlarmRateRepository> _alarmrateRepositoryTest;
+        protected readonly Mock<IRecordService> _recordServiceTest;
 
-        protected readonly Mock<IMediaRecordRepository> _mediaRecordRepository;
-        protected readonly Mock<IMediaRecordService> _mediaRecordService;
+        protected readonly Mock<IMediaRecordRepository> _mediaRecordRepositoryTest;
+        protected readonly Mock<IMediaRecordService> _mediaRecordServiceTest;
 
-        protected readonly Mock<ITimerService> _timerService;
-        protected readonly Mock<IMemoryCacheService> _memoryCacheService;
+        protected readonly Mock<ITimerService> _timerServiceTest;
+        protected readonly Mock<IMemoryCacheService> _memoryCacheServiceTest;
 
-        protected readonly Mock<LinkGenerator> _linkGenerator;
+        protected readonly Mock<LinkGenerator> _linkGeneratorTest;
         protected readonly FireDetectionDbContext _dbContext;
 
         public SetupTest()
@@ -60,7 +60,7 @@ namespace Backend.Domain.Tests
             _mapperConfig = mappingConfig.CreateMapper();
 
 
-            _linkGenerator = new Mock<LinkGenerator>();
+            _linkGeneratorTest = new Mock<LinkGenerator>();
             _fixture = new Fixture();
 
             _fixture.Behaviors.Remove(new ThrowingRecursionBehavior());
@@ -70,23 +70,23 @@ namespace Backend.Domain.Tests
     .ForEach(b => _fixture.Behaviors.Remove(b));
 
             _unitOfWork = new Mock<IUnitOfWork>();
-            _locationRepository = new Mock<ILocationRepository>();
-            _locationService = new Mock<ILocationService>();
-            _alarmrateRepository = new Mock<IAlarmRateRepository>();
-            _alarmRepository = new Mock<IAlarmRepository>();
-            _memoryCacheService = new Mock<IMemoryCacheService>();
-            _timerService = new Mock<ITimerService>();
-            _mediaRecordService = new Mock<IMediaRecordService>();
-            _mediaRecordRepository = new Mock<IMediaRecordRepository>();
-            _recordService = new Mock<IRecordService>();
-            _cameraRepository = new Mock<ICameraRepository>();
-            _cameraService = new Mock<ICameraService>();
-            _userRepository = new Mock<IUserRepository>();
-            _userService = new Mock<IUserService>();
-            _controlCameraRepository = new Mock<IControlCameraRepository>();
-            _alarmService = new Mock<IAlarmService>();
-            _recordRepository = new Mock<IRecordRepository>();
-            _recordProcessRepository = new Mock<IRecordProcessRepository>();
+            _locationRepositoryTest = new Mock<ILocationRepository>();
+            _locationServiceTest = new Mock<ILocationService>();
+            _alarmrateRepositoryTest = new Mock<IAlarmRateRepository>();
+            _alarmRepositoryTest = new Mock<IAlarmRepository>();
+            _memoryCacheServiceTest = new Mock<IMemoryCacheService>();
+            _timerServiceTest = new Mock<ITimerService>();
+            _mediaRecordServiceTest = new Mock<IMediaRecordService>();
+            _mediaRecordRepositoryTest = new Mock<IMediaRecordRepository>();
+            _recordServiceTest = new Mock<IRecordService>();
+            _cameraRepositoryTest = new Mock<ICameraRepository>();
+            _cameraServiceTest = new Mock<ICameraService>();
+            _userRepositoryTest = new Mock<IUserRepository>();
+            _userServiceTest = new Mock<IUserService>();
+            _controlCameraRepositoryTest = new Mock<IControlCameraRepository>();
+            _alarmServiceTest = new Mock<IAlarmService>();
+            _recordRepositoryTest = new Mock<IRecordRepository>();
+            _recordProcessRepositoryTest = new Mock<IRecordProcessRepository>();
 
 
             var options = new DbContextOptionsBuilder<FireDetectionDbContext>()

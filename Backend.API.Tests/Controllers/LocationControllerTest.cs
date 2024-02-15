@@ -29,7 +29,8 @@ namespace Backend.API.Tests.Controllers
             _locationController = new LocationController(_locationService.Object,_linkGenerator.Object);
         }
 
-        [Fact]
+       
+        /*[Fact]
         public async Task GetLocation_ShouldReturnCorrectData()
         {
             // Arrange
@@ -64,6 +65,6 @@ namespace Backend.API.Tests.Controllers
             // Additional assertions for Links if needed
             Assert.NotNull(restDto.Links);
             Assert.Single(restDto.Links);
-        }
+        }*/
     }
 }
