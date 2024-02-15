@@ -1,9 +1,12 @@
+using ConnectingApps.SmartInject;
 using FireDetection.Backend.API;
 using FireDetection.Backend.API.Middleware.GraphQL;
 using FireDetection.Backend.Domain;
 using FireDetection.Backend.Domain.Helpers;
 using FireDetection.Backend.Infrastructure;
 using FireDetection.Backend.Infrastructure.Helpers.ErrorHandler;
+using FireDetection.Backend.Infrastructure.Service.IServices;
+using FireDetection.Backend.Infrastructure.Service.Serivces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -40,6 +43,8 @@ builder.Services.AddEndpointsApiExplorer();
 // Add CORS
 builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
+
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddSwaggerGen(opt =>
 {
     opt.SwaggerDoc("v1", new OpenApiInfo { Title = "DressUpExchange-API", Version = "v1" });
@@ -71,14 +76,15 @@ builder.Services.AddSwaggerGen(opt =>
 
 var conn = builder.Configuration.GetConnectionString("DefaultConnections");
 builder.Services.AddDbContext<FireDetectionDbContext>(options =>
-    options.UseNpgsql(conn),
-    ServiceLifetime.Scoped);
+    options.UseNpgsql(conn));
+
 
 builder.Services.AddMemoryCache();
-
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSingleton<MyMemoryCache>();
 builder.Services.AddInfrastructuresService(conn);
 builder.Services.AddWebAPIService();
+builder.Services.AddLazyScoped<IRecordService, RecordService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

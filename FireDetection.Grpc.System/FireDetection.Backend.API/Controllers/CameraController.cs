@@ -52,7 +52,7 @@ namespace FireDetection.Backend.API.Controllers
                 Links = new List<LinkDTO> {
                     new LinkDTO(
                     Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Delete),"CameraController",Request.Scheme))!,
+                        _linkGenerator.GetUriByAction(HttpContext,nameof(Add),"CameraController",Request.Scheme))!,
                     "self",
                     "Add")
                 }
@@ -123,14 +123,14 @@ namespace FireDetection.Backend.API.Controllers
             DetectElectricalIncidentResponse response = await _cameraService.DetectElectricalIncident(id, request);
             return new RestDTO<DetectElectricalIncidentResponse>()
             {
-                Message = "Take Camera Disconnect  Successfully",
+                Message = "Get Alarm   Successfully",
                 Data = response,
                 Links = new List<LinkDTO> {
                     new LinkDTO(
                     Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Update),"Location",Request.Scheme))!,
+                        _linkGenerator.GetUriByAction(HttpContext,nameof(ElectricalIncident),"CameraController",Request.Scheme))!,
                     "self",
-                    "Patch")
+                    "Post")
                 }
             };
         }

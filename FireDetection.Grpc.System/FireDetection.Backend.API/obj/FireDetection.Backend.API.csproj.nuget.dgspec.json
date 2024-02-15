@@ -44,6 +44,10 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
+            "ConnectingApps.SmartInject": {
+              "target": "Package",
+              "version": "[2.0.2, )"
+            },
             "GraphQL": {
               "target": "Package",
               "version": "[7.7.2, )"
