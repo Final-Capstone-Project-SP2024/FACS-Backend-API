@@ -14,8 +14,11 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
 
         Task<bool> ActionInAlarm(Guid recordID,AddRecordActionRequest request);
 
+        public Task AutoAction(Guid recordID, int actioTypeId);
+
         Task<IEnumerable<RecordResponse>> Get();
         
         Task<RecordDetailResponse> GetDetail(Guid recordID);
+
     }
 }

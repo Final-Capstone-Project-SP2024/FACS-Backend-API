@@ -4,15 +4,17 @@ using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace FireDetection.Backend.Infrastructure.Service.Serivces
 {
-    public class MemoryCacheService : IMemoryCacheService
+    public class MemoryCacheService :   IMemoryCacheService
     {
         private readonly IMemoryCache _memoryCache;
-
+        static int Rating = 0;
+        static readonly object lockObject = new object();
         public MemoryCacheService(IMemoryCache memoryCache)
         {
             _memoryCache = memoryCache;
@@ -85,6 +87,48 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         public async Task UncheckRecordKey(Guid recordId)
         {
             _memoryCache.Set($"{recordId}", "Yes" );
+        }
+
+
+        public   void  CountingVote(int value, out int input)
+        {
+            // Update the global variable with proper synchronization
+            input  = value;
+            input++;
+        }
+
+
+        public async Task CancelAutoAction(Guid recordId)
+        {
+            _memoryCache.Set($"{recordId}_Action", "Yes");
+        }
+
+        public async Task<bool> CheckIsAction(Guid recordId)
+        {
+            _memoryCache.TryGetValue($"{recordId}_Action", out var result);
+
+            if (result.ToString() == "Not")
+            {
+                return false;
+
+            }
+            return true;
+        }
+
+        public async Task CreateCheckAction(Guid recordId)
+        {
+            var cacheEntryOptions = new MemoryCacheEntryOptions()
+          .SetSlidingExpiration(TimeSpan.FromMinutes(5))
+          .SetAbsoluteExpiration(TimeSpan.FromMinutes(5))
+          .SetPriority(CacheItemPriority.Normal)
+          .SetSize(1024);
+            _memoryCache.Set($"{recordId}_Action", "Not", cacheEntryOptions);
+       
+        }
+
+        public async Task<int> VotingResult()
+        {
+            return Rating;
         }
     }
 }

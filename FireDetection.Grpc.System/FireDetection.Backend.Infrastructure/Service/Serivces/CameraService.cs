@@ -78,15 +78,14 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<CameInformationResponse> Update(Guid id, AddCameraRequest request)
         {
-            Camera camera = await GetCameraById(id);
+            Camera camera =  await _unitOfWork.CameraRepository.GetById(id);
             camera.CameraDestination = request.Destination;
             camera.Status = request.Status;
             camera.LastModified = DateTime.UtcNow;
 
             _unitOfWork.CameraRepository.Update(camera);
             await _unitOfWork.SaveChangeAsync();
-
-            return _mapper.Map<CameInformationResponse>(_unitOfWork.CameraRepository.Where(x => x.Id == id));
+            return _mapper.Map<CameInformationResponse>(await _unitOfWork.CameraRepository.GetById(id));
 
         }
 
@@ -97,11 +96,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         }
 
 
-        public async Task<Camera> GetCameraById(Guid cameraId)
-        {
-            IQueryable<Camera> cameras = await _unitOfWork.CameraRepository.GetAll();
-            return cameras.FirstOrDefault(x => x.Id == cameraId);
-        }
+       
 
 
         private async Task<bool> CheckDuplicateDestination(string CameraLocation)

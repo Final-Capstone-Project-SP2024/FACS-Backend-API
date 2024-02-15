@@ -13,7 +13,7 @@ namespace FireDetection.Backend.Infrastructure.Repository.IRepositories
     {
         Task<IQueryable<T>> GetAll();
         Task<T?> GetById(Guid id);
-        void InsertAsync(T obj);
+        Task InsertAsync(T obj);
         void Update(T obj);
         void SoftDelete(T obj);
         void HardDelete(T obj);

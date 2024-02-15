@@ -14,8 +14,6 @@ namespace FireDetection.Backend.Domain.FluentAPIs
         public void Configure(EntityTypeBuilder<Record> builder)
         {
             builder.HasKey(x => x.Id);
-
-
             builder.HasMany(x => x.MediaRecords).WithOne(x => x.Record).HasForeignKey(x => x.RecordId);
             builder.HasMany(x => x.RecordProcesses).WithOne(x => x.Record).HasForeignKey(x => x.RecordID);
             builder.HasMany(x => x.AlarmRates).WithOne(x => x.Record).HasForeignKey(x => x.RecordID);

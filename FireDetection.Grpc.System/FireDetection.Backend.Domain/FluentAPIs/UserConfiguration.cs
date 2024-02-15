@@ -16,11 +16,12 @@ namespace FireDetection.Backend.Domain.FluentAPIs
             builder.HasKey(x => x.Id);
 
             builder.Property(book => book.Id).ValueGeneratedOnAdd();
-
-            
             
             builder.HasMany(x => x.ControlCameras).WithOne(x => x.User).HasForeignKey(x => x.UserID);
             builder.HasMany(x => x.RecordProcesses).WithOne(x => x.User).HasForeignKey(x => x.UserID);
+
+
+           
         }
     }
 }

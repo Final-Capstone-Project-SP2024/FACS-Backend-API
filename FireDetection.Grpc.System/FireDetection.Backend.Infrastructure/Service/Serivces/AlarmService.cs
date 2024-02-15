@@ -45,7 +45,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         }
 
 
-        private  async Task<bool> SaveMediaFileInStorage(string urlInput)
+        public  async Task<bool> SaveMediaFileInStorage(string urlInput)
         {
             if (urlInput.Contains(".mp4"))
             {
@@ -72,7 +72,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         }
 
 
-        private async Task<bool> SaveRecord(Record record)
+        public async Task<bool> SaveRecord(Record record)
         {
              _unitOfWork.RecordRepository.InsertAsync(record);
             return await _unitOfWork.SaveChangeAsync() > 0;

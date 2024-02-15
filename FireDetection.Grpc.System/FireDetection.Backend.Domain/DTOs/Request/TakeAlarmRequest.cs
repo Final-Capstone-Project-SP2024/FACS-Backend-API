@@ -11,7 +11,6 @@ namespace FireDetection.Backend.Domain.DTOs.Request
    
         public  decimal PredictedPercent { get; set; } = 0;
 
-        public DateTime Time { get; set; }
 
         public string PictureUrl { get; set; } = null!;
 

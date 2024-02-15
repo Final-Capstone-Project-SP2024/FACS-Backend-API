@@ -31,7 +31,6 @@ namespace FireDetection.Backend.Infrastructure
             services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<IMediaRecordService, MediaRecordService>();
             services.AddScoped<IMemoryCacheService, MemoryCacheService>();
-            services.AddScoped<IRecordService,RecordService>();
             services.AddScoped<ITimerService , TimerService>();
             services.AddScoped<IUserService , UserService>();
 

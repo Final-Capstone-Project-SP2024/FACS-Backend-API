@@ -57,7 +57,7 @@ namespace FireDetection.Backend.API.Mapper
                 .ForMember(x => x.Status, src => src.MapFrom(x => "InAlarm"))
                 .ForMember(x => x.PredictedPercent, src => src.MapFrom(x => x.PredictedPercent))
                 .ForMember(x => x.CreatedDate, src => src.MapFrom(x => DateTime.UtcNow))
-                .ForMember(x => x.RecordTime, src => src.MapFrom(x => x.Time))
+                .ForMember(x => x.RecordTime, src => src.MapFrom(x => DateTime.UtcNow))
                  .ForMember(x => x.RecordTypeID, src => src.MapFrom(x => 1))
                 .ReverseMap();
 

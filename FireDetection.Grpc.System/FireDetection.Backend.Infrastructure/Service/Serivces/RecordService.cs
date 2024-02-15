@@ -4,6 +4,7 @@ using FireDetection.Backend.Domain.DTOs.Response;
 using FireDetection.Backend.Domain.DTOs.State;
 using FireDetection.Backend.Domain.Entity;
 using FireDetection.Backend.Infrastructure.Helpers.ErrorHandler;
+using FireDetection.Backend.Infrastructure.Service.DAL;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using FireDetection.Backend.Infrastructure.UnitOfWork;
 using System;
@@ -16,22 +17,35 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 {
     public class RecordService : IRecordService
     {
+        private readonly ITimerService _timerService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IMemoryCacheService _memoryCacheService;
 
-        public RecordService(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCacheService memoryCacheService)
+        public RecordService(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCacheService memoryCacheService, ITimerService timerService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _memoryCacheService = memoryCacheService;
+            _timerService = timerService;
+
         }
+
+        public RecordService()
+        {
+            
+        }
+
         public async Task<bool> ActionInAlarm(Guid recordID, AddRecordActionRequest request)
         {
+
             if (!await CheckActionInSystem(recordID, request.ActionId)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Have already this location in system");
 
             if (!await checkActionInRecord(recordID)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Have already this location in system");
 
+
+
+            await _memoryCacheService.CancelAutoAction(recordID);
             if (request.ActionId == 5 || request.ActionId == 6) await updateRecordToEnd(recordID);
 
             RecordProcess recordProcess = _mapper.Map<RecordProcess>(request);
@@ -39,17 +53,22 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             _unitOfWork.RecordProcessRepository.InsertAsync(recordProcess);
             await _unitOfWork.SaveChangeAsync();
             Task.Run(async () => await updateRecordToEnd(recordID, 1));
+
             return true;
         }
 
         public async Task<bool> VoteAlarmLevel(Guid recordID, RateAlarmRequest request)
         {
+
             //  await _memoryCacheService.SetRecordKey(recordID);
             if (await _memoryCacheService.checkDisableVote(recordID))
             {
                 throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Have already this location in system");
             };
-             await _memoryCacheService.UncheckRecordKey(recordID);
+            await _memoryCacheService.UncheckRecordKey(recordID);
+
+            await _memoryCacheService.CreateCheckAction(recordID);
+            _timerService.CheckIsAction(recordID);
             AlarmRate alarmRate = _mapper.Map<AlarmRate>(request);
             alarmRate.RecordID = recordID;
             _unitOfWork.AlarmRateRepository.InsertAsync(alarmRate);
@@ -120,12 +139,20 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<IEnumerable<RecordResponse>> Get()
         {
-           return _unitOfWork.RecordRepository.Get();
+            return _unitOfWork.RecordRepository.Get();
         }
 
         public async Task<RecordDetailResponse> GetDetail(Guid recordID)
         {
             return _unitOfWork.RecordRepository.RecordDetailResponse(recordID);
+        }
+
+        public async Task AutoAction(Guid recordID, int actioTypeId)
+        {
+
+            throw new NotImplementedException();
+
+
         }
     }
 }

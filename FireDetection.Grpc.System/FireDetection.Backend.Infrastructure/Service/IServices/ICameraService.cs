@@ -1,5 +1,6 @@
 ﻿using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.DTOs.Response;
+using FireDetection.Backend.Domain.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,5 +26,9 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
 
 
         Task<DetectElectricalIncidentResponse> DetectElectricalIncident(Guid id, TakeElectricalIncidentRequest request);
+
+
+
+        public Task<Camera> GetCameraByName(string cameraName);
     }
 }
