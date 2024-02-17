@@ -1,4 +1,5 @@
 ﻿using FireDetection.Backend.Domain.DTOs.Request;
+using FireDetection.Backend.Domain.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,10 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
         public Task<string> TakeElectricalBreakdownAlarm(ElectricalBreakdownRequest request);
 
         public Task<string> RateAlarm(RateAlarmRequest request);
+
+        public  Task<bool> SaveRecord(Record record);
+
+        public Task<bool> SaveMediaFileInStorage(string urlInput);
 
 
 

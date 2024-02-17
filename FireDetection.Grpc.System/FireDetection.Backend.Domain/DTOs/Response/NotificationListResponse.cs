@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace FireDetection.Backend.Domain.DTOs.Response
 {
-    public class DetectElectricalIncidentResponse
+    public class NotificationListResponse
     {
+        public List<string> Notifications { get; set; }
     }
 }

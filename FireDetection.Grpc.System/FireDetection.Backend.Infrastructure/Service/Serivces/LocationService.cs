@@ -44,7 +44,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<bool> DeleteLocation(Guid id)
         {
-            Location location = await GetLocationByID(id);
+            Location location = await _context.LocationRepository.GetById(id);
             location.IsDeleted = true;
             await _context.SaveChangeAsync();
             return true;
@@ -94,17 +94,33 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<LocationInformationResponse> AddStaffToLocation(Guid locationId, AddStaffRequest request)
         {
+            int check = 0;
+            List<Guid> duplicateGuid = new List<Guid>();
             foreach (var staff in request.staff)
             {
-
-                ControlCamera controlCamera = new ControlCamera()
+               if(! await CheckDuplicateUserInControlCamera(locationId, staff))
                 {
-                    LocationID = locationId,
-                    UserID = staff  
-                };
-                _context.ControlCameraRepository.InsertAsync(controlCamera);
-                await _context.SaveChangeAsync();
+                    check++;
+                    duplicateGuid.Add(staff);
+                }
+                else
+                {
+                    ControlCamera controlCamera = new ControlCamera()
+                    {
+                        LocationID = locationId,
+                        UserID = staff
+                    };
+                    _context.ControlCameraRepository.InsertAsync(controlCamera);
+                    await _context.SaveChangeAsync();
 
+                };
+
+          
+
+            }
+            if(check > 0)
+            {
+                throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, $"Some user have already in this location {duplicateGuid.ToString}");
             }
 
             var data = await _context.LocationRepository.GetStaffInLocation(locationId);

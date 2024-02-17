@@ -1,5 +1,6 @@
 ﻿using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.DTOs.Response;
+using FireDetection.Backend.Domain.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,9 +22,13 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
 
         Task<IQueryable<CameInformationResponse>> Get();
 
-        Task<DetectFireResponse> DetectFire(Guid id, TakeAlarmRequest request);
+        Task<DetectResponse> DetectFire(Guid id, TakeAlarmRequest request);
 
 
-        Task<DetectElectricalIncidentResponse> DetectElectricalIncident(Guid id, TakeElectricalIncidentRequest request);
+       Task<DetectResponse> DetectElectricalIncident(Guid id);
+
+
+
+        public Task<Camera> GetCameraByName(string cameraName);
     }
 }

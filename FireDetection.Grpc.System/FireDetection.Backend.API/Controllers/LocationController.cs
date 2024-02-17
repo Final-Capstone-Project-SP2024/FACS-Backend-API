@@ -1,11 +1,10 @@
 ﻿using FireDetection.Backend.Domain.DTOs.Core;
 using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.DTOs.Response;
-using FireDetection.Backend.Domain.Entity;
-using FireDetection.Backend.Infrastructure.Repository.IRepositories;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Location = FireDetection.Backend.Domain.Entity.Location;
 
 namespace FireDetection.Backend.API.Controllers
 {
@@ -93,19 +92,19 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [HttpGet]
-        public async Task<ActionResult<RestDTO<IQueryable<Domain.Entity.Location>>>> Get()
+        [HttpGet]   
+        public async Task<ActionResult<RestDTO<IQueryable<Location>>>> Get()
         {
-            IQueryable<Domain.Entity.Location> location = await _context.GetLocation();
+            IQueryable<Location> location = await _context.GetLocation();
 
-            return new RestDTO<IQueryable<Domain.Entity.Location>>()
+            return new RestDTO<IQueryable<Location>>()
             {
-                Message = "Delete Location Successfully",
+                Message = "Get Location Successfully",
                 Data = location,
                 Links = new List<LinkDTO> {
                     new LinkDTO(
                     Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Get),"RecordController",Request.Scheme))!,
+                        _linkGenerator.GetUriByAction(HttpContext,nameof(Get),"LocationController",Request.Scheme))!,
                     "self",
                     "Get")
                 }

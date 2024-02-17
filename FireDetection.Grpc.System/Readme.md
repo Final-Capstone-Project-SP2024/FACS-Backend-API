@@ -9,3 +9,8 @@ dotnet ef  database update  -s .\FireDetection.Backend.API\  -p .\FireDetection.
 ```
 dotnet ef migrations add Name -s .\FireDetection.Backend.API\  -p .\FireDetection.Backend.Domain\ 
 ```
+
+### Docker run 
+` docker-compose up `
+- API using 
+`  http://localhost:4211/swagger/index.html#  `
