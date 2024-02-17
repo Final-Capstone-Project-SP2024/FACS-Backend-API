@@ -62,7 +62,6 @@ namespace Backend.API.Tests.Controllers
           It.IsAny<FragmentString>(),
           It.IsAny<LinkOptions>()))
       .Returns("/location"); // Adjust the return value as needed
-
             // Use the wrapper method in your controller or service
             var uri = LinkGeneratorWrapper.GetUriByAction(
                 _linkGeneratorTest.Object,
