@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using FireDetection.Backend.Domain.DTOs.Filter;
 using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.DTOs.Response;
 using FireDetection.Backend.Domain.Entity;
@@ -88,8 +87,6 @@ namespace FireDetection.Backend.API.Mapper
                 .ForMember(x => x.ActionTypeId, src => src.MapFrom(x => x.ActionId))
                 .ForMember(x => x.UserID, src => src.MapFrom(x => x.UserID))
                 .ReverseMap();
-
-            CreateMap<UserInformationResponse, UserFilter>();
 
         }
 

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using FireDetection.Backend.Domain;
-using FireDetection.Backend.Domain.DTOs.Filter;
 using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.DTOs.Response;
 using FireDetection.Backend.Domain.Entity;

@@ -1,12 +1,14 @@
 ﻿using FireDetection.Backend.Domain.DTOs.Core;
-using FireDetection.Backend.Domain.DTOs.Filter;
 using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.DTOs.Response;
 using FireDetection.Backend.Infrastructure.Repository.IRepositories;
 using FireDetection.Backend.Infrastructure.Service.IServices;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Npgsql.Internal.TypeHandlers;
 using System.Diagnostics;
+using System.Linq.Dynamic.Core;
 
 namespace FireDetection.Backend.API.Controllers
 {
@@ -119,9 +121,18 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [HttpGet]
-        public async Task<ActionResult<RestDTO<UserInformationResponse>>> GetUsers([FromBody] PagingRequest pagingRequest, [FromQuery]UserFilter filter){
-            throw new NotImplementedException();
-        }
+        //[HttpGet]
+        //public async Task<RestDTO<PagedResult<UserInformationResponse>>> GetAllUsers(PagingRequest pagingRequest, UserRequest request){
+        //    var response = await _userService.GetAllUsers(pagingRequest, request);
+        //    return response != null ? new RestDTO<PageResult<UserInformationResponse>>()
+        //    {
+        //        Message = "Get All Successfully!",
+        //        Data = response,
+        //        Links = new List<LinkDTO>
+        //        {
+        //            new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(GetAllUsers), "UserController", null, Request.Scheme))!,"self","Get")
+        //        }
+        //    } : NotFound();
+        //}
     }
 }

@@ -9,13 +9,8 @@ namespace FireDetection.Backend.Domain.DTOs.Response
     public class UserInformationResponse
     {
         public string SecurityCode { get; set; } = null!;
-
         public string Email { get; set; } = null!;
-
         public string Name { get; set; } = null!;
-
         public string CreatedDate { get; set; } = null!;
-
-
     }
 }

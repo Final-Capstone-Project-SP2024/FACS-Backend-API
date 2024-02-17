@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using FireDetection.Backend.Domain.DTOs.Filter;
 using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.DTOs.Response;
 using FireDetection.Backend.Domain.Entity;
 using FireDetection.Backend.Infrastructure.Helpers.ErrorHandler;
+using FireDetection.Backend.Infrastructure.Helpers.GetHandler;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using FireDetection.Backend.Infrastructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +17,8 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using FireDetection.Backend.Domain.Ultilities;
+using AutoMapper.QueryableExtensions;
 
 namespace FireDetection.Backend.Infrastructure.Service.Serivces
 {
@@ -204,9 +206,19 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             return false;
         }
 
-        public Task<UserInformationResponse> GetUsers(PagingRequest pagingRequest, UserFilter request)
+        public async Task<PagedResult<UserInformationResponse>> GetAllUsers(PagingRequest pagingRequest, UserRequest request)
         {
-            throw new NotImplementedException(); 
-        }   
+            var userEntity = _mapper.Map<User>(request);
+
+            var usersQuery = await _unitOfWork.UserRepository.GetAll();
+
+            var filterQuery = LinqUtils.DynamicFilter<User>(usersQuery, userEntity);
+            var usersProjected = filterQuery.ProjectTo<UserInformationResponse>(_mapper.ConfigurationProvider).ToList();
+
+            var pagedUsers = PageHelper<UserInformationResponse>.Paging(usersProjected, pagingRequest.Page, pagingRequest.PageSize);
+
+            return pagedUsers;
+        }
+
     }
 }
