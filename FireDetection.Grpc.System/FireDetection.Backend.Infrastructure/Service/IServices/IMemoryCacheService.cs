@@ -19,6 +19,14 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
 
         public Task UncheckRecordKey(Guid recordId);
 
+        public Task CountingVote(int value);
 
+        public Task<bool> CheckIsAction(Guid recordId);
+
+        public Task CancelAutoAction(Guid recordId);
+
+        public Task CreateCheckAction(Guid recordId);
+
+        public Task<int> VotingResult();
     }
 }

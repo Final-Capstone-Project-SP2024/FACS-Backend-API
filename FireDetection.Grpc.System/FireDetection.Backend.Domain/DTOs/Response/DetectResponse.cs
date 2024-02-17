@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FireDetection.Backend.Domain.DTOs.Response
 {
-    public class DetectFireResponse
+    public class DetectResponse
     {
         public Guid CameraId { get; set; }
 

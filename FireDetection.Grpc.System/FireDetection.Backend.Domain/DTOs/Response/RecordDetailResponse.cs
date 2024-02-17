@@ -23,6 +23,12 @@ namespace FireDetection.Backend.Domain.DTOs.Response
         public VideoRecord VideoRecord { get; set; } = null!;
 
         public ImageRecord ImageRecord { get; set; } = null!;
+
+        public List<UserRating> userRatings { get; set; } = null!;
+
+
+
+
     }
 
     public class VideoRecord
@@ -35,4 +41,24 @@ namespace FireDetection.Backend.Domain.DTOs.Response
     {
         public string? VideoUrl { get; set; }
     }
+
+
+    public class UserRating
+    {
+        public Guid userId { get; set; }
+
+        public int Rating { get; set;}
+    }
+
+
+    public class UserVoting
+    {
+        
+        public Guid userId { get; set; }
+
+        public int Rating { get; set; }
+    }
+
+
+    
 }
