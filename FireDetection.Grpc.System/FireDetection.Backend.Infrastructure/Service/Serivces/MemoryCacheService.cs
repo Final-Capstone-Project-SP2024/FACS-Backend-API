@@ -90,10 +90,15 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         }
 
 
-        public   void  CountingVote(int value, out int input)
+        public  async Task  CountingVote(int value)
         {
             // Update the global variable with proper synchronization
-            input  = value;
+            await Task.Run(() => Increase(value, out Rating));
+        }
+
+        public void Increase(int value ,out int input)
+        {
+            input = value;
             input++;
         }
 

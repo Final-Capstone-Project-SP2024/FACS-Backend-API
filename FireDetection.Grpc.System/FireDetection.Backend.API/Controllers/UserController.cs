@@ -25,6 +25,14 @@ namespace FireDetection.Backend.API.Controllers
         [HttpPost]
         public async Task<ActionResult<RestDTO<UserInformationResponse>>> Add(CreateUserRequest request)
         {
+            if (!ModelState.IsValid)
+            {
+                var details = new ValidationProblemDetails(ModelState);
+                details.Extensions["traceId"] = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+                details.Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1";
+                details.Status = StatusCodes.Status400BadRequest;
+                return new BadRequestObjectResult(details);
+            }
             UserInformationResponse response = await _userService.CreateUser(request);
             return new RestDTO<UserInformationResponse>()
             {
@@ -33,7 +41,7 @@ namespace FireDetection.Backend.API.Controllers
                 Links = new List<LinkDTO> {
                     new LinkDTO(
                     Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Add),"UserController",
+                        _linkGenerator.GetUriByAction(HttpContext,nameof(Add),"/UserController",
                         request,
                         Request.Scheme))!,
                     "self",

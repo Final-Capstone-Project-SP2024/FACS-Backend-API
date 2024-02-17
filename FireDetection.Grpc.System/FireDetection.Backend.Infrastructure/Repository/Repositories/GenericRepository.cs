@@ -53,9 +53,9 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
             return query;
         }
 
-        public  async Task InsertAsync(T obj)
+        public void InsertAsync(T obj)
         {
-            await  _dbSet.AddAsync(obj);
+            _dbSet.Add(obj);
         }
 
         public void SoftDelete(T obj)

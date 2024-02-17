@@ -1,4 +1,5 @@
 ﻿using FireDetection.Backend.Domain.DTOs.Response;
+using FireDetection.Backend.Domain.DTOs.State;
 using FireSharp.Config;
 using FireSharp.Interfaces;
 using FireSharp.Response;
@@ -104,10 +105,14 @@ namespace FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler
         {
             switch (id)
             {
-                case 1: return await RealtimeDatabaseHandlers.GetDetail("Alarm level 1");
-                case 2: return await RealtimeDatabaseHandlers.GetDetail("Alarm level 2");
-                case 3: return await RealtimeDatabaseHandlers.GetDetail("Alarm level 3");
-                case 4: return await RealtimeDatabaseHandlers.GetDetail("Disconnect camera");
+                case 1: return await RealtimeDatabaseHandlers.GetDetail(AlarmType.Level1);
+                case 2: return await RealtimeDatabaseHandlers.GetDetail(AlarmType.Level2);
+                case 3: return await RealtimeDatabaseHandlers.GetDetail(AlarmType.Level3);
+                case 4: return await RealtimeDatabaseHandlers.GetDetail(AlarmType.DisconnectCamera);
+                case 5: return await RealtimeDatabaseHandlers.GetDetail(AlarmType.FakeAlarm);
+                case 6: return await RealtimeDatabaseHandlers.GetDetail(AlarmType.Voting);
+                case 7: return await RealtimeDatabaseHandlers.GetDetail(AlarmType.Remind);
+                case 8: return await RealtimeDatabaseHandlers.GetDetail(AlarmType.FireDetectNotify);
                 default:
                     break;
             }

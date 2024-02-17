@@ -6,6 +6,8 @@ using FireDetection.Backend.Domain;
 using FireDetection.Backend.Infrastructure.Repository.IRepositories;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using FireDetection.Backend.Infrastructure.UnitOfWork;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Moq;
@@ -25,6 +27,11 @@ namespace Backend.Domain.Tests
         protected readonly Mock<ILocationRepository> _locationRepositoryTest;
         protected readonly Mock<ILocationService> _locationServiceTest;
 
+        protected readonly Mock<IHttpContextAccessor> _mockContextAccessorTest;
+        protected readonly Mock<HttpRequest> _mockHttpRequestTest;
+
+        protected readonly Mock<HttpContext> _httpContextTest;
+        protected readonly Mock<IUrlHelper> _urlHelperTest;
         protected readonly Mock<IUserRepository> _userRepositoryTest;
         protected readonly Mock<IUserService> _userServiceTest;
 
@@ -69,6 +76,10 @@ namespace Backend.Domain.Tests
             _fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList()
     .ForEach(b => _fixture.Behaviors.Remove(b));
 
+
+            _mockHttpRequestTest = new Mock<HttpRequest>();
+            _mockContextAccessorTest = new Mock<IHttpContextAccessor>();
+            _httpContextTest = new Mock<HttpContext>();
             _unitOfWork = new Mock<IUnitOfWork>();
             _locationRepositoryTest = new Mock<ILocationRepository>();
             _locationServiceTest = new Mock<ILocationService>();
@@ -88,7 +99,7 @@ namespace Backend.Domain.Tests
             _recordRepositoryTest = new Mock<IRecordRepository>();
             _recordProcessRepositoryTest = new Mock<IRecordProcessRepository>();
 
-
+            _urlHelperTest = new Mock<IUrlHelper>();
             var options = new DbContextOptionsBuilder<FireDetectionDbContext>()
                  .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;

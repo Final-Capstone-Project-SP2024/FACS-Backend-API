@@ -1,7 +1,7 @@
 ﻿using FireDetection.Backend.Domain;
+using FireDetection.Backend.Domain.DTOs.Response;
 using FireDetection.Backend.Domain.Entity;
 using FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler;
-using FireDetection.Backend.Infrastructure.Service.DAL;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using FireDetection.Backend.Infrastructure.UnitOfWork;
 using Microsoft.AspNetCore.Http;
@@ -21,17 +21,17 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
     public class TimerService : ITimerService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IAPICallService _APICallService;
 
         private readonly IMemoryCacheService _memorycachedservice;
 
 
 
-        public TimerService(IUnitOfWork unitOfWork, IMemoryCacheService memoryCacheService)
+        public TimerService(IUnitOfWork unitOfWork, IMemoryCacheService memoryCacheService, IAPICallService aPICallService)
         {
             _unitOfWork = unitOfWork;
             _memorycachedservice = memoryCacheService;
-
-
+            _APICallService = aPICallService;
         }
 
         public void CheckIsAction(Guid recordId)
@@ -54,9 +54,10 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 {
                     if (!await _memorycachedservice.CheckRecordKeyIsVote(recorid))
                     {
+                        var response = await NotificationHandler.Get(6);
                         // Data not found, send notification
-                        //     await CloudMessagingHandlers.CloudMessaging();
-                        Console.WriteLine("=====================_____Vote");
+                        await CloudMessagingHandlers.CloudMessaging(titleInput: response.Title, bodyInput: response.Context);
+                        Console.WriteLine("========Voting Phase=====");
                     }
                     else
                     {
@@ -93,9 +94,9 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 {
                     if (!await _memorycachedservice.CheckIsAction(recordId))
                     {
-                        // Data not found, send notification
-                        //     await CloudMessagingHandlers.CloudMessaging();
-                        Console.WriteLine("=====================-----Action");
+                        //! Send notification to remind manager have some action
+                         await CloudMessagingHandlers.CloudMessaging();
+                        Console.WriteLine("======Action Phase=======");
                     }
                     else
                     {
@@ -114,23 +115,8 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
                 if ((DateTime.Now - startTime).TotalMinutes >= 0.2)
                 {
-
-
                     Console.WriteLine("Performing action after 5 minutes...");
-
-                    try
-                    {
-
-                        APICal call = new APICal(_unitOfWork);
-                      await  call.AutoCallAction(recordId,  1);
-
-                    }
-                    catch (Exception e)
-                    {
-
-                        Console.WriteLine(e);
-                        throw;
-                    }
+                    await _APICallService.AutoCallAction(recordId, await _memorycachedservice.VotingResult());
                     break; // Exit the loop after performing the action
                 }
             }

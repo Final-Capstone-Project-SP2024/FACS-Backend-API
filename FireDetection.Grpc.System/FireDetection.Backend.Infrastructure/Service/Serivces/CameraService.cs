@@ -2,7 +2,10 @@
 using Firebase.Auth;
 using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.DTOs.Response;
+using FireDetection.Backend.Domain.DTOs.State;
 using FireDetection.Backend.Domain.Entity;
+using FireDetection.Backend.Domain.Utils;
+using FireDetection.Backend.Infrastructure.Helpers.ErrorHandler;
 using FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using FireDetection.Backend.Infrastructure.UnitOfWork;
@@ -47,10 +50,10 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<CameInformationResponse> Add(AddCameraRequest request)
         {
-            if (!await CheckDuplicateDestination(request.Destination)) throw new Exception();
+            if (!await CheckDuplicateDestination(request.Destination)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Destination have already add in system");
+
             _unitOfWork.CameraRepository.InsertAsync(_mapper.Map<Camera>(request));
             await _unitOfWork.SaveChangeAsync();
-
 
             return _mapper.Map<CameInformationResponse>(await GetCameraByName(request.Destination));
         }
@@ -78,7 +81,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<CameInformationResponse> Update(Guid id, AddCameraRequest request)
         {
-            Camera camera =  await _unitOfWork.CameraRepository.GetById(id);
+            Camera camera = await _unitOfWork.CameraRepository.GetById(id);
             camera.CameraDestination = request.Destination;
             camera.Status = request.Status;
             camera.LastModified = DateTime.UtcNow;
@@ -95,10 +98,6 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             return cameras.FirstOrDefault(x => x.CameraDestination == cameraName);
         }
 
-
-       
-
-
         private async Task<bool> CheckDuplicateDestination(string CameraLocation)
         {
             IQueryable<Camera> cameras = await _unitOfWork.CameraRepository.GetAll();
@@ -110,8 +109,11 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             return true;
         }
 
-        public async Task<DetectFireResponse> DetectFire(Guid id, TakeAlarmRequest request)
+        public async Task<DetectResponse> DetectFire(Guid id, TakeAlarmRequest request)
         {
+            Camera camera = await _unitOfWork.CameraRepository.GetById(id);
+            if (camera is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "CameraId is invalid");
+
             //1.get the people who have responsibility in this camreId,
             List<Guid> userIds = await _unitOfWork.CameraRepository.GetUsersByCameraId(id);
 
@@ -120,10 +122,19 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                {
                    //2. get fcmtoken from their userid
                    await RealtimeDatabaseHandlers.GetFCMTokenByUserID(userId);
-                   // 3. push notification to their with messaging setting
-                   await CloudMessagingHandlers.CloudMessaging();
+                   // 3. push notification to their with messaging settinga
 
                }*/
+            //? Send notification about where have the fire belong to where location
+            NotficationDetailResponse data = await NotificationHandler.Get(8);
+
+            await CloudMessagingHandlers.CloudMessaging(
+                HandleTextUtil.HandleTitle(data.Title, camera.CameraDestination),
+                HandleTextUtil.HandleContext(
+                    data.Context,
+                    _unitOfWork.LocationRepository.GetById(camera.LocationID).Result.LocationName,
+                    camera.CameraDestination)
+                );
 
 
             // 5. save record to database
@@ -134,26 +145,41 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
             _unitOfWork.RecordRepository.InsertAsync(record);
             await _unitOfWork.SaveChangeAsync();
+
             // 4. save image and video to database 
             await _mediaRecordService.AddImage(request.PictureUrl, record.Id);
             await _mediaRecordService.Addvideo(request.VideoUrl, record.Id);
+
+
             _timerService.CheckIsVoting(record.Id);
-            return _mapper.Map<DetectFireResponse>(record);
+            return _mapper.Map<DetectResponse>(record);
         }
 
-        public async Task<DetectElectricalIncidentResponse> DetectElectricalIncident(Guid id, TakeElectricalIncidentRequest request)
+        public async Task<DetectResponse> DetectElectricalIncident(Guid id)
         {
+            Camera camera = await _unitOfWork.CameraRepository.GetById(id);
+            if (camera is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "CameraId is invalid");
 
-            await RealtimeDatabaseHandlers.GetFCMTokenByUserID();
+            //? Send notification about where have the fire belong to where location
+            NotficationDetailResponse data = await NotificationHandler.Get(4);
+
             // 3. push notification to their with messaging setting
-            await CloudMessagingHandlers.CloudMessaging();
-            Record record = _mapper.Map<Record>(request);
+            await CloudMessagingHandlers.CloudMessaging(
+               HandleTextUtil.HandleTitle(data.Title, camera.CameraDestination),
+               HandleTextUtil.HandleContext(
+                   data.Context,
+                   _unitOfWork.LocationRepository.GetById(camera.LocationID).Result.LocationName,
+                   camera.CameraDestination)
+               );
+            Record record = new();
             record.CameraID = id;
             record.Id = new Guid();
+            record.Status = RecordState.InAlram;
+            record.RecordTypeID = 2;
             _unitOfWork.RecordRepository.InsertAsync(record);
             await _unitOfWork.SaveChangeAsync();
 
-            return _mapper.Map<DetectElectricalIncidentResponse>(record);
+            return _mapper.Map<DetectResponse>(record);
         }
 
 

@@ -5,6 +5,7 @@ using FireDetection.Backend.Domain.DTOs.Response;
 using FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using static Google.Apis.Requests.BatchRequest;
 
 namespace FireDetection.Backend.API.Controllers
@@ -44,6 +45,14 @@ namespace FireDetection.Backend.API.Controllers
         [HttpPost]
         public async Task<ActionResult<RestDTO<CameInformationResponse>>> Add(AddCameraRequest request)
         {
+            if (!ModelState.IsValid)
+            {
+                var details = new ValidationProblemDetails(ModelState);
+                details.Extensions["traceId"] = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+                details.Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1";
+                details.Status = StatusCodes.Status400BadRequest;
+                return new BadRequestObjectResult(details);
+            }
             CameInformationResponse response = await _cameraService.Add(request);
             return new RestDTO<CameInformationResponse>()
             {
@@ -99,10 +108,18 @@ namespace FireDetection.Backend.API.Controllers
 
 
         [HttpPost("{id}/detect")]
-        public async Task<ActionResult<RestDTO<DetectFireResponse>>> DetectFire(Guid id, TakeAlarmRequest request)
+        public async Task<ActionResult<RestDTO<DetectResponse>>> DetectFire(Guid id, TakeAlarmRequest request)
         {
-            DetectFireResponse response = await _cameraService.DetectFire(id, request);
-            return new RestDTO<DetectFireResponse>()
+            if (!ModelState.IsValid)
+            {
+                var details = new ValidationProblemDetails(ModelState);
+                details.Extensions["traceId"] = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+                details.Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1";
+                details.Status = StatusCodes.Status400BadRequest;
+                return new BadRequestObjectResult(details);
+            }
+            DetectResponse response = await _cameraService.DetectFire(id, request);
+            return new RestDTO<DetectResponse>()
             {
                 Message = "Detect Fire  Successfully",
                 Data = response,
@@ -118,12 +135,12 @@ namespace FireDetection.Backend.API.Controllers
 
 
         [HttpPost("{id}/disconnect")]
-        public async Task<ActionResult<RestDTO<DetectElectricalIncidentResponse>>> ElectricalIncident(Guid id, TakeElectricalIncidentRequest request)
+        public async Task<ActionResult<RestDTO<DetectResponse>>> ElectricalIncident(Guid id)
         {
-            DetectElectricalIncidentResponse response = await _cameraService.DetectElectricalIncident(id, request);
-            return new RestDTO<DetectElectricalIncidentResponse>()
+            DetectResponse response = await _cameraService.DetectElectricalIncident(id);
+            return new RestDTO<DetectResponse>()
             {
-                Message = "Get Alarm   Successfully",
+                Message = "Get Alarm  Electrical Incident Successfully",
                 Data = response,
                 Links = new List<LinkDTO> {
                     new LinkDTO(
@@ -137,7 +154,7 @@ namespace FireDetection.Backend.API.Controllers
 
 
         [HttpPost("{id}/record")]
-        public async Task<ActionResult<RestDTO<DetectElectricalIncidentResponse>>> Record(Guid id, TakeElectricalIncidentRequest request)
+        public async Task<ActionResult<RestDTO<DetectResponse>>> Record(Guid id, TakeElectricalIncidentRequest request)
         {
             throw new NotImplementedException();
         }

@@ -4,7 +4,6 @@ using FireDetection.Backend.Domain.DTOs.Response;
 using FireDetection.Backend.Domain.DTOs.State;
 using FireDetection.Backend.Domain.Entity;
 using FireDetection.Backend.Infrastructure.Helpers.ErrorHandler;
-using FireDetection.Backend.Infrastructure.Service.DAL;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using FireDetection.Backend.Infrastructure.UnitOfWork;
 using System;
@@ -30,12 +29,6 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             _timerService = timerService;
 
         }
-
-        public RecordService()
-        {
-            
-        }
-
         public async Task<bool> ActionInAlarm(Guid recordID, AddRecordActionRequest request)
         {
 
@@ -52,7 +45,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             recordProcess.RecordID = recordID;
             _unitOfWork.RecordProcessRepository.InsertAsync(recordProcess);
             await _unitOfWork.SaveChangeAsync();
-            Task.Run(async () => await updateRecordToEnd(recordID, 1));
+            await updateRecordToEnd(recordID, 1);
 
             return true;
         }
@@ -60,7 +53,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         public async Task<bool> VoteAlarmLevel(Guid recordID, RateAlarmRequest request)
         {
 
-            //  await _memoryCacheService.SetRecordKey(recordID);
+              await _memoryCacheService.CountingVote(request.LevelRating);
             if (await _memoryCacheService.checkDisableVote(recordID))
             {
                 throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Have already this location in system");
@@ -68,6 +61,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             await _memoryCacheService.UncheckRecordKey(recordID);
 
             await _memoryCacheService.CreateCheckAction(recordID);
+            Console.Write(await _memoryCacheService.VotingResult());
             _timerService.CheckIsAction(recordID);
             AlarmRate alarmRate = _mapper.Map<AlarmRate>(request);
             alarmRate.RecordID = recordID;
@@ -117,7 +111,8 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             }
             if (levelAction > 0)
             {
-                await Task.Delay(TimeSpan.FromMinutes(3));
+                //? 
+               // await Task.Delay(TimeSpan.FromMinutes(3));
                 if (_unitOfWork.RecordRepository.Where(x => x.Id == recordId && x.Status == RecordState.InFinish).FirstOrDefault() is null)
                 {
                     await updateRecord(record);

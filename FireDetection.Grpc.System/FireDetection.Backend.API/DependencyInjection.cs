@@ -33,6 +33,7 @@ namespace FireDetection.Backend.API
 
             //Record 
             services.AddScoped<IRecordRepository, RecordRepository>();
+            services.AddScoped<IAPICallService, APICallService>();
             //Alarm 
             services.AddScoped<IAlarmService, AlarmService>();
             services.AddScoped<IAlarmRepository, AlarmRepository>();
