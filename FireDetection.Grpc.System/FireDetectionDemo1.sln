@@ -28,19 +28,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FireDetection.Backend.Infra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FireDetection.Backend.API", "FireDetection.Backend.API\FireDetection.Backend.API.csproj", "{573BD7DC-1F12-42D8-851C-04CEC38A9070}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{3A333542-3E22-4AF0-9379-DEE87C92774E}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "application.tests", "application.tests", "{68ACD28E-48A5-480D-A388-903D67283F6C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "domain.tests", "domain.tests", "{086F7A30-B972-4C1C-A560-52C6CA6ED84C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "infrastructure.tests", "infrastructure.tests", "{6268D356-12C3-476A-B04A-7CEA1A670CB0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend.API.Tests", "..\Backend.API.Tests\Backend.API.Tests.csproj", "{FDE52C77-99DC-4928-8BFE-853D753D6597}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend.API.Tests", "..\Backend.API.Tests\Backend.API.Tests.csproj", "{FDE52C77-99DC-4928-8BFE-853D753D6597}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend.Infrastructure.Tests", "..\Backend.Infrastructure.Tests\Backend.Infrastructure.Tests.csproj", "{1C7DF949-7F47-408A-A370-4D3555EC72BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend.Infrastructure.Tests", "..\Backend.Infrastructure.Tests\Backend.Infrastructure.Tests.csproj", "{1C7DF949-7F47-408A-A370-4D3555EC72BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend.Domain.Tests", "..\Backend.Domain.Tests\Backend.Domain.Tests.csproj", "{7C9229DF-982C-4945-BD6A-38FFFAED9FFA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend.Domain.Tests", "..\Backend.Domain.Tests\Backend.Domain.Tests.csproj", "{7C9229DF-982C-4945-BD6A-38FFFAED9FFA}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{563F2229-1934-4BDA-8B0C-F81FBE66B791}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -62,10 +62,6 @@ Global
 		{573BD7DC-1F12-42D8-851C-04CEC38A9070}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{573BD7DC-1F12-42D8-851C-04CEC38A9070}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{573BD7DC-1F12-42D8-851C-04CEC38A9070}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3A333542-3E22-4AF0-9379-DEE87C92774E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3A333542-3E22-4AF0-9379-DEE87C92774E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3A333542-3E22-4AF0-9379-DEE87C92774E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3A333542-3E22-4AF0-9379-DEE87C92774E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FDE52C77-99DC-4928-8BFE-853D753D6597}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FDE52C77-99DC-4928-8BFE-853D753D6597}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDE52C77-99DC-4928-8BFE-853D753D6597}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -78,6 +74,10 @@ Global
 		{7C9229DF-982C-4945-BD6A-38FFFAED9FFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C9229DF-982C-4945-BD6A-38FFFAED9FFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C9229DF-982C-4945-BD6A-38FFFAED9FFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{563F2229-1934-4BDA-8B0C-F81FBE66B791}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{563F2229-1934-4BDA-8B0C-F81FBE66B791}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{563F2229-1934-4BDA-8B0C-F81FBE66B791}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{563F2229-1934-4BDA-8B0C-F81FBE66B791}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

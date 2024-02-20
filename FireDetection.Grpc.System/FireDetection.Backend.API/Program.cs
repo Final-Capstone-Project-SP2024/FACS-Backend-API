@@ -74,7 +74,7 @@ builder.Services.AddSwaggerGen(opt =>
     });
 });
 
-var conn = builder.Configuration.GetConnectionString("DefaultConnections");
+var conn = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<FireDetectionDbContext>(options =>
     options.UseNpgsql(conn));
 
@@ -90,7 +90,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    
+
+    //app.ApplyMigrations();
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
@@ -106,6 +107,12 @@ if (app.Environment.IsDevelopment())
         c.ShowExtensions();
         c.EnableValidator();
     });
+    
+
+}
+else
+{
+    //app.ApplyMigrations();
 }
 
 app.Use((context, next) =>

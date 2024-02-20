@@ -4,7 +4,7 @@
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
     <DockerPublishLocally>False</DockerPublishLocally>
-    <ProjectGuid>3a333542-3e22-4af0-9379-dee87c92774e</ProjectGuid>
+    <ProjectGuid>563f2229-1934-4bda-8b0c-f81fbe66b791</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
     <DockerServiceName>firedetection.backend.api</DockerServiceName>
