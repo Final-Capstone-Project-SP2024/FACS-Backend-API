@@ -155,7 +155,7 @@ namespace Backend.Infrastructure.Tests.Service
 
             _mapperConfig.Map<DetectResponse>(record);
 
-            var result = await _cameraService.DetectElectricalIncident(id, mock);
+            var result = await _cameraService.DetectElectricalIncident(id);
 
             Assert.NotNull(result);
         }

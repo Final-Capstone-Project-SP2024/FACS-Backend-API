@@ -129,18 +129,28 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        //[HttpGet]
-        //public async Task<RestDTO<PagedResult<UserInformationResponse>>> GetAllUsers(PagingRequest pagingRequest, UserRequest request){
-        //    var response = await _userService.GetAllUsers(pagingRequest, request);
-        //    return response != null ? new RestDTO<PageResult<UserInformationResponse>>()
-        //    {
-        //        Message = "Get All Successfully!",
-        //        Data = response,
-        //        Links = new List<LinkDTO>
-        //        {
-        //            new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(GetAllUsers), "UserController", null, Request.Scheme))!,"self","Get")
-        //        }
-        //    } : NotFound();
-        //}
+        [HttpGet]
+        public async Task<ActionResult<RestDTO<List<UserInformationResponse>>>> GetAllUsers([FromQuery] PagingRequest pagingRequest, [FromQuery] UserRequest request)
+        {
+            var response = await _userService.GetAllUsers(pagingRequest, request);
+            //return response != null ? new RestDTO<UserInformationResponse>()
+            //{
+            //    Message = "Get All Successfully!",
+            //    Data = response,
+            //    Links = new List<LinkDTO>
+            //    {
+            //        new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(GetAllUsers), "UserController", null, Request.Scheme))!,"self","Get")
+            //    }
+            //} : NotFound();
+            return response != null ? Ok(new
+            {
+                Message = "Get All Users Successfully!",
+                Data = response,
+                Links = new List<LinkDTO>
+                {
+                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(GetAllUsers), "UserController", null, Request.Scheme))!,"self","Get")
+                }
+            }) : NotFound();
+        }
     }
 }
