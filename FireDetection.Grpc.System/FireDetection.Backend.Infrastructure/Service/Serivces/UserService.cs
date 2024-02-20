@@ -163,10 +163,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             {
                 if (int.TryParse(user.SecurityCode.Substring(4), out int numericPart))
                 {
-                    // Increment the numeric part
                     numericPart++;
-
-
                 }
                 return $"XXX_{numericPart:D3}";
             }
@@ -205,17 +202,48 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             }
             return false;
         }
-
+            
         public async Task<PagedResult<UserInformationResponse>> GetAllUsers(PagingRequest pagingRequest, UserRequest request)
         {
+            if (pagingRequest.ColName == null)
+            {
+                pagingRequest.ColName = "SecurityCode"; //Change Default ID
+            }
+
             var userEntity = _mapper.Map<User>(request);
-
             var usersQuery = await _unitOfWork.UserRepository.GetAll();
-
             var filterQuery = LinqUtils.DynamicFilter<User>(usersQuery, userEntity);
-            var usersProjected = filterQuery.ProjectTo<UserInformationResponse>(_mapper.ConfigurationProvider).ToList();
+            var usersProjected = filterQuery.ProjectTo<UserInformationResponse>(_mapper.ConfigurationProvider);
 
-            var pagedUsers = PageHelper<UserInformationResponse>.Paging(usersProjected, pagingRequest.Page, pagingRequest.PageSize);
+            #region filter
+            if (request.SecurityCode != null)
+            {
+                usersProjected = usersProjected.Where(_ => _.SecurityCode == request.SecurityCode);
+            }
+
+            if(request.Name != null)
+            {
+                usersProjected = usersProjected.Where(_ => _.Name == request.Name);
+            }
+
+            if (request.Email != null)
+            {
+                usersProjected = usersProjected.Where(_ => _.Email == request.Email);
+            }
+
+            if (request.Phone != null)
+            {
+                usersProjected = usersProjected.Where(_ => _.Phone == request.Phone);
+            }
+
+            if (request.Status != null)
+            {
+                usersProjected = usersProjected.Where(_ => _.Status == request.Status);
+            }
+            #endregion
+
+            var sort = PageHelper<UserInformationResponse>.Sorting(pagingRequest.SortType, usersProjected, pagingRequest.ColName).ToList();
+            var pagedUsers = PageHelper<UserInformationResponse>.Paging(sort, pagingRequest.Page, pagingRequest.PageSize);
 
             return pagedUsers;
         }
