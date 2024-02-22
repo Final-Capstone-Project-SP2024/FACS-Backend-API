@@ -59,6 +59,7 @@ namespace FireDetection.Backend.API
             services.AddScoped<ITimerService, TimerService>();
             services.AddScoped<IMemoryCacheService, MemoryCacheService>();
 
+            services.AddScoped<IClaimsService, ClaimsService>();
 
             services.AddGraphQLServer()
                     .AddQueryType<Query>()

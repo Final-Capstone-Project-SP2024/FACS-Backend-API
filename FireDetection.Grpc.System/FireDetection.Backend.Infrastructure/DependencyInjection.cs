@@ -26,8 +26,6 @@ namespace FireDetection.Backend.Infrastructure
             services.AddScoped<IAlarmRateRepository, AlarmRateRepository>();
             services.AddScoped<IAlarmRepository , AlarmRepository>();
 
-
-
             services.AddScoped<IAPICallService, APICallService>();
             services.AddScoped<IAlarmService, AlarmService>();
             services.AddScoped<ICameraService, CameraService>();
@@ -36,9 +34,11 @@ namespace FireDetection.Backend.Infrastructure
             services.AddScoped<IMemoryCacheService, MemoryCacheService>();
             services.AddScoped<ITimerService , TimerService>();
             services.AddScoped<IUserService , UserService>();
+            services.AddScoped<IClaimsService, ClaimsService>();
 
 
-           services.AddAutoMapper(typeof(MappingProfile).Assembly);
+
+            services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
             return services;
 
