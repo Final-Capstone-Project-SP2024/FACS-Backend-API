@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ namespace Backend.Domain.Tests
         protected readonly Mock<IUnitOfWork> _unitOfWork;
         protected readonly Mock<ILocationRepository> _locationRepositoryTest;
         protected readonly Mock<ILocationService> _locationServiceTest;
-
+        protected readonly Mock<IConfiguration> _configuration;
         protected readonly Mock<IHttpContextAccessor> _mockContextAccessorTest;
         protected readonly Mock<HttpRequest> _mockHttpRequestTest;
 
@@ -76,6 +77,7 @@ namespace Backend.Domain.Tests
             _fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList()
     .ForEach(b => _fixture.Behaviors.Remove(b));
 
+            _configuration = new Mock<IConfiguration>();
 
             _mockHttpRequestTest = new Mock<HttpRequest>();
             _mockContextAccessorTest = new Mock<IHttpContextAccessor>();
