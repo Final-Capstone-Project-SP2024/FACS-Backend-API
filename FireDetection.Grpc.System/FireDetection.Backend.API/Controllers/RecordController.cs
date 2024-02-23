@@ -75,7 +75,7 @@ namespace FireDetection.Backend.API.Controllers
             RecordDetailResponse  response = await _recordService.GetDetail(recordId);
             return new RestDTO<RecordDetailResponse>()
             {
-                Message = "View RecordDetail Successfully",
+                Message = "View Record Detail Successfully",
                 Data = response,
                 Links = new List<LinkDTO> {
                     new LinkDTO(

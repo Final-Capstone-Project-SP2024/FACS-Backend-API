@@ -12,6 +12,7 @@ namespace FireDetection.Backend.Domain.DTOs.Response
 
         public string CameraDestination { get; set; } = string.Empty;
 
+        public int RatingResult { get; set; } = 0;
         public Guid RecordId { get; set; }
 
         public decimal UserRatingPercent { get; set; }
@@ -26,6 +27,7 @@ namespace FireDetection.Backend.Domain.DTOs.Response
 
         public List<UserRating> userRatings { get; set; } = null!;
 
+        public List<UserVoting> userVoting { get; set; } = null!;
 
 
 
@@ -53,10 +55,11 @@ namespace FireDetection.Backend.Domain.DTOs.Response
 
     public class UserVoting
     {
-        
         public Guid userId { get; set; }
 
-        public int Rating { get; set; }
+        public int VoteLevel { get; set; }
+
+        public string VoteType { get; set; } = null!;
     }
 
 

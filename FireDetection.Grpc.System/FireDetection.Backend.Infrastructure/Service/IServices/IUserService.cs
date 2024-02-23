@@ -1,5 +1,6 @@
 ﻿using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.DTOs.Response;
+using FireDetection.Backend.Domain.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,5 +17,13 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
         public Task<UserLoginResponse> Login(UserLoginRequest req);
         public Task<PagedResult<UserInformationResponse>> GetAllUsers(PagingRequest pagingRequest, UserRequest request);
         public Task<UserInformationResponse> UpdateUser(Guid id, UpdateUserRequest req);
+        public Task<User> GetUserById(Guid id);
+        public Task<bool> CheckUserStatus(Guid id, string status);
+
+        public  Task<bool> CheckDuplicateEmail(string email);
+
+        public  Task<bool> CheckDuplicatePhone(string phone);
+
+        public  Task<string> GenerateSecurityCode();
     }
 }

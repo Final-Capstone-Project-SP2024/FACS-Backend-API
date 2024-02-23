@@ -26,6 +26,7 @@
     <PkgMicrosoft_Extensions_ApiDescription_Server Condition=" '$(PkgMicrosoft_Extensions_ApiDescription_Server)' == '' ">C:\Users\ducan\.nuget\packages\microsoft.extensions.apidescription.server\6.0.5</PkgMicrosoft_Extensions_ApiDescription_Server>
     <PkgMicrosoft_VisualStudio_Azure_Containers_Tools_Targets Condition=" '$(PkgMicrosoft_VisualStudio_Azure_Containers_Tools_Targets)' == '' ">C:\Users\ducan\.nuget\packages\microsoft.visualstudio.azure.containers.tools.targets\1.19.5</PkgMicrosoft_VisualStudio_Azure_Containers_Tools_Targets>
     <PkgMicrosoft_Bcl_Build Condition=" '$(PkgMicrosoft_Bcl_Build)' == '' ">C:\Users\ducan\.nuget\packages\microsoft.bcl.build\1.0.14</PkgMicrosoft_Bcl_Build>
+    <PkgMicrosoft_EntityFrameworkCore_Tools Condition=" '$(PkgMicrosoft_EntityFrameworkCore_Tools)' == '' ">C:\Users\ducan\.nuget\packages\microsoft.entityframeworkcore.tools\7.0.11</PkgMicrosoft_EntityFrameworkCore_Tools>
     <PkgGraphQL_Analyzers Condition=" '$(PkgGraphQL_Analyzers)' == '' ">C:\Users\ducan\.nuget\packages\graphql.analyzers\7.7.2</PkgGraphQL_Analyzers>
   </PropertyGroup>
 </Project>

@@ -19,13 +19,16 @@ using System.Text;
 using System.Threading.Tasks;
 using FireDetection.Backend.Domain.Ultilities;
 using AutoMapper.QueryableExtensions;
+using FireDetection.Backend.Domain.DTOs.State;
 
 namespace FireDetection.Backend.Infrastructure.Service.Serivces
 {
     public class UserService : IUserService
     {
         private readonly IMapper _mapper;
+
         private readonly IUnitOfWork _unitOfWork;
+        
         private readonly IConfiguration _configuration;
         public UserService(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration config)
         {
@@ -36,10 +39,10 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<bool> ActiveUser(Guid userId)
         {
-            if(!await CheckUserStatus(userId, "actived")) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Have already actived in system");
+            if(!await CheckUserStatus(userId, UserState.Active)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Have already actived in system");
             User user = await GetUserById(userId);
             user.LastModified = DateTime.UtcNow;
-            user.Status = "actived";
+            user.Status = UserState.Active;
 
             _unitOfWork.UserRepository.Update(user);
             await _unitOfWork.SaveChangeAsync();
@@ -144,14 +147,14 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         }
 
-        private async Task<User> GetUserById(Guid id)
+        public async Task<User> GetUserById(Guid id)
         {
             IQueryable<User> users = await _unitOfWork.UserRepository.GetAll();
 
             return users.FirstOrDefault(x => x.Id == id);
         }
 
-        private async Task<string> GenerateSecurityCode()
+        public async Task<string> GenerateSecurityCode()
         {
             var users = await _unitOfWork.UserRepository.GetAll();
             User user = users.OrderByDescending(x => x.CreatedDate).FirstOrDefault();
@@ -169,7 +172,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             }
         }
 
-        private async Task<bool> CheckDuplicatePhone(string phone)
+        public async Task<bool> CheckDuplicatePhone(string phone)
         {
             var users = await _unitOfWork.UserRepository.GetAll();
             var user = users.FirstOrDefault(x => x.Phone == phone);
@@ -180,7 +183,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             return false;
         }
 
-        private async Task<bool> CheckDuplicateEmail(string email)
+        public async Task<bool> CheckDuplicateEmail(string email)
         {
             var users = await _unitOfWork.UserRepository.GetAll();
             var user = users.FirstOrDefault(x => x.Email == email);
@@ -192,7 +195,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         }
 
 
-        private async Task<bool> CheckUserStatus(Guid id, string status)
+        public async Task<bool> CheckUserStatus(Guid id, string status)
         {
             var users = await _unitOfWork.UserRepository.GetAll();
             var user = users.FirstOrDefault(x => x.Status == status && x.Id == id);
