@@ -37,7 +37,7 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
                         .OrderByDescending(x => x.CreatedDate).Select(camera => new RecordResponse
                         {
                             CameraId = camera.Id,
-                            cameraFollow = camera.Records.Select(record => new CameraFollow
+                            RecordFollows = camera.Records.Select(record => new RecordFollows
                             {
                                 CreatedDate = record.CreatedDate,
                                 RecordId = record.Id,
