@@ -98,8 +98,8 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public void Increase(int value ,out int input)
         {
-            input = value;
-            input++;
+            input =+ value;
+            
         }
 
 

@@ -2,6 +2,7 @@
 using FireDetection.Backend.Domain.DTOs.Response;
 using FireDetection.Backend.Domain.Entity;
 using FireDetection.Backend.Infrastructure.Repository.IRepositories;
+using FireDetection.Backend.Infrastructure.Service.Serivces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,7 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
 
         public RecordDetailResponse RecordDetailResponse(Guid recordId)
         {
-           return GetRecordCompiledQuery(_context, recordId);
+            return GetRecordCompiledQuery(_context, recordId);
         }
 
         private static readonly Func<FireDetectionDbContext, IEnumerable<RecordResponse>> CompiledQuery =
@@ -58,6 +59,15 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
                       PredictedPercent = x.PredictedPercent,
                       UserRatingPercent = x.UserRatingPercent,
                       Status = x.Status,
+                      RatingResult = 1,
+                      userRatings = x.AlarmRates
+                                      .Where(x => x.RecordID == recordId)
+                                      .Select(m => new UserRating { Rating = m.LevelID, userId = m.UserID })
+                                      .ToList(),
+                      userVoting = x.RecordProcesses
+                                    .Where(x => x.RecordID == recordId)
+                                    .Select(m => new UserVoting { userId = m.UserID , VoteLevel = m.ActionTypeId ,VoteType = m.ActionType.ActionName})
+                                    .ToList(),
                       ImageRecord = x.MediaRecords
                           .Where(m => m.MediaTypeId == 2 && m.RecordId == recordId)
                           .Select(m => new ImageRecord { VideoUrl = m.Url })
@@ -66,6 +76,7 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
                           .Where(m => m.MediaTypeId == 1 && m.RecordId == recordId)
                           .Select(m => new VideoRecord { VideoUrl = m.Url })
                           .FirstOrDefault(),
+
                   })
                   .FirstOrDefault());
 
