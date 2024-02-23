@@ -14,11 +14,11 @@ COPY ["FireDetection.Backend.Domain/FireDetection.Backend.Domain.csproj", "FireD
 RUN dotnet restore "./FireDetection.Backend.API/./FireDetection.Backend.API.csproj"
 COPY . .
 WORKDIR "/src/FireDetection.Backend.API"
-RUN dotnet build "./FireDetection.Backend.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "./FireDetection.Backend.API.csproj" -c Release -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./FireDetection.Backend.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./FireDetection.Backend.API.csproj" -c Release-o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app

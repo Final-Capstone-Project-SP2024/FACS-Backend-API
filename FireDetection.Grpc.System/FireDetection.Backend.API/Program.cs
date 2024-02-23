@@ -98,7 +98,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
 
-    //app.ApplyMigrations();
+    app.ApplyMigrations();
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
@@ -119,7 +119,22 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    //app.ApplyMigrations();
+    app.ApplyMigrations();
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+        c.DefaultModelExpandDepth(0);
+        c.DefaultModelsExpandDepth(-1);
+        c.DefaultModelRendering(ModelRendering.Example);
+        c.DisplayOperationId();
+        c.DisplayRequestDuration();
+        c.DocExpansion(DocExpansion.None);
+        c.EnableDeepLinking();
+        c.EnableFilter();
+        c.ShowExtensions();
+        c.EnableValidator();
+    });
 }
 
 app.Use((context, next) =>
