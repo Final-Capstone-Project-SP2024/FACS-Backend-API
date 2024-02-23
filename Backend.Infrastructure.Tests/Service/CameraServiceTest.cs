@@ -153,9 +153,9 @@ namespace Backend.Infrastructure.Tests.Service
             _unitOfWork.Setup(x => x.RecordRepository.InsertAsync(record));
             _unitOfWork.Setup(x => x.SaveChangeAsync());
 
-            _mapperConfig.Map<DetectElectricalIncidentResponse>(record);
+            _mapperConfig.Map<DetectResponse>(record);
 
-            var result = await _cameraService.DetectElectricalIncident(id, mock);
+            var result = await _cameraService.DetectElectricalIncident(id);
 
             Assert.NotNull(result);
         }

@@ -16,15 +16,17 @@ namespace FireDetection.Backend.API.Controllers
     {
         private readonly ICameraService _cameraService;
         private readonly LinkGenerator _linkGenerator;
-
-        public CameraController(ICameraService cameraService, LinkGenerator linkGenerator)
+        private readonly ILogger<CameraController> _logger;
+        public CameraController(ICameraService cameraService, LinkGenerator linkGenerator, ILogger<CameraController> logger)
         {
             _cameraService = cameraService;
             _linkGenerator = linkGenerator;
+            _logger = logger;
         }
         [HttpGet]
         public async Task<ActionResult<RestDTO<IQueryable<CameInformationResponse>>>> Get()
         {
+            _logger.LogInformation("Access Get Camera");
             IQueryable<CameInformationResponse> response = await _cameraService.Get();
 
             return new RestDTO<IQueryable<CameInformationResponse>>()
