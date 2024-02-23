@@ -85,7 +85,7 @@ namespace FireDetection.Backend.API.Controllers
                 Links = new List<LinkDTO> {
                     new LinkDTO(
                     Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Delete),"RecordController",Request.Scheme))!,
+                        _linkGenerator.GetUriByAction(HttpContext,nameof(Delete),"LocationController",Request.Scheme))!,
                     "self",
                     "Delete")
                 }
@@ -122,7 +122,7 @@ namespace FireDetection.Backend.API.Controllers
                 Links = new List<LinkDTO> {
                   new LinkDTO(
                     Url.Action(
-                     _linkGenerator.GetUriByAction(HttpContext,nameof(AddStaff),"/LocationController",
+                     _linkGenerator.GetUriByAction(HttpContext,nameof(AddStaff),"LocationController",
                       request,
                       Request.Scheme))!,
                 "self",

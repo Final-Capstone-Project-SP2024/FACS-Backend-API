@@ -58,7 +58,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         public async Task<LocationInformationResponse> UpdateLocation(Guid locationId, AddLocationRequest request)
         {
             Location location = await GetLocationByID(locationId);
-            if(location is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, " Not found this locations");
+            if (location is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, " Not found this locations");
             location.LocationName = request.LocationName;
             location.LastModified = DateTime.UtcNow;
 
@@ -98,7 +98,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             List<Guid> duplicateGuid = new List<Guid>();
             foreach (var staff in request.staff)
             {
-               if(! await CheckDuplicateUserInControlCamera(locationId, staff))
+                if (await CheckDuplicateUserInControlCamera(locationId, staff))
                 {
                     check++;
                     duplicateGuid.Add(staff);
@@ -115,17 +115,19 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
                 };
 
-          
+
 
             }
-            if(check > 0)
+            if (check > 0)
             {
-                throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, $"Some user have already in this location {duplicateGuid.ToString}");
+                throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, $"Some user have already in this location {duplicateGuid.ToString()}");
             }
 
             var data = await _context.LocationRepository.GetStaffInLocation(locationId);
             return new LocationInformationResponse()
             {
+                CreatedDate = _context.LocationRepository.GetById(locationId).Result.CreatedDate,
+                LocationName = _context.LocationRepository.GetById(locationId).Result.LocationName,
                 LocationId = locationId,
                 Users = data
             };
@@ -134,8 +136,8 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         private async Task<bool> CheckDuplicateUserInControlCamera(Guid locationId, Guid userId)
         {
-            var check = _context.ControlCameraRepository.Where(x => x.LocationID == locationId && x.UserID == userId);
-            if (check is not null)
+            var check = _context.ControlCameraRepository.Where(x => x.LocationID == locationId && x.UserID == userId).Count();
+            if (check == 0)
             {
                 return false;
             }

@@ -11,16 +11,16 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
 {
     public interface ICameraService
     {
-        Task<CameInformationResponse> Add(AddCameraRequest request);
+        Task<CameraInformationResponse> Add(AddCameraRequest request);
 
-        Task<CameInformationResponse> Update(Guid id ,AddCameraRequest request);
+        Task<CameraInformationResponse> Update(Guid id ,AddCameraRequest request);
 
-        Task<CameInformationResponse> Active(Guid id);
+        Task<CameraInformationResponse> Active(Guid id);
 
-        Task<CameInformationResponse> Inactive(Guid id);
+        Task<CameraInformationResponse> Inactive(Guid id);
 
 
-        Task<IQueryable<CameInformationResponse>> Get();
+        Task<IQueryable<CameraInformationResponse>> Get();
 
         Task<DetectResponse> DetectFire(Guid id, TakeAlarmRequest request);
 

@@ -1,4 +1,5 @@
 ﻿using FireDetection.Backend.Domain;
+using FireDetection.Backend.Domain.DTOs.Response;
 using FireDetection.Backend.Domain.Entity;
 using FireDetection.Backend.Infrastructure.Repository.IRepositories;
 using FireDetection.Backend.Infrastructure.UnitOfWork;
@@ -14,7 +15,7 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
     public class CameraRepository : GenericRepository<Camera>, ICameraRepository
     {
         private readonly FireDetectionDbContext _context;
-        public CameraRepository(FireDetectionDbContext context) : base(context) 
+        public CameraRepository(FireDetectionDbContext context) : base(context)
         {
             _context = context;
         }
@@ -28,5 +29,21 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
 
             return result;
         }
+
+        public  async Task<IQueryable<CameraInformationResponse>> GetAllViewModel()
+        {
+            return GetCameras(_context).AsQueryable();
+        }
+
+        private static readonly Func<FireDetectionDbContext, IEnumerable<CameraInformationResponse>>
+            GetCameras =
+            EF.CompileQuery(
+                (FireDetectionDbContext context) =>
+                context.Cameras.Select(x => new CameraInformationResponse
+                {
+                    CameraDestination = x.CameraDestination,
+                    CameraId = x.Id,
+                    Status = x.Status
+                }));
     }
 }

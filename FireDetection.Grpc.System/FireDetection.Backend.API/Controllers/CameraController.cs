@@ -23,11 +23,11 @@ namespace FireDetection.Backend.API.Controllers
             _linkGenerator = linkGenerator;
         }
         [HttpGet]
-        public async Task<ActionResult<RestDTO<IQueryable<CameInformationResponse>>>> Get()
+        public async Task<ActionResult<RestDTO<IQueryable<CameraInformationResponse>>>> Get()
         {
-            IQueryable<CameInformationResponse> response = await _cameraService.Get();
+            IQueryable<CameraInformationResponse> response = await _cameraService.Get();
 
-            return new RestDTO<IQueryable<CameInformationResponse>>()
+            return new RestDTO<IQueryable<CameraInformationResponse>>()
             {
                 Message = "Get All Camera  Successfully",
                 Data = response,
@@ -43,7 +43,7 @@ namespace FireDetection.Backend.API.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<RestDTO<CameInformationResponse>>> Add(AddCameraRequest request)
+        public async Task<ActionResult<RestDTO<CameraInformationResponse>>> Add(AddCameraRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -53,8 +53,8 @@ namespace FireDetection.Backend.API.Controllers
                 details.Status = StatusCodes.Status400BadRequest;
                 return new BadRequestObjectResult(details);
             }
-            CameInformationResponse response = await _cameraService.Add(request);
-            return new RestDTO<CameInformationResponse>()
+            CameraInformationResponse response = await _cameraService.Add(request);
+            return new RestDTO<CameraInformationResponse>()
             {
                 Message = "Add Camera Successfully",
                 Data = response,
@@ -69,10 +69,10 @@ namespace FireDetection.Backend.API.Controllers
         }
 
         [HttpPatch("{id}")]
-        public async Task<ActionResult<RestDTO<CameInformationResponse>>> Update(Guid id, AddCameraRequest request)
+        public async Task<ActionResult<RestDTO<CameraInformationResponse>>> Update(Guid id, AddCameraRequest request)
         {
-            CameInformationResponse response = await _cameraService.Update(id, request);
-            return new RestDTO<CameInformationResponse>()
+            CameraInformationResponse response = await _cameraService.Update(id, request);
+            return new RestDTO<CameraInformationResponse>()
             {
                 Message = "Delete Location Successfully",
                 Data = response,
@@ -87,11 +87,11 @@ namespace FireDetection.Backend.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<RestDTO<CameInformationResponse>>> Delete(Guid id)
+        public async Task<ActionResult<RestDTO<CameraInformationResponse>>> Delete(Guid id)
         {
-            CameInformationResponse response = await _cameraService.Inactive(id);
+            CameraInformationResponse response = await _cameraService.Inactive(id);
 
-            return new RestDTO<CameInformationResponse>()
+            return new RestDTO<CameraInformationResponse>()
             {
                 Message = "Delete Camera Successfully",
                 Data = response,

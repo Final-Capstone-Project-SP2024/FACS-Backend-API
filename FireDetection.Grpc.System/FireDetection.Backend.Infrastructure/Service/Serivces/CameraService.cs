@@ -34,7 +34,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             _timerService = timerService;
             _memoryCacheService = memoryCacheService;
         }
-        public async Task<CameInformationResponse> Active(Guid id)
+        public async Task<CameraInformationResponse> Active(Guid id)
         {
             Camera camera = await _unitOfWork.CameraRepository.GetById(id);
             if (camera is null) throw new Exception();
@@ -45,26 +45,25 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             _unitOfWork.CameraRepository.Update(camera);
             await _unitOfWork.SaveChangeAsync();
 
-            return _mapper.Map<CameInformationResponse>(camera);
+            return _mapper.Map<CameraInformationResponse>(camera);
         }
 
-        public async Task<CameInformationResponse> Add(AddCameraRequest request)
+        public async Task<CameraInformationResponse> Add(AddCameraRequest request)
         {
             if (!await CheckDuplicateDestination(request.Destination)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Destination have already add in system");
 
             _unitOfWork.CameraRepository.InsertAsync(_mapper.Map<Camera>(request));
             await _unitOfWork.SaveChangeAsync();
 
-            return _mapper.Map<CameInformationResponse>(await GetCameraByName(request.Destination));
+            return _mapper.Map<CameraInformationResponse>(await GetCameraByName(request.Destination));
         }
 
-        public async Task<IQueryable<CameInformationResponse>> Get()
+        public async Task<IQueryable<CameraInformationResponse>> Get()
         {
-            IQueryable<Camera> cameras = await _unitOfWork.CameraRepository.GetAll();
-            return (IQueryable<CameInformationResponse>)cameras;
+            return await _unitOfWork.CameraRepository.GetAllViewModel();   
         }
 
-        public async Task<CameInformationResponse> Inactive(Guid id)
+        public async Task<CameraInformationResponse> Inactive(Guid id)
         {
             Camera camera = await _unitOfWork.CameraRepository.GetById(id);
             if (camera is null) throw new Exception();
@@ -75,11 +74,11 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             _unitOfWork.CameraRepository.Update(camera);
             await _unitOfWork.SaveChangeAsync();
 
-            return _mapper.Map<CameInformationResponse>(camera);
+            return _mapper.Map<CameraInformationResponse>(camera);
 
         }
 
-        public async Task<CameInformationResponse> Update(Guid id, AddCameraRequest request)
+        public async Task<CameraInformationResponse> Update(Guid id, AddCameraRequest request)
         {
             Camera camera = await _unitOfWork.CameraRepository.GetById(id);
             camera.CameraDestination = request.Destination;
@@ -88,7 +87,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
             _unitOfWork.CameraRepository.Update(camera);
             await _unitOfWork.SaveChangeAsync();
-            return _mapper.Map<CameInformationResponse>(await _unitOfWork.CameraRepository.GetById(id));
+            return _mapper.Map<CameraInformationResponse>(await _unitOfWork.CameraRepository.GetById(id));
 
         }
 
