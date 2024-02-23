@@ -1,11 +1,15 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.DTOs.Response;
 using FireDetection.Backend.Domain.DTOs.State;
 using FireDetection.Backend.Domain.Entity;
+using FireDetection.Backend.Domain.Helpers.GetHandler;
 using FireDetection.Backend.Infrastructure.Helpers.ErrorHandler;
+using FireDetection.Backend.Infrastructure.Helpers.GetHandler;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using FireDetection.Backend.Infrastructure.UnitOfWork;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -132,9 +136,30 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             await _unitOfWork.SaveChangeAsync();
         }
 
-        public async Task<IEnumerable<RecordResponse>> Get()
+        public async Task<PagedResult<RecordResponse>> Get(PagingRequest pagingRequest, RecordRequest req)
         {
-            return _unitOfWork.RecordRepository.Get();
+            if (pagingRequest.ColName == null)
+            {
+                pagingRequest.ColName = "CameraId"; //Init default Id
+            }
+
+            var entity = _mapper.Map<Record>(req);
+            var query = await _unitOfWork.RecordRepository.GetAll();
+            var records = await query.ToListAsync();
+            
+            query = query.Where(x => x.CreatedDate.Date >= req.FirstDate.Date && x.CreatedDate.Date <= req.LastDate.Date);
+            
+            var entityProjected = LinqUtils.DynamicFilter<Record>(query, entity).ProjectTo<RecordResponse>(_mapper.ConfigurationProvider);
+
+            if (req.CameraId != Guid.Empty)
+            {
+                query = query.Where(x => x.CameraID == req.CameraId);
+            }
+
+            var sort = PageHelper<RecordResponse>.Sorting(pagingRequest.SortType, entityProjected, pagingRequest.ColName);
+            var pagedEntity = PageHelper<RecordResponse>.Paging(sort, pagingRequest.Page, pagingRequest.PageSize);
+
+            return pagedEntity;
         }
 
         public async Task<RecordDetailResponse> GetDetail(Guid recordID)

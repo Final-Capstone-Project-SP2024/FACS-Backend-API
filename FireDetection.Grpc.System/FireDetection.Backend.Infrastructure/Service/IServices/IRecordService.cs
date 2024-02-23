@@ -16,7 +16,7 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
 
         public Task AutoAction(Guid recordID, int actioTypeId);
 
-        Task<IEnumerable<RecordResponse>> Get();
+        Task<PagedResult<RecordResponse>> Get(PagingRequest pagingRequest, RecordRequest req);
         
         Task<RecordDetailResponse> GetDetail(Guid recordID);
 

@@ -62,24 +62,10 @@ namespace FireDetection.Backend.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<RestDTO<IEnumerable<RecordResponse>>>> Get()
+        public async Task<ActionResult<RestDTO<PagedResult<RecordResponse>>>> Get([FromQuery] PagingRequest pagingRequest, [FromQuery] RecordRequest recordRequest)
         {
-
-            IEnumerable<RecordResponse> response = await _recordService.Get();
-
-            return new RestDTO<IEnumerable<RecordResponse>>()
-            {
-                Message = "Action Successfully",
-                Data = response,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Get),"RecordController",
-                        Request.Scheme))!,
-                    "self",
-                    "Get")
-                }
-            };
+            var response = await _recordService.Get(pagingRequest, recordRequest);
+            return Ok(response);
         }
 
 

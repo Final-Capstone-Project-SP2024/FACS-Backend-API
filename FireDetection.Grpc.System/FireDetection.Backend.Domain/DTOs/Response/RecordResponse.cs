@@ -9,10 +9,10 @@ namespace FireDetection.Backend.Domain.DTOs.Response
     public class RecordResponse
     {
         public Guid CameraId { get; set; }
-        public List<CameraFollow> cameraFollow { get; set; }
+        public List<RecordFollows>? RecordFollows { get; set; } = new List<RecordFollows>();
     }
 
-    public class CameraFollow
+    public class RecordFollows
     {
         public Guid RecordId { get; set; }
 
