@@ -1,4 +1,3 @@
-Quang Trang Minh
 version: '3.4'
 networks:
   web:
