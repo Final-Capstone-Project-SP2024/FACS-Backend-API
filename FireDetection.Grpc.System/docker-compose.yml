@@ -1,7 +1,9 @@
+Quang Trang Minh
 version: '3.4'
 networks:
   web:
     external: true
+
 services:
   firedetection.backend.api:
     image: ${DOCKER_REGISTRY-}firedetectionbackendapi
@@ -12,13 +14,14 @@ services:
     ports:
       - "4211:80"
     tty: true
-    environment:
+    environment: 
        -  ConnectionStrings__DefaultConnection=User ID=postgres;Password=postgres;Server=firedetection.database;Port=5432;Database=FireDetectionDatabase;Include Error Detail=true;Integrated Security=true;Pooling=true
     depends_on:
         -  "firedetection.database"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /usr/bin/docker:/usr/bin/docker
+  
   firedetection.database:
     image: postgres:latest
     container_name: firedetection.database
