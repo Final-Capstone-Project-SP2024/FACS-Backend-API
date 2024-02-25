@@ -12,7 +12,6 @@ services:
     container_name: firedetection.api
     ports:
       - "4211:80"
-      - "4222:443"
     tty: true
     environment: 
        -  ConnectionStrings__DefaultConnection=User ID=postgres;Password=postgres;Server=firedetection.database;Port=5432;Database=FireDetectionDatabase;Include Error Detail=true;Integrated Security=true;Pooling=true

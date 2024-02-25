@@ -146,14 +146,14 @@ app.Use((context, next) =>
 });
 
 app.UseCors();
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseMiddleware<CustomExceptionMiddleware>();
 app.MapGraphQL();
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.MapControllers();
 

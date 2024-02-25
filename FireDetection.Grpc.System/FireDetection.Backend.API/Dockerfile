@@ -3,7 +3,6 @@
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
 EXPOSE 80
-EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 ARG BUILD_CONFIGURATION=Release
@@ -18,7 +17,7 @@ RUN dotnet build "./FireDetection.Backend.API.csproj" -c Release -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./FireDetection.Backend.API.csproj" -c Release-o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./FireDetection.Backend.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
