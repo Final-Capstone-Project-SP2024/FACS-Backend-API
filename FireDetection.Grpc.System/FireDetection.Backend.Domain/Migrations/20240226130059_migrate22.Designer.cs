@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FireDetection.Backend.Domain.Migrations
 {
     [DbContext(typeof(FireDetectionDbContext))]
-    [Migration("20240219153450_MyMigration")]
-    partial class MyMigration
+    [Migration("20240226130059_migrate22")]
+    partial class migrate22
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -322,6 +322,112 @@ namespace FireDetection.Backend.Domain.Migrations
                         });
                 });
 
+            modelBuilder.Entity("FireDetection.Backend.Domain.Entity.NotificationLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("DeleteBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("ModifiedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("NotificationTypeId")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("RecordId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NotificationTypeId");
+
+                    b.HasIndex("RecordId");
+
+                    b.ToTable("NotificationLog");
+                });
+
+            modelBuilder.Entity("FireDetection.Backend.Domain.Entity.NotificationType", b =>
+                {
+                    b.Property<int>("NotificationTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("NotificationTypeId"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("NotificationTypeId");
+
+                    b.ToTable("NotificationType");
+
+                    b.HasData(
+                        new
+                        {
+                            NotificationTypeId = 1,
+                            Name = "FireNotify"
+                        },
+                        new
+                        {
+                            NotificationTypeId = 2,
+                            Name = "Voting"
+                        },
+                        new
+                        {
+                            NotificationTypeId = 3,
+                            Name = "Alarm Level 1"
+                        },
+                        new
+                        {
+                            NotificationTypeId = 4,
+                            Name = "Alarm Level 2"
+                        },
+                        new
+                        {
+                            NotificationTypeId = 5,
+                            Name = "Alarm Level 3 "
+                        },
+                        new
+                        {
+                            NotificationTypeId = 6,
+                            Name = "Alarm Level 4"
+                        },
+                        new
+                        {
+                            NotificationTypeId = 7,
+                            Name = "Alarm Level 5"
+                        },
+                        new
+                        {
+                            NotificationTypeId = 8,
+                            Name = "Fake Alarm"
+                        },
+                        new
+                        {
+                            NotificationTypeId = 9,
+                            Name = "Disconnect Camera"
+                        });
+                });
+
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.Record", b =>
                 {
                     b.Property<Guid>("Id")
@@ -589,6 +695,25 @@ namespace FireDetection.Backend.Domain.Migrations
                     b.Navigation("Record");
                 });
 
+            modelBuilder.Entity("FireDetection.Backend.Domain.Entity.NotificationLog", b =>
+                {
+                    b.HasOne("FireDetection.Backend.Domain.Entity.NotificationType", "notificationType")
+                        .WithMany("Log")
+                        .HasForeignKey("NotificationTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FireDetection.Backend.Domain.Entity.Record", "Record")
+                        .WithMany("NotificationLogs")
+                        .HasForeignKey("RecordId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Record");
+
+                    b.Navigation("notificationType");
+                });
+
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.Record", b =>
                 {
                     b.HasOne("FireDetection.Backend.Domain.Entity.Camera", "Camera")
@@ -673,11 +798,18 @@ namespace FireDetection.Backend.Domain.Migrations
                     b.Navigation("MediaRecords");
                 });
 
+            modelBuilder.Entity("FireDetection.Backend.Domain.Entity.NotificationType", b =>
+                {
+                    b.Navigation("Log");
+                });
+
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.Record", b =>
                 {
                     b.Navigation("AlarmRates");
 
                     b.Navigation("MediaRecords");
+
+                    b.Navigation("NotificationLogs");
 
                     b.Navigation("RecordProcesses");
                 });

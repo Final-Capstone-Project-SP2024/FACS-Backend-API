@@ -32,8 +32,7 @@ namespace FireDetection.Backend.Domain
         public DbSet<ActionType> ActionTypes { get; set; }
         public DbSet<Camera> Cameras { get; set; }
         public DbSet<AlarmRate> AlarmRates { get; set; }    
-
-
+        public DbSet<NotificationLog>  NotificationLogs { get; set; }   
         public DbSet<RecordType> RecordTypes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
