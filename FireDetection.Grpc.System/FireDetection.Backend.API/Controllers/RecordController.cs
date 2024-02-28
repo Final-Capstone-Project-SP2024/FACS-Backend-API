@@ -1,8 +1,10 @@
 ﻿using FireDetection.Backend.Domain.DTOs.Core;
 using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.DTOs.Response;
+using FireDetection.Backend.Domain.DTOs.State;
 using FireDetection.Backend.Domain.Entity;
 using FireDetection.Backend.Infrastructure.Service.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -14,12 +16,15 @@ namespace FireDetection.Backend.API.Controllers
     {
         private readonly IRecordService _recordService;
         private readonly LinkGenerator _linkGenerator;
+
         public RecordController(IRecordService recordService, LinkGenerator linkGenerator)
         {
             _recordService = recordService;
             _linkGenerator = linkGenerator;
 
         }
+
+        [Authorize(Roles = Roles.Manager + "," + Roles.User)]
         [HttpPost("{RecordId}/vote")]
         public async Task<ActionResult<RestDTO<VoteAlarmResponse>>> Vote(Guid RecordId, RateAlarmRequest request)
         {
@@ -41,6 +46,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
+        [Authorize(Roles = Roles.Manager + "," + Roles.User)]
         [HttpPost("{RecordId}/action")]
         public async Task<ActionResult<RestDTO<ActionProcessResponse>>> Action(Guid RecordId, AddRecordActionRequest request)
         {
@@ -61,6 +67,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
+        [Authorize(Roles = Roles.Manager + "," + Roles.User)]
         [HttpGet]
         public async Task<ActionResult<RestDTO<PagedResult<RecordResponse>>>> Get([FromQuery] PagingRequest pagingRequest, [FromQuery] RecordRequest recordRequest)
         {
@@ -68,7 +75,7 @@ namespace FireDetection.Backend.API.Controllers
             return Ok(response);
         }
 
-
+        [Authorize(Roles = Roles.Manager + "," + Roles.User)]
         [HttpGet("{recordId}")]
         public async Task<ActionResult<RestDTO<RecordDetailResponse>>> GetDetail(Guid recordId)
         {

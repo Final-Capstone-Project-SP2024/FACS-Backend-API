@@ -55,7 +55,7 @@ builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.Al
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSwaggerGen(opt =>
 {
-    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "DressUpExchange-API", Version = "v1" });
+    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Fire Alarm Camera Solution - API", Version = "v1" });
     opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,

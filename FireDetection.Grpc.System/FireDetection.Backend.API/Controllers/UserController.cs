@@ -1,8 +1,10 @@
 ﻿using FireDetection.Backend.Domain.DTOs.Core;
 using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.DTOs.Response;
+using FireDetection.Backend.Domain.DTOs.State;
 using FireDetection.Backend.Infrastructure.Repository.IRepositories;
 using FireDetection.Backend.Infrastructure.Service.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -24,6 +26,7 @@ namespace FireDetection.Backend.API.Controllers
             _linkGenerator = linkGenerator;
         }
 
+        [Authorize(Roles = Roles.Manager)]
         [HttpPost]
         public async Task<ActionResult<RestDTO<UserInformationResponse>>> Add(CreateUserRequest request)
         {
@@ -61,12 +64,12 @@ namespace FireDetection.Backend.API.Controllers
                 Data = response,
                 Links = new List<LinkDTO>
                 {
-                    new LinkDTO(Url.Action("login","UserController",req, Request.Scheme)!,"self","Post")
+                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(Login),"UserController",req, Request.Scheme))!,"self","Post")
                 }
             };
         }
 
-
+        [Authorize(Roles = Roles.Manager)]
         [HttpPost("{id}/active")]
         public async Task<ActionResult<RestDTO<UserInformationResponse>>> Active(Guid id)
         {
@@ -77,12 +80,12 @@ namespace FireDetection.Backend.API.Controllers
                 Data = null,
                 Links = new List<LinkDTO>
                 {
-                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(Active), "UserController", null, Request.Scheme))  !, "self", "Post")
+                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(Active), "UserController", null, Request.Scheme))!, "self", "Post")
                 }
             };
         }
 
-
+        [Authorize(Roles = Roles.Manager)]
         [HttpPost("{id}/inactive")]
         public async Task<ActionResult<RestDTO<UserInformationResponse>>> Inactive(Guid id)
         {
@@ -98,13 +101,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [HttpGet("/{id}")]
-        public async Task<ActionResult<RestDTO<UserInformationResponse>>> GetById(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-
+        [Authorize(Roles = Roles.Manager + "," + Roles.User)]
         [HttpPatch("/{id}")]
         public async Task<ActionResult<RestDTO<UserInformationResponse>>> Update(Guid id, UpdateUserRequest request)
         {
@@ -129,19 +126,11 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
+        [Authorize(Roles = Roles.Manager + "," + Roles.User)]
         [HttpGet]
         public async Task<ActionResult<RestDTO<List<UserInformationResponse>>>> GetAllUsers([FromQuery] PagingRequest pagingRequest, [FromQuery] UserRequest request)
         {
             var response = await _userService.GetAllUsers(pagingRequest, request);
-            //return response != null ? new RestDTO<UserInformationResponse>()
-            //{
-            //    Message = "Get All Successfully!",
-            //    Data = response,
-            //    Links = new List<LinkDTO>
-            //    {
-            //        new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(GetAllUsers), "UserController", null, Request.Scheme))!,"self","Get")
-            //    }
-            //} : NotFound();
             return response != null ? Ok(new
             {
                 Message = "Get All Users Successfully!",
