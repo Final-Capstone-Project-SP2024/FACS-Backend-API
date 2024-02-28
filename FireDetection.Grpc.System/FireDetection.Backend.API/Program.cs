@@ -17,6 +17,8 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true); //fix datetime issue of npgsql
+
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
@@ -26,7 +28,6 @@ builder.Services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(dispose:
 
 // Add services to the container.
 builder.Services.AddControllers();
-
 // Add authentication and configure JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -93,7 +94,6 @@ builder.Services.AddInfrastructuresService(conn);
 builder.Services.AddWebAPIService();
 builder.Services.AddLazyScoped<IRecordService, RecordService>();
 var app = builder.Build();
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
