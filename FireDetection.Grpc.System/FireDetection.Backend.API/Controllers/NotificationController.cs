@@ -19,7 +19,7 @@ namespace FireDetection.Backend.API.Controllers
             _linkGenerator = linkGenerator;
         }
 
-        [Authorize(Roles = Roles.Manager)]
+        [Authorize(Roles = UserRole.Manager)]
         [HttpPost]
         public async Task<IActionResult> Add(AddNotificationRequest request)
         {
@@ -28,7 +28,7 @@ namespace FireDetection.Backend.API.Controllers
 
         }
 
-        [Authorize(Roles = Roles.Manager + "," + Roles.User)]
+        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpGet]
         public async Task<ActionResult<RestDTO<NotificationListResponse>>> GetAll()
         {
@@ -48,7 +48,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = Roles.Manager + "," + Roles.User)]
+        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpGet("{id}")]
         public async Task<ActionResult<RestDTO<NotficationDetailResponse>>> GetDetail(int id)
         {

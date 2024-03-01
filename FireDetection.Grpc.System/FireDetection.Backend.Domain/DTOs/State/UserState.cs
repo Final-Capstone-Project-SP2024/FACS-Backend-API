@@ -11,7 +11,7 @@ namespace FireDetection.Backend.Domain.DTOs.State
 {
     public static class UserState
     {
-        public static string Active = "Active";
+        public static  string Active = "Active";
 
         public static string Inactive = "Inactive";
     }
