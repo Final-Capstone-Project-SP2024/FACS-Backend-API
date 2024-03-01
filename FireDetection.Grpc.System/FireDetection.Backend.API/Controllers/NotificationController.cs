@@ -1,4 +1,5 @@
-﻿using FireDetection.Backend.Domain.DTOs.Core;
+﻿using FireDetection.Backend.API.Middleware;
+using FireDetection.Backend.Domain.DTOs.Core;
 using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.DTOs.Response;
 using FireDetection.Backend.Domain.DTOs.State;
@@ -11,6 +12,7 @@ namespace FireDetection.Backend.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [ApiKey]
     public class NotificationController : ControllerBase
     {
         private readonly LinkGenerator _linkGenerator;
@@ -19,7 +21,7 @@ namespace FireDetection.Backend.API.Controllers
             _linkGenerator = linkGenerator;
         }
 
-        [Authorize(Roles = UserRole.Manager)]
+        //[Authorize(Roles = UserRole.Manager)]
         [HttpPost]
         public async Task<IActionResult> Add(AddNotificationRequest request)
         {
@@ -28,7 +30,7 @@ namespace FireDetection.Backend.API.Controllers
 
         }
 
-        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
+//        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpGet]
         public async Task<ActionResult<RestDTO<NotificationListResponse>>> GetAll()
         {
@@ -48,7 +50,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
+      //  [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpGet("{id}")]
         public async Task<ActionResult<RestDTO<NotficationDetailResponse>>> GetDetail(int id)
         {

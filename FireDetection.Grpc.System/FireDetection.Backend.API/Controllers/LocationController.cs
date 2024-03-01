@@ -54,6 +54,7 @@ namespace FireDetection.Backend.API.Controllers
         }
 
         [Authorize(Roles = UserRole.Manager)]
+        [HttpGet("{id}")]
         public async Task<ActionResult<RestDTO<LocationInformationResponse>>> GetById(Guid id)
         {
             var response = await _context.GetById(id);

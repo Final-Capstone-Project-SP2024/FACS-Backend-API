@@ -103,6 +103,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+
         c.DefaultModelExpandDepth(0);
         c.DefaultModelsExpandDepth(-1);
         c.DefaultModelRendering(ModelRendering.Example);
@@ -113,6 +114,7 @@ if (app.Environment.IsDevelopment())
         c.EnableFilter();
         c.ShowExtensions();
         c.EnableValidator();
+        
     });
     
 
