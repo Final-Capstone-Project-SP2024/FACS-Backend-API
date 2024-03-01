@@ -9,5 +9,7 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
     public interface IAPICallService
     {
         public Task AutoCallAction(Guid recordId, int actionId);
+        
+        public Task AutoCompleteVoting(Guid recordId);
     }
 }

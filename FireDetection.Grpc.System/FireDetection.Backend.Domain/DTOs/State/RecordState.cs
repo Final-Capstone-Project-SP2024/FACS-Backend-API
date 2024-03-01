@@ -11,5 +11,7 @@ namespace FireDetection.Backend.Domain.DTOs.State
         public const string InAlram = "InAlarm";
 
         public const string InFinish = "InFinish";
+
+        public const string EndVote = "EndVote";
     }
 }

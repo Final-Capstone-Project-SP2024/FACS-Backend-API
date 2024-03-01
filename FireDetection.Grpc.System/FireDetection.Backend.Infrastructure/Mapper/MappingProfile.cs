@@ -39,25 +39,28 @@ namespace FireDetection.Backend.API.Mapper
 
             CreateMap<Camera, AddCameraRequest>()
                 .ForMember(x => x.Destination, src => src.MapFrom(x => x.CameraDestination))
+                .ForMember(x => x.CameraName, src => src.MapFrom(x => x.CameraName))
                 .ForMember(x => x.Status, src => src.MapFrom(x => x.Status))
                 .ForMember(x => x.LocationId, src => src.MapFrom(x => x.LocationID))
                 .ReverseMap();
 
             CreateMap<CameraInformationResponse, Camera>()
                 .ForMember(x => x.CameraDestination, src => src.MapFrom(x => x.CameraDestination))
+                .ForMember(x => x.CameraName, src => src.MapFrom(x => x.CameraName))
                 .ForMember(x => x.Id, src => src.MapFrom(x => x.CameraId))
                 .ForMember(x => x.Status, src => src.MapFrom(x => x.Status))
                 .ForMember(x => x.CreatedDate, src => src.MapFrom(x => DateTime.UtcNow))
                 .ReverseMap();
 
             CreateMap<Location, LocationInformationResponse>()
-                .ForMember(x => x.LocationId ,src => src.MapFrom(x => x.Id))
+                .ForMember(x => x.LocationId, src => src.MapFrom(x => x.Id))
                 .ForMember(x => x.LocationName, src => src.MapFrom(x => x.LocationName))
                 .ForMember(x => x.CreatedDate, src => src.MapFrom(x => x.CreatedDate))
                 .ReverseMap();
 
-            CreateMap<Location, AddLocationRequest>()
+            CreateMap<AddLocationRequest, Location>()
                 .ForMember(x => x.LocationName, src => src.MapFrom(x => x.LocationName))
+                 .ForMember(x => x.CreatedDate, src => src.MapFrom(x => DateTime.UtcNow))
                 .ReverseMap();
 
 

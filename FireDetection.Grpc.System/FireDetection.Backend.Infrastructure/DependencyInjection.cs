@@ -25,7 +25,10 @@ namespace FireDetection.Backend.Infrastructure
             services.AddScoped<IControlCameraRepository, ControlCameraRepository>();
             services.AddScoped<IAlarmRateRepository, AlarmRateRepository>();
             services.AddScoped<IAlarmRepository , AlarmRepository>();
+            services.AddScoped<INotificationLogRepository , NotificationLogRepository>();   
 
+
+            services.AddScoped<INotificationLogService , NotificationLogService>();
             services.AddScoped<IAPICallService, APICallService>();
             services.AddScoped<IAlarmService, AlarmService>();
             services.AddScoped<ICameraService, CameraService>();

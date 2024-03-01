@@ -32,23 +32,36 @@ namespace FireDetection.Backend.Domain.FluentAPIs
               ActionDescription = "a large fire can affect and cause damage, mobilizing everyone"
           }
           ,
+           new ActionType
+           {
+               ID = 4,
+               ActionName = "Alarm Level 4",
+               ActionDescription = "a large fire can affect and cause damage, mobilizing everyone"
+           }
+             ,
+           new ActionType
+           {
+               ID = 5,
+               ActionName = "Alarm Level 5",
+               ActionDescription = "a large fire can affect and cause damage, mobilizing everyone"
+           },
           new ActionType
           {
-              ID = 4,
+              ID = 6,
               ActionName = "End Action",
               ActionDescription = "a large fire can affect and cause damage, mobilizing everyone"
           }
           ,
           new ActionType
           {
-              ID = 5,
+              ID = 7,
               ActionName = "Fake  Alarm",
               ActionDescription = ""
           }
           ,
           new ActionType
           {
-              ID = 6,
+              ID = 8,
               ActionName = "Repair the camera",
               ActionDescription = "AI model is disconnected from the camera"
           }

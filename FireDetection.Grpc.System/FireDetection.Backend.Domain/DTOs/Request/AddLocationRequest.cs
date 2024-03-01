@@ -11,5 +11,7 @@ namespace FireDetection.Backend.Domain.DTOs.Request
     {
         [Required]
         public string LocationName { get; set; } = null!;
+
+        
     }
 }

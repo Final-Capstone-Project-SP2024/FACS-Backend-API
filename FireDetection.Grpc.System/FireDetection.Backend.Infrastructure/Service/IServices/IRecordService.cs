@@ -20,5 +20,9 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
         
         Task<RecordDetailResponse> GetDetail(Guid recordID);
 
+        Task EndVotePhase(Guid recordID);
+
+
+
     }
 }

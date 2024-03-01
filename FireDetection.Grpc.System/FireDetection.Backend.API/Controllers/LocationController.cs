@@ -4,6 +4,7 @@ using FireDetection.Backend.Domain.DTOs.Response;
 using FireDetection.Backend.Domain.DTOs.State;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using Microsoft.AspNetCore.Authorization;
+using GreenDonut;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Location = FireDetection.Backend.Domain.Entity.Location;
@@ -53,6 +54,25 @@ namespace FireDetection.Backend.API.Controllers
         }
 
         [Authorize(Roles = UserRole.Manager)]
+        public async Task<ActionResult<RestDTO<LocationInformationResponse>>> GetById(Guid id)
+        {
+            var response = await _context.GetById(id);
+            return new RestDTO<LocationInformationResponse>()
+            {
+                Message = "View Location Detail Successfully",
+                Data = response,
+                Links = new List<LinkDTO> {
+                  new LinkDTO(
+                    Url.Action(
+                     _linkGenerator.GetUriByAction(HttpContext,nameof(GetById),"LocationController",
+                      "",
+                      Request.Scheme))!,
+                "self",
+                 "Post")
+    }
+            };
+        }
+
         [HttpPatch("{id}")]
         public async Task<ActionResult<RestDTO<LocationInformationResponse>>> Update(Guid id, AddLocationRequest request)
         {

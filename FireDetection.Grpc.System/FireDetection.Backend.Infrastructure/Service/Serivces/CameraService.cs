@@ -37,9 +37,9 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         public async Task<CameraInformationResponse> Active(Guid id)
         {
             Camera camera = await _unitOfWork.CameraRepository.GetById(id);
-            if (camera is null) throw new Exception();
+            if (camera is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "This CameraId not  in system");
 
-            camera.Status = "Active";
+            camera.Status = CameraType.Active;
             camera.LastModified = DateTime.UtcNow;
 
             _unitOfWork.CameraRepository.Update(camera);
@@ -52,6 +52,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         {
             if (!await CheckDuplicateDestination(request.Destination)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Destination have already add in system");
 
+            if (!await CheckDuplicateCameraName(request.CameraName)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Camera Name have already add in system");
             _unitOfWork.CameraRepository.InsertAsync(_mapper.Map<Camera>(request));
             await _unitOfWork.SaveChangeAsync();
 
@@ -60,15 +61,15 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<IQueryable<CameraInformationResponse>> Get()
         {
-            return await _unitOfWork.CameraRepository.GetAllViewModel();   
+            return await _unitOfWork.CameraRepository.GetAllViewModel();
         }
 
         public async Task<CameraInformationResponse> Inactive(Guid id)
         {
             Camera camera = await _unitOfWork.CameraRepository.GetById(id);
-            if (camera is null) throw new Exception();
+            if (camera is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Camera is not in system");
 
-            camera.Status = "Banned";
+            camera.Status = CameraType.Ban;
             camera.LastModified = DateTime.UtcNow;
 
             _unitOfWork.CameraRepository.Update(camera);
@@ -108,61 +109,59 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             return true;
         }
 
+
+        private async Task<bool> CheckDuplicateCameraName(string CameraName)
+        {
+            IQueryable<Camera> cameras = await _unitOfWork.CameraRepository.GetAll();
+            var destination = cameras.FirstOrDefault(x => x.CameraName == CameraName);
+            if (destination != null)
+            {
+                return false;
+            }
+            return true;
+        }
         public async Task<DetectResponse> DetectFire(Guid id, TakeAlarmRequest request)
         {
+            //TODO: Check camera in system 
             Camera camera = await _unitOfWork.CameraRepository.GetById(id);
+            string locationName = _unitOfWork.LocationRepository.GetById(camera.LocationID).Result.LocationName;
+           
             if (camera is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "CameraId is invalid");
 
-            //1.get the people who have responsibility in this camreId,
-            List<Guid> userIds = await _unitOfWork.CameraRepository.GetUsersByCameraId(id);
-
-
-            /*   foreach (var userId in userIds)
-               {
-                   //2. get fcmtoken from their userid
-                   await RealtimeDatabaseHandlers.GetFCMTokenByUserID(userId);
-                   // 3. push notification to their with messaging settinga
-
-               }*/
-            //? Send notification about where have the fire belong to where location
-            NotficationDetailResponse data = await NotificationHandler.Get(8);
-
-            await CloudMessagingHandlers.CloudMessaging(
-                HandleTextUtil.HandleTitle(data.Title, camera.CameraDestination),
-                HandleTextUtil.HandleContext(
-                    data.Context,
-                    _unitOfWork.LocationRepository.GetById(camera.LocationID).Result.LocationName,
-                    camera.CameraDestination)
-                );
-
-
-            // 5. save record to database
+            //TODO: save record to database
             Record record = _mapper.Map<Record>(request);
             record.CameraID = id;
             record.Id = Guid.NewGuid();
-            await _memoryCacheService.CreateRecordKey(record.Id);
-
             _unitOfWork.RecordRepository.InsertAsync(record);
             await _unitOfWork.SaveChangeAsync();
+
+            //? add tp check 
+            await _memoryCacheService.Create(record.Id, CacheType.FireNotify);
+            await _memoryCacheService.Create(record.Id, CacheType.IsVoting);
+
+            //todo  create checking user do the next task ( vote task)
+            _timerService.CheckIsVoting(record.Id, camera.CameraDestination, locationName);
+
+            //! get the people who have responsibility in this camreId,
+            // List<Guid> userIds = await _unitOfWork.CameraRepository.GetUsersByCameraId(id);
 
             // 4. save image and video to database 
             await _mediaRecordService.AddImage(request.PictureUrl, record.Id);
             await _mediaRecordService.Addvideo(request.VideoUrl, record.Id);
 
 
-            _timerService.CheckIsVoting(record.Id);
             return _mapper.Map<DetectResponse>(record);
         }
 
         public async Task<DetectResponse> DetectElectricalIncident(Guid id)
         {
+
+            //todo check cameraID in system 
             Camera camera = await _unitOfWork.CameraRepository.GetById(id);
             if (camera is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "CameraId is invalid");
 
-            //? Send notification about where have the fire belong to where location
+            //todo Send notification about where have the fire belong to where location
             NotficationDetailResponse data = await NotificationHandler.Get(4);
-
-            // 3. push notification to their with messaging setting
             await CloudMessagingHandlers.CloudMessaging(
                HandleTextUtil.HandleTitle(data.Title, camera.CameraDestination),
                HandleTextUtil.HandleContext(
@@ -170,6 +169,9 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                    _unitOfWork.LocationRepository.GetById(camera.LocationID).Result.LocationName,
                    camera.CameraDestination)
                );
+
+
+            //todo save record to the database 
             Record record = new();
             record.CameraID = id;
             record.Id = new Guid();
