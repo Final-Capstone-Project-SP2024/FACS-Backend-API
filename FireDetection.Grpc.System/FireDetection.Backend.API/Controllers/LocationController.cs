@@ -1,7 +1,9 @@
 ﻿using FireDetection.Backend.Domain.DTOs.Core;
 using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.DTOs.Response;
+using FireDetection.Backend.Domain.DTOs.State;
 using FireDetection.Backend.Infrastructure.Service.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Location = FireDetection.Backend.Domain.Entity.Location;
@@ -21,7 +23,7 @@ namespace FireDetection.Backend.API.Controllers
             _linkGenerator = linkGenerator;
         }
 
-
+        [Authorize(Roles = Roles.Manager)]
         [HttpPost]
         public async Task<ActionResult<RestDTO<LocationInformationResponse>>> Add(AddLocationRequest request)
         {
@@ -48,10 +50,9 @@ namespace FireDetection.Backend.API.Controllers
                     "Post")
                 }
             };
-
-
         }
 
+        [Authorize(Roles = Roles.Manager)]
         [HttpPatch("{id}")]
         public async Task<ActionResult<RestDTO<LocationInformationResponse>>> Update(Guid id, AddLocationRequest request)
         {
@@ -73,7 +74,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-
+        [Authorize(Roles = Roles.Manager)]
         [HttpDelete("{id}")]
         public async Task<ActionResult<RestDTO<LocationInformationResponse>>> Delete(Guid id)
         {
@@ -92,6 +93,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
+        [Authorize(Roles = Roles.Manager + "," + Roles.User)]
         [HttpGet]   
         public async Task<ActionResult<RestDTO<IQueryable<Location>>>> Get()
         {
@@ -111,6 +113,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
+        [Authorize(Roles = Roles.Manager)]
         [HttpPost("/{id}/add")]
         public async Task<ActionResult<RestDTO<LocationInformationResponse>>> AddStaff(Guid id, AddStaffRequest request)
         {
@@ -127,7 +130,7 @@ namespace FireDetection.Backend.API.Controllers
                       Request.Scheme))!,
                 "self",
                  "Post")
-    }
+                }
             };
         }
     }

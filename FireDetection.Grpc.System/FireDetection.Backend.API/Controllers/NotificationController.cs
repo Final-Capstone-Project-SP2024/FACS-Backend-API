@@ -1,7 +1,9 @@
 ﻿using FireDetection.Backend.Domain.DTOs.Core;
 using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.DTOs.Response;
+using FireDetection.Backend.Domain.DTOs.State;
 using FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static Google.Apis.Requests.BatchRequest;
 
@@ -17,6 +19,7 @@ namespace FireDetection.Backend.API.Controllers
             _linkGenerator = linkGenerator;
         }
 
+        [Authorize(Roles = Roles.Manager)]
         [HttpPost]
         public async Task<IActionResult> Add(AddNotificationRequest request)
         {
@@ -25,8 +28,7 @@ namespace FireDetection.Backend.API.Controllers
 
         }
 
-
-
+        [Authorize(Roles = Roles.Manager + "," + Roles.User)]
         [HttpGet]
         public async Task<ActionResult<RestDTO<NotificationListResponse>>> GetAll()
         {
@@ -46,7 +48,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-
+        [Authorize(Roles = Roles.Manager + "," + Roles.User)]
         [HttpGet("{id}")]
         public async Task<ActionResult<RestDTO<NotficationDetailResponse>>> GetDetail(int id)
         {

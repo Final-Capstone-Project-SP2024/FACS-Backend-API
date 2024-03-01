@@ -2,8 +2,10 @@
 using FireDetection.Backend.Domain.DTOs.Core;
 using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.DTOs.Response;
+using FireDetection.Backend.Domain.DTOs.State;
 using FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler;
 using FireDetection.Backend.Infrastructure.Service.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using static Google.Apis.Requests.BatchRequest;
@@ -23,6 +25,8 @@ namespace FireDetection.Backend.API.Controllers
             _linkGenerator = linkGenerator;
             _logger = logger;
         }
+
+        [Authorize(Roles = Roles.Manager + "," + Roles.User)]
         [HttpGet]
         public async Task<ActionResult<RestDTO<IQueryable<CameraInformationResponse>>>> Get()
         {
@@ -44,7 +48,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-
+        [Authorize(Roles = Roles.Manager)]
         [HttpPost]
         public async Task<ActionResult<RestDTO<CameraInformationResponse>>> Add(AddCameraRequest request)
         {
@@ -71,6 +75,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
+        [Authorize(Roles = Roles.Manager)]
         [HttpPatch("{id}")]
         public async Task<ActionResult<RestDTO<CameraInformationResponse>>> Update(Guid id, AddCameraRequest request)
         {
@@ -89,6 +94,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
+        [Authorize(Roles = Roles.Manager)]
         [HttpDelete("{id}")]
         public async Task<ActionResult<RestDTO<CameraInformationResponse>>> Delete(Guid id)
         {
@@ -108,8 +114,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-
-
+        [Authorize(Roles = Roles.Manager + "," + Roles.User)]
         [HttpPost("{id}/detect")]
         public async Task<ActionResult<RestDTO<DetectResponse>>> DetectFire(Guid id, TakeAlarmRequest request)
         {
@@ -136,14 +141,14 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-
+        [Authorize(Roles = Roles.Manager + "," + Roles.User)]
         [HttpPost("{id}/disconnect")]
         public async Task<ActionResult<RestDTO<DetectResponse>>> ElectricalIncident(Guid id)
         {
             DetectResponse response = await _cameraService.DetectElectricalIncident(id);
             return new RestDTO<DetectResponse>()
             {
-                Message = "Get Alarm  Electrical Incident Successfully",
+                Message = "Get Alarm Electrical Incident Successfully",
                 Data = response,
                 Links = new List<LinkDTO> {
                     new LinkDTO(
@@ -154,7 +159,6 @@ namespace FireDetection.Backend.API.Controllers
                 }
             };
         }
-
 
         [HttpPost("{id}/record")]
         public async Task<ActionResult<RestDTO<DetectResponse>>> Record(Guid id, TakeElectricalIncidentRequest request)
