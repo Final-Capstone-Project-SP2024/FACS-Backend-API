@@ -4,6 +4,7 @@ using FireDetection.Backend.Domain.DTOs.Response;
 using FireDetection.Backend.Domain.Entity;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using Microsoft.AspNetCore.Mvc;
+using static Google.Apis.Requests.BatchRequest;
 
 
 namespace FireDetection.Backend.API.Controllers
@@ -84,6 +85,26 @@ namespace FireDetection.Backend.API.Controllers
                         Request.Scheme))!,
                     "self",
                     "Get")
+                }
+            };
+        }
+
+        [HttpPost("{Id}/endvote")]
+        public async Task<ActionResult<RestDTO<RecordDetailResponse>>> EndVote(Guid Id)
+        {
+            await _recordService.EndVotePhase(Id);
+            RecordDetailResponse response = await _recordService.GetDetail(Id);
+            return new RestDTO<RecordDetailResponse>()
+            {
+                Message = "End Vote Record  Successfully",
+                Data = response,
+                Links = new List<LinkDTO> {
+                    new LinkDTO(
+                    Url.Action(
+                        _linkGenerator.GetUriByAction(HttpContext,nameof(EndVote),"RecordController",
+                        Request.Scheme))!,
+                    "self",
+                    "Post")
                 }
             };
         }

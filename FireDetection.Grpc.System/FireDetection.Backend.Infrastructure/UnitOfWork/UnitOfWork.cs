@@ -21,7 +21,7 @@ namespace FireDetection.Backend.Infrastructure.UnitOfWork
         private readonly IRecordRepository _recordRepository;
         private readonly IControlCameraRepository _controlCameraRepository;
         private readonly IAlarmRepository _alarmRepository;
-
+        private readonly INotificationLogRepository _notificationLogRepository;
 
         public UnitOfWork(FireDetectionDbContext context,
             IUserRepository userRepository,
@@ -32,7 +32,8 @@ namespace FireDetection.Backend.Infrastructure.UnitOfWork
             IControlCameraRepository controlCameraRepository,
             IAlarmRepository alarmRepository,
             IRecordProcessRepository processRepository,
-            IAlarmRateRepository alarmRateRepository)
+            IAlarmRateRepository alarmRateRepository,
+            INotificationLogRepository notificationLogRepository)
         {
             _context = context;
             _userRepository = userRepository;
@@ -44,6 +45,7 @@ namespace FireDetection.Backend.Infrastructure.UnitOfWork
             _alarmRepository = alarmRepository;
             _processRepository = processRepository;
             _alarmRateRepository = alarmRateRepository;
+            _notificationLogRepository = notificationLogRepository;
         }
         public IUserRepository UserRepository => _userRepository;
 
@@ -57,6 +59,8 @@ namespace FireDetection.Backend.Infrastructure.UnitOfWork
         public IMediaRecordRepository MediaRecordRepository => _mediaRecordRepository;  
 
         public IAlarmRepository AlarmRepository => _alarmRepository;
+
+        public INotificationLogRepository NotificationLogRepository => _notificationLogRepository;
 
         public async Task<int> SaveChangeAsync()
         {

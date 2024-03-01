@@ -65,17 +65,29 @@ namespace FireDetection.Backend.Domain.Migrations
                         {
                             ID = 4,
                             ActionDescription = "a large fire can affect and cause damage, mobilizing everyone",
-                            ActionName = "End Action"
+                            ActionName = "Alarm Level 4"
                         },
                         new
                         {
                             ID = 5,
+                            ActionDescription = "a large fire can affect and cause damage, mobilizing everyone",
+                            ActionName = "Alarm Level 5"
+                        },
+                        new
+                        {
+                            ID = 6,
+                            ActionDescription = "a large fire can affect and cause damage, mobilizing everyone",
+                            ActionName = "End Action"
+                        },
+                        new
+                        {
+                            ID = 7,
                             ActionDescription = "",
                             ActionName = "Fake  Alarm"
                         },
                         new
                         {
-                            ID = 6,
+                            ID = 8,
                             ActionDescription = "AI model is disconnected from the camera",
                             ActionName = "Repair the camera"
                         });
@@ -123,6 +135,10 @@ namespace FireDetection.Backend.Domain.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("CameraDestination")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("CameraName")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -358,7 +374,7 @@ namespace FireDetection.Backend.Domain.Migrations
 
                     b.HasIndex("RecordId");
 
-                    b.ToTable("NotificationLog");
+                    b.ToTable("NotificationLogs");
                 });
 
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.NotificationType", b =>

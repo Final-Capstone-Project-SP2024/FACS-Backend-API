@@ -10,7 +10,7 @@ namespace FireDetection.Backend.Domain.Entity
     public class NotificationLog : BaseEntity, IBaseCreated, IBaseModified
     {
         public int Count { get; set; }
-        public DateTime LastModified { get; set; }
+        public DateTime LastModified { get; set; } 
         public Guid ModifiedBy { get ; set ; }
         public Guid? DeleteBy { get; set; }
         public bool IsDeleted { get; set; }

@@ -12,9 +12,8 @@ namespace FireDetection.Backend.Domain.DTOs.Request
 
         [RegularExpression(@"(Active|Inactive)$", ErrorMessage = "Active or Inactive ")]
         public string Status { get; set; } = null!;
-
+        public string CameraName  { get; set; } = null!;
         public string Destination { get; set; } = null!;
-
         public Guid LocationId { get; set; }
     }
 }

@@ -15,5 +15,7 @@ namespace FireDetection.Backend.Domain.DTOs.Response
         public DateTime? CreatedDate { get; set; }
 
         public  ReadOnlyCollection<Guid> Users { get; set; } = null!;
+
+        public ReadOnlyCollection<Guid> CameraInLocations { get; set; } = null!;
     }
 }
