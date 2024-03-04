@@ -22,8 +22,8 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
 
         public IEnumerable<RecordResponse> Get()
         {
-            var result = CompiledQuery(_context);
-            return result;
+            //var result = CompiledQuery(_context);
+            return null; //result;
         }
 
         public RecordDetailResponse RecordDetailResponse(Guid recordId)
@@ -31,20 +31,20 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
             return GetRecordCompiledQuery(_context, recordId);
         }
 
-        private static readonly Func<FireDetectionDbContext, IEnumerable<RecordResponse>> CompiledQuery =
-            EF.CompileQuery(
-                (FireDetectionDbContext context) =>
-                    context.Cameras
-                        .OrderByDescending(x => x.CreatedDate).Select(camera => new RecordResponse
-                        {
-                            CameraId = camera.Id,
-                            RecordFollows = camera.Records.Select(record => new RecordFollows
-                            {
-                                CreatedDate = record.CreatedDate,
-                                RecordId = record.Id,
-                                RecordTypeId = record.RecordTypeID
-                            }).ToList()
-                        }));
+        //private static readonly Func<FireDetectionDbContext, IEnumerable<RecordResponse>> CompiledQuery =
+        //    EF.CompileQuery(
+        //        (FireDetectionDbContext context) =>
+        //            context.Cameras
+        //                .OrderByDescending(x => x.CreatedDate).Select(camera => new RecordResponse
+        //                {
+        //                    CameraId = camera.Id,
+        //                    RecordFollows = camera.Records.Select(record => new RecordFollows
+        //                    {
+        //                        CreatedDate = record.CreatedDate,
+        //                        RecordId = record.Id,
+        //                        RecordTypeId = record.RecordTypeID
+        //                    }).ToList()
+        //                }));
 
         private static readonly Func<FireDetectionDbContext, Guid, RecordDetailResponse?> GetRecordCompiledQuery =
       EF.CompileQuery(
