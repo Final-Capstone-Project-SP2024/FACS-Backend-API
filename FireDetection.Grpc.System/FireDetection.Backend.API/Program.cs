@@ -19,10 +19,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true); //fix datetime issue of npgsql
 
-Log.Logger = new LoggerConfiguration()
+/*Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
-    .CreateLogger();
+    .CreateLogger();*/
 
 builder.Services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(dispose: true));
 
@@ -103,6 +103,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+
         c.DefaultModelExpandDepth(0);
         c.DefaultModelsExpandDepth(-1);
         c.DefaultModelRendering(ModelRendering.Example);
@@ -113,6 +114,7 @@ if (app.Environment.IsDevelopment())
         c.EnableFilter();
         c.ShowExtensions();
         c.EnableValidator();
+        
     });
     
 

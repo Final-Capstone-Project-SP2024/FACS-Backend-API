@@ -26,7 +26,7 @@ namespace FireDetection.Backend.API.Controllers
             _logger = logger;
         }
 
-        [Authorize(Roles = Roles.Manager + "," + Roles.User)]
+        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpGet]
         public async Task<ActionResult<RestDTO<IQueryable<CameraInformationResponse>>>> Get()
         {
@@ -48,7 +48,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = Roles.Manager)]
+        [Authorize(Roles = UserRole.Manager)]
         [HttpPost]
         public async Task<ActionResult<RestDTO<CameraInformationResponse>>> Add(AddCameraRequest request)
         {
@@ -75,7 +75,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = Roles.Manager)]
+        [Authorize(Roles = UserRole.Manager)]
         [HttpPatch("{id}")]
         public async Task<ActionResult<RestDTO<CameraInformationResponse>>> Update(Guid id, AddCameraRequest request)
         {
@@ -94,7 +94,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = Roles.Manager)]
+        [Authorize(Roles = UserRole.Manager)]
         [HttpDelete("{id}")]
         public async Task<ActionResult<RestDTO<CameraInformationResponse>>> Delete(Guid id)
         {
@@ -114,7 +114,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = Roles.Manager + "," + Roles.User)]
+      //  [Authorize(Roles = Roles.Manager + "," + Roles.User)]
         [HttpPost("{id}/detect")]
         public async Task<ActionResult<RestDTO<DetectResponse>>> DetectFire(Guid id, TakeAlarmRequest request)
         {
@@ -141,7 +141,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = Roles.Manager + "," + Roles.User)]
+       // [Authorize(Roles = Roles.Manager + "," + Roles.User)]
         [HttpPost("{id}/disconnect")]
         public async Task<ActionResult<RestDTO<DetectResponse>>> ElectricalIncident(Guid id)
         {

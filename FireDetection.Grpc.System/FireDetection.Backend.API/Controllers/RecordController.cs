@@ -6,6 +6,7 @@ using FireDetection.Backend.Domain.Entity;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static Google.Apis.Requests.BatchRequest;
 
 
 namespace FireDetection.Backend.API.Controllers
@@ -24,7 +25,7 @@ namespace FireDetection.Backend.API.Controllers
 
         }
 
-        [Authorize(Roles = Roles.Manager + "," + Roles.User)]
+        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpPost("{RecordId}/vote")]
         public async Task<ActionResult<RestDTO<VoteAlarmResponse>>> Vote(Guid RecordId, RateAlarmRequest request)
         {
@@ -46,7 +47,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = Roles.Manager + "," + Roles.User)]
+        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpPost("{RecordId}/action")]
         public async Task<ActionResult<RestDTO<ActionProcessResponse>>> Action(Guid RecordId, AddRecordActionRequest request)
         {
@@ -67,7 +68,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = Roles.Manager + "," + Roles.User)]
+        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpGet]
         public async Task<ActionResult<RestDTO<PagedResult<RecordResponse>>>> Get([FromQuery] PagingRequest pagingRequest, [FromQuery] RecordRequest recordRequest)
         {
@@ -75,7 +76,7 @@ namespace FireDetection.Backend.API.Controllers
             return Ok(response);
         }
 
-        [Authorize(Roles = Roles.Manager + "," + Roles.User)]
+        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpGet("{recordId}")]
         public async Task<ActionResult<RestDTO<RecordDetailResponse>>> GetDetail(Guid recordId)
         {
@@ -91,6 +92,26 @@ namespace FireDetection.Backend.API.Controllers
                         Request.Scheme))!,
                     "self",
                     "Get")
+                }
+            };
+        }
+
+        [HttpPost("{Id}/endvote")]
+        public async Task<ActionResult<RestDTO<RecordDetailResponse>>> EndVote(Guid Id)
+        {
+            await _recordService.EndVotePhase(Id);
+            RecordDetailResponse response = await _recordService.GetDetail(Id);
+            return new RestDTO<RecordDetailResponse>()
+            {
+                Message = "End Vote Record  Successfully",
+                Data = response,
+                Links = new List<LinkDTO> {
+                    new LinkDTO(
+                    Url.Action(
+                        _linkGenerator.GetUriByAction(HttpContext,nameof(EndVote),"RecordController",
+                        Request.Scheme))!,
+                    "self",
+                    "Post")
                 }
             };
         }

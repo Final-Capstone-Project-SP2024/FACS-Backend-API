@@ -124,12 +124,14 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             }
 
             var data = await _context.LocationRepository.GetStaffInLocation(locationId);
+            var cameras =  _context.CameraRepository.Where(x => x.LocationID == locationId).Select(x => x.Id).ToList().AsReadOnly();
             return new LocationInformationResponse()
             {
                 CreatedDate = _context.LocationRepository.GetById(locationId).Result.CreatedDate,
                 LocationName = _context.LocationRepository.GetById(locationId).Result.LocationName,
                 LocationId = locationId,
-                Users = data
+                Users = data,
+                CameraInLocations = cameras
             };
         }
 
@@ -143,6 +145,21 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             }
 
             return true;
+        }
+
+        public  async Task<LocationInformationResponse> GetById(Guid locationId)
+        {
+            var data = await _context.LocationRepository.GetStaffInLocation(locationId);
+            var cameras = _context.CameraRepository.Where(x => x.LocationID == locationId).Select(x => x.Id).ToList().AsReadOnly();
+
+            return new LocationInformationResponse()
+            {
+                CreatedDate = _context.LocationRepository.GetById(locationId).Result.CreatedDate,
+                LocationName = _context.LocationRepository.GetById(locationId).Result.LocationName,
+                LocationId = locationId,
+                Users = data,
+                CameraInLocations = cameras
+            };
         }
     }
 }

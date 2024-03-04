@@ -39,7 +39,7 @@ namespace Backend.Infrastructure.Tests.Service
             _unitOfWork.Setup(x => x.CameraRepository.InsertAsync(mock));
             _unitOfWork.Setup(x => x.SaveChangeAsync());
 
-            _mapperConfig.Map<CameInformationResponse>(mock);
+            _mapperConfig.Map<CameraInformationResponse>(mock);
 
             var result = await _cameraService.Active(mock.Id);
 
@@ -73,7 +73,7 @@ namespace Backend.Infrastructure.Tests.Service
             _unitOfWork.Setup(x => x.SaveChangeAsync());
 
             _cameraServiceTest.Setup(x => x.GetCameraByName(mock.Destination)).ReturnsAsync(camera);
-            _mapperConfig.Map<CameInformationResponse>(camera);
+            _mapperConfig.Map<CameraInformationResponse>(camera);
             var result = await _cameraService.Add(mock);
 
             Assert.Null(result);
@@ -92,7 +92,7 @@ namespace Backend.Infrastructure.Tests.Service
             _unitOfWork.Setup(x => x.CameraRepository.InsertAsync(mock));
             _unitOfWork.Setup(x => x.SaveChangeAsync());
 
-            _mapperConfig.Map<CameInformationResponse>(mock);
+            _mapperConfig.Map<CameraInformationResponse>(mock);
 
             var result = await _cameraService.Inactive(mock.Id);
 
@@ -131,7 +131,7 @@ namespace Backend.Infrastructure.Tests.Service
             _unitOfWork.Setup(x => x.SaveChangeAsync());
 
             _unitOfWork.Setup(x => x.CameraRepository.GetById(mock2.Id)).ReturnsAsync(mock2);
-            _mapperConfig.Map<CameInformationResponse>(mock2);
+            _mapperConfig.Map<CameraInformationResponse>(mock2);
 
             var result = await _cameraService.Update(mock2.Id, mock);
 

@@ -8,10 +8,13 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
 {
     public interface ITimerService
     {
-        public void CheckIsVoting(Guid recordId);
+        public void CheckIsVoting(Guid recordId, string cameraDestination, string cameraLocation);
 
         public void CheckIsAction(Guid recordId);
-      
+
+        public void SpamNotification(Guid recordId, int alarmLevel);
+
+        public void EndVotePhase(Guid recordId);
 
     }
 }

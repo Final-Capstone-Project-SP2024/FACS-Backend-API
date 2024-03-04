@@ -10,11 +10,10 @@ namespace FireDetection.Backend.Domain.Entity
     public class Camera : BaseEntity, IBaseCreated, IBaseModified
     {
         public string Status { get; set; } = null!;
+        public string CameraName { get; set; } = null!;
         public string CameraDestination { get; set; } = null!;
         public Location Location { get; set; } = null!;
-
         public Guid LocationID { get; set; }
-
         public ICollection<Record> Records { get; set; } = null!;
         public DateTime LastModified { get; set ; }
         public Guid ModifiedBy { get ; set; }

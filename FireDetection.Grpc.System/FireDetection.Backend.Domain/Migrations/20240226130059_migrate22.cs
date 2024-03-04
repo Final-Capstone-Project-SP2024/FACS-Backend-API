@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FireDetection.Backend.Domain.Migrations
 {
     /// <inheritdoc />
-    public partial class MyMigration : Migration
+    public partial class migrate22 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -71,6 +71,19 @@ namespace FireDetection.Backend.Domain.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MediaTypes", x => x.MediaTypeID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NotificationType",
+                columns: table => new
+                {
+                    NotificationTypeId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NotificationType", x => x.NotificationTypeId);
                 });
 
             migrationBuilder.CreateTable(
@@ -274,6 +287,38 @@ namespace FireDetection.Backend.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "NotificationLog",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Count = table.Column<int>(type: "integer", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ModifiedBy = table.Column<Guid>(type: "uuid", nullable: false),
+                    DeleteBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: false),
+                    NotificationTypeId = table.Column<int>(type: "integer", nullable: false),
+                    RecordId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NotificationLog", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_NotificationLog_NotificationType_NotificationTypeId",
+                        column: x => x.NotificationTypeId,
+                        principalTable: "NotificationType",
+                        principalColumn: "NotificationTypeId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_NotificationLog_Records_RecordId",
+                        column: x => x.RecordId,
+                        principalTable: "Records",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "RecordProcesses",
                 columns: table => new
                 {
@@ -342,6 +387,22 @@ namespace FireDetection.Backend.Domain.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "NotificationType",
+                columns: new[] { "NotificationTypeId", "Name" },
+                values: new object[,]
+                {
+                    { 1, "FireNotify" },
+                    { 2, "Voting" },
+                    { 3, "Alarm Level 1" },
+                    { 4, "Alarm Level 2" },
+                    { 5, "Alarm Level 3 " },
+                    { 6, "Alarm Level 4" },
+                    { 7, "Alarm Level 5" },
+                    { 8, "Fake Alarm" },
+                    { 9, "Disconnect Camera" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "RecordTypes",
                 columns: new[] { "RecordTypeId", "Name" },
                 values: new object[,]
@@ -400,6 +461,16 @@ namespace FireDetection.Backend.Domain.Migrations
                 column: "RecordId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_NotificationLog_NotificationTypeId",
+                table: "NotificationLog",
+                column: "NotificationTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_NotificationLog_RecordId",
+                table: "NotificationLog",
+                column: "RecordId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RecordProcesses_ActionTypeId",
                 table: "RecordProcesses",
                 column: "ActionTypeId");
@@ -443,6 +514,9 @@ namespace FireDetection.Backend.Domain.Migrations
                 name: "MediaRecords");
 
             migrationBuilder.DropTable(
+                name: "NotificationLog");
+
+            migrationBuilder.DropTable(
                 name: "RecordProcesses");
 
             migrationBuilder.DropTable(
@@ -450,6 +524,9 @@ namespace FireDetection.Backend.Domain.Migrations
 
             migrationBuilder.DropTable(
                 name: "MediaTypes");
+
+            migrationBuilder.DropTable(
+                name: "NotificationType");
 
             migrationBuilder.DropTable(
                 name: "ActionTypes");

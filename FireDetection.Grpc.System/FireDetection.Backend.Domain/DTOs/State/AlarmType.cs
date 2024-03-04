@@ -10,9 +10,11 @@ namespace FireDetection.Backend.Domain.DTOs.State
     {
 
         public static string FireDetectNotify = "Fire Detect Notify";
-        public static string Level1 = "Alarm Level 1";
-        public static string Level2 = "Alarm Level 2";
+        public static string Level1 = "Alarm level 1";
+        public static string Level2 = "Alarm level 2";
         public static string Level3 = "Alarm Level 3";
+        public static string Level4 = "Alarm Level 4";
+        public static string Level5 = "Alarm Level 5";
         public static string FakeAlarm = "Fake Alarm";
         public static string Voting = "Voting";
         public static string DisconnectCamera = "Disconnect camera";

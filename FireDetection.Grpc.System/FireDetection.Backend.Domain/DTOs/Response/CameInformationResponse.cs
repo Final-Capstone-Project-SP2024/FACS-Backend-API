@@ -10,6 +10,7 @@ namespace FireDetection.Backend.Domain.DTOs.Response
     {
         public Guid CameraId { get; set; }
         public string Status { get; set; } = null!;
+        public string CameraName { get; set; } = null!;
         public string CameraDestination { get; set; } = null!;
     }
 }

@@ -28,9 +28,6 @@ namespace FireDetection.Backend.Domain.DTOs.Response
         public List<UserRating> userRatings { get; set; } = null!;
 
         public List<UserVoting> userVoting { get; set; } = null!;
-
-
-
     }
 
     public class VideoRecord

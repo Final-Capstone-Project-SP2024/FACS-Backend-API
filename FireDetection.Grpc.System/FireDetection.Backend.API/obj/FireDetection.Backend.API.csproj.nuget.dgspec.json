@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\FACS\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.API\\FireDetection.Backend.API.csproj": {}
+    "C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.API\\FireDetection.Backend.API.csproj": {}
   },
   "projects": {
-    "D:\\FACS\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.API\\FireDetection.Backend.API.csproj": {
+    "C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.API\\FireDetection.Backend.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\FACS\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.API\\FireDetection.Backend.API.csproj",
+        "projectUniqueName": "C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.API\\FireDetection.Backend.API.csproj",
         "projectName": "FireDetection.Backend.API",
-        "projectPath": "D:\\FACS\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.API\\FireDetection.Backend.API.csproj",
-        "packagesPath": "C:\\Users\\ducan\\.nuget\\packages\\",
-        "outputPath": "D:\\FACS\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.API\\obj\\",
+        "projectPath": "C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.API\\FireDetection.Backend.API.csproj",
+        "packagesPath": "C:\\Users\\manda\\.nuget\\packages\\",
+        "outputPath": "C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.API\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\ducan\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\manda\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -26,15 +22,14 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "D:\\FACS\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Infrastructure\\FireDetection.Backend.Infrastructure.csproj": {
-                "projectPath": "D:\\FACS\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Infrastructure\\FireDetection.Backend.Infrastructure.csproj"
+              "C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Infrastructure\\FireDetection.Backend.Infrastructure.csproj": {
+                "projectPath": "C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Infrastructure\\FireDetection.Backend.Infrastructure.csproj"
               }
             }
           }
@@ -89,9 +84,9 @@
               "target": "Package",
               "version": "[3.1.1, )"
             },
-            "Serilog.AspNetCore": {
+            "Serilog.Extensions.Logging": {
               "target": "Package",
-              "version": "[8.0.1, )"
+              "version": "[7.0.0, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
@@ -117,25 +112,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\FACS\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Domain\\FireDetection.Backend.Domain.csproj": {
+    "C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Domain\\FireDetection.Backend.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\FACS\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Domain\\FireDetection.Backend.Domain.csproj",
+        "projectUniqueName": "C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Domain\\FireDetection.Backend.Domain.csproj",
         "projectName": "FireDetection.Backend.Domain",
-        "projectPath": "D:\\FACS\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Domain\\FireDetection.Backend.Domain.csproj",
-        "packagesPath": "C:\\Users\\ducan\\.nuget\\packages\\",
-        "outputPath": "D:\\FACS\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Domain\\obj\\",
+        "projectPath": "C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Domain\\FireDetection.Backend.Domain.csproj",
+        "packagesPath": "C:\\Users\\manda\\.nuget\\packages\\",
+        "outputPath": "C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Domain\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\ducan\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\manda\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -143,7 +134,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -243,25 +233,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\FACS\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Infrastructure\\FireDetection.Backend.Infrastructure.csproj": {
+    "C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Infrastructure\\FireDetection.Backend.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\FACS\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Infrastructure\\FireDetection.Backend.Infrastructure.csproj",
+        "projectUniqueName": "C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Infrastructure\\FireDetection.Backend.Infrastructure.csproj",
         "projectName": "FireDetection.Backend.Infrastructure",
-        "projectPath": "D:\\FACS\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Infrastructure\\FireDetection.Backend.Infrastructure.csproj",
-        "packagesPath": "C:\\Users\\ducan\\.nuget\\packages\\",
-        "outputPath": "D:\\FACS\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Infrastructure\\obj\\",
+        "projectPath": "C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Infrastructure\\FireDetection.Backend.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\manda\\.nuget\\packages\\",
+        "outputPath": "C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\ducan\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\manda\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -269,15 +255,14 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "D:\\FACS\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Domain\\FireDetection.Backend.Domain.csproj": {
-                "projectPath": "D:\\FACS\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Domain\\FireDetection.Backend.Domain.csproj"
+              "C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Domain\\FireDetection.Backend.Domain.csproj": {
+                "projectPath": "C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Domain\\FireDetection.Backend.Domain.csproj"
               }
             }
           }
@@ -313,7 +298,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
         }
       }
     }

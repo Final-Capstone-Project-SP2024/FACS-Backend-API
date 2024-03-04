@@ -28,6 +28,7 @@ namespace FireDetection.Backend.Domain.Entity
         public ICollection<AlarmRate> AlarmRates { get; set; }
         public ICollection<MediaRecord> MediaRecords { get; set; }
         public ICollection<RecordProcess> RecordProcesses { get; set; }
+        public ICollection<NotificationLog> NotificationLogs { get; set; }
         public DateTime CreatedDate { get ; set; }
         public Guid CreatedBy { get ; set ; }
     }

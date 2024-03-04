@@ -4,6 +4,7 @@ using FireDetection.Backend.Domain.DTOs.Response;
 using FireDetection.Backend.Domain.DTOs.State;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using Microsoft.AspNetCore.Authorization;
+using GreenDonut;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Location = FireDetection.Backend.Domain.Entity.Location;
@@ -23,7 +24,7 @@ namespace FireDetection.Backend.API.Controllers
             _linkGenerator = linkGenerator;
         }
 
-        [Authorize(Roles = Roles.Manager)]
+        [Authorize(Roles = UserRole.Manager)]
         [HttpPost]
         public async Task<ActionResult<RestDTO<LocationInformationResponse>>> Add(AddLocationRequest request)
         {
@@ -52,7 +53,27 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = Roles.Manager)]
+        [Authorize(Roles = UserRole.Manager)]
+        [HttpGet("{id}")]
+        public async Task<ActionResult<RestDTO<LocationInformationResponse>>> GetById(Guid id)
+        {
+            var response = await _context.GetById(id);
+            return new RestDTO<LocationInformationResponse>()
+            {
+                Message = "View Location Detail Successfully",
+                Data = response,
+                Links = new List<LinkDTO> {
+                  new LinkDTO(
+                    Url.Action(
+                     _linkGenerator.GetUriByAction(HttpContext,nameof(GetById),"LocationController",
+                      "",
+                      Request.Scheme))!,
+                "self",
+                 "Post")
+    }
+            };
+        }
+
         [HttpPatch("{id}")]
         public async Task<ActionResult<RestDTO<LocationInformationResponse>>> Update(Guid id, AddLocationRequest request)
         {
@@ -74,7 +95,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = Roles.Manager)]
+        [Authorize(Roles = UserRole.Manager)]
         [HttpDelete("{id}")]
         public async Task<ActionResult<RestDTO<LocationInformationResponse>>> Delete(Guid id)
         {
@@ -93,7 +114,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = Roles.Manager + "," + Roles.User)]
+        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpGet]   
         public async Task<ActionResult<RestDTO<IQueryable<Location>>>> Get()
         {
@@ -113,7 +134,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = Roles.Manager)]
+        [Authorize(Roles = UserRole.Manager)]
         [HttpPost("/{id}/add")]
         public async Task<ActionResult<RestDTO<LocationInformationResponse>>> AddStaff(Guid id, AddStaffRequest request)
         {

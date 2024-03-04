@@ -1,17 +1,14 @@
-﻿using FireDetection.Backend.Domain.DTOs.Core;
+﻿using AutoMapper;
+using FireDetection.Backend.Domain.DTOs.Core;
 using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.DTOs.Response;
 using FireDetection.Backend.Domain.DTOs.State;
-using FireDetection.Backend.Infrastructure.Repository.IRepositories;
+using FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Npgsql.Internal.TypeHandlers;
 using System.Diagnostics;
-using System.Linq.Dynamic.Core;
-
+using static Google.Apis.Requests.BatchRequest;
 namespace FireDetection.Backend.API.Controllers
 {
     [ApiController]
@@ -26,7 +23,7 @@ namespace FireDetection.Backend.API.Controllers
             _linkGenerator = linkGenerator;
         }
 
-        [Authorize(Roles = Roles.Manager)]
+        [Authorize(Roles = UserRole.Manager)]
         [HttpPost]
         public async Task<ActionResult<RestDTO<UserInformationResponse>>> Add(CreateUserRequest request)
         {
@@ -69,7 +66,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = Roles.Manager)]
+        [Authorize(Roles = UserRole.Manager)]
         [HttpPost("{id}/active")]
         public async Task<ActionResult<RestDTO<UserInformationResponse>>> Active(Guid id)
         {
@@ -85,7 +82,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = Roles.Manager)]
+        [Authorize(Roles = UserRole.Manager)]
         [HttpPost("{id}/inactive")]
         public async Task<ActionResult<RestDTO<UserInformationResponse>>> Inactive(Guid id)
         {
@@ -101,7 +98,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = Roles.Manager + "," + Roles.User)]
+        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpPatch("/{id}")]
         public async Task<ActionResult<RestDTO<UserInformationResponse>>> Update(Guid id, UpdateUserRequest request)
         {
@@ -126,7 +123,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = Roles.Manager + "," + Roles.User)]
+        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpGet]
         public async Task<ActionResult<RestDTO<List<UserInformationResponse>>>> GetAllUsers([FromQuery] PagingRequest pagingRequest, [FromQuery] UserRequest request)
         {
