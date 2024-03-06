@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FireDetection.Backend.API", "FireDetection.Backend.API.csproj", "{7E2F85DF-4014-4FE7-AFA7-1829D5B4D420}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7E2F85DF-4014-4FE7-AFA7-1829D5B4D420}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E2F85DF-4014-4FE7-AFA7-1829D5B4D420}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E2F85DF-4014-4FE7-AFA7-1829D5B4D420}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E2F85DF-4014-4FE7-AFA7-1829D5B4D420}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C5CB6892-A662-4503-848B-B221D9DBA5CE}
+	EndGlobalSection
+EndGlobal
