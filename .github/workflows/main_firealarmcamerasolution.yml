@@ -25,6 +25,9 @@ jobs:
       - name: Direct to the solution folder
         run: cd .\FireDetection.Grpc.System\FireDetection.Backend.API\
 
+      - name: Show directory contents after CD
+        run: Get-ChildItem -Path .
+
       - name: Build with dotnet
         run: dotnet build --configuration Release
 
