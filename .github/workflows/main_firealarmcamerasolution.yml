@@ -23,7 +23,7 @@ jobs:
           include-prerelease: true
 
       - name: Direct to the solution folder
-        run: cd FireDetection.Backend.API
+        run: cd FireAlarmCameraSolution
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
