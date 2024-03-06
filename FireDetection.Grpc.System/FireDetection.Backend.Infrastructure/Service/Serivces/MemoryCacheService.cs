@@ -36,8 +36,8 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         {
             string Name = NameTransfer(cacheType, recordId);
             var cacheEntryOptions = new MemoryCacheEntryOptions()
-                 .SetSlidingExpiration(TimeSpan.FromMinutes(5))
-                 .SetAbsoluteExpiration(TimeSpan.FromMinutes(5))
+                 .SetSlidingExpiration(TimeSpan.FromHours(1))
+                 .SetAbsoluteExpiration(TimeSpan.FromHours(1))
                  .SetPriority(CacheItemPriority.Normal)
                  .SetSize(1024);
 

@@ -214,18 +214,16 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             var entity = _mapper.Map<Record>(req);
 
             var query = await _unitOfWork.RecordRepository.GetAll();
-            query = query.Include(record => record.Camera).ThenInclude(camera => camera.Location);
+            query = query
+                .Include(alarm => alarm.AlarmRates) //user rating
+                .Include(noti => noti.NotificationLogs)
+                .Include(recordProcess => recordProcess.RecordProcesses) /*User Voting*/ .ThenInclude(action => action.ActionType)
+                .Include(record => record.Camera).ThenInclude(camera => camera.Location);
 
             var records = await query.ToListAsync();
-<<<<<<< HEAD
             
             query = query.Where(x => x.RecordTime.Date >= req.FromDate.Date && x.RecordTime.Date <= req.ToDate.Date);
             
-=======
-
-            query = query.Where(x => x.CreatedDate.Date >= req.FirstDate.Date && x.CreatedDate.Date <= req.LastDate.Date);
-
->>>>>>> d60c32b4f488cfb2302b722cbb39292a81343c60
             var entityProjected = LinqUtils.DynamicFilter<Record>(query, entity).ProjectTo<RecordResponse>(_mapper.ConfigurationProvider);
 
             #region filter
@@ -244,6 +242,8 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 query = query.Where(x => x.Status == req.Status);
             }
             #endregion
+
+            var test = await query.ToListAsync();
 
             var sort = PageHelper<RecordResponse>.Sorting(pagingRequest.SortType, entityProjected, pagingRequest.ColName);
             var pagedEntity = PageHelper<RecordResponse>.Paging(sort, pagingRequest.Page, pagingRequest.PageSize);

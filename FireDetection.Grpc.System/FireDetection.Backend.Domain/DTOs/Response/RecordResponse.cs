@@ -15,7 +15,10 @@ namespace FireDetection.Backend.Domain.DTOs.Response
         public decimal UserRatingPercent { get; set; }
         public decimal PredictedPercent { get; set; }
         public DateTime CreatedDate { get; set; }
+        public List<AlarmRatesResponse> UserRatings { get; set; } = null!;
+        public List<RecordProcessResponse> UserVoting { get; set; } = null!;
         public RecordTypeResponse? RecordType { get; set; }
+        public List<NotificationLogResponse>? NotificationLogs { get; set; }
     }
 
 }

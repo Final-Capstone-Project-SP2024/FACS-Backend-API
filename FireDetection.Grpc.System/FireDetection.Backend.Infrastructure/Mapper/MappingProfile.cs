@@ -103,6 +103,21 @@ namespace FireDetection.Backend.API.Mapper
                 .ForMember(x => x.UserID, src => src.MapFrom(x => x.UserID))
                 .ReverseMap();
 
+            //CreateMap<AlarmRate, UserRating>
+            //    .ForMember(x => x.LevelID, src => src.MapFrom(x => x.LevelRating))
+            //    .ForMember(x => x.UserID, src => src.MapFrom(x => x.UserId))
+            //    .ReverseMap();
+
+            CreateMap<NotificationLog, NotificationLogResponse>()
+                .ForMember(x => x.Count, src => src.MapFrom(x => x.Count))
+                .ForMember(x => x.notificationType, src => src.MapFrom(x => x.notificationType))
+                .ReverseMap();
+
+            CreateMap<NotificationType, NotificationTypeResponse>()
+                .ReverseMap();
+
+            //CreateMap<RecordProcess, RecordProcessResponse>()
+            //    .ForMember(x => x.ActionId, src => src.MapFrom(x => x.ActionTypeId))
         }
 
     }
