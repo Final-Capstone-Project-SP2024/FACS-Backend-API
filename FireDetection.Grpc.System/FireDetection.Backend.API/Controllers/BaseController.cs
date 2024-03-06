@@ -5,11 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace FireDetection.Backend.API.Controllers
 {
     [ApiController]
-    public class FireDetectionController : BaseController
+    [Route("api/v1/[controller]")]
+    public class BaseController : ControllerBase
     {
-    
-
-
-      
     }
 }

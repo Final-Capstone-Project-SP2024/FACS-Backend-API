@@ -12,8 +12,7 @@ using static Google.Apis.Requests.BatchRequest;
 namespace FireDetection.Backend.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class UserController : ControllerBase
+    public class UserController : BaseController
     {
         private readonly IUserService _userService;
         private readonly LinkGenerator _linkGenerator;
@@ -51,7 +50,7 @@ namespace FireDetection.Backend.API.Controllers
                 }
             };
         }
-        [HttpPost("/login")]
+        [HttpPost("login")]
         public async Task<ActionResult<RestDTO<UserLoginResponse>>> Login(UserLoginRequest req)
         {
             UserLoginResponse response = await _userService.Login(req);
@@ -99,7 +98,7 @@ namespace FireDetection.Backend.API.Controllers
         }
 
         [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
-        [HttpPatch("/{id}")]
+        [HttpPatch("{id}")]
         public async Task<ActionResult<RestDTO<UserInformationResponse>>> Update(Guid id, UpdateUserRequest request)
         {
             if (!ModelState.IsValid)

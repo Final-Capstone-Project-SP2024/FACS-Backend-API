@@ -12,8 +12,7 @@ using static Google.Apis.Requests.BatchRequest;
 namespace FireDetection.Backend.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class RecordController : ControllerBase
+    public class RecordController : BaseController
     {
         private readonly IRecordService _recordService;
         private readonly LinkGenerator _linkGenerator;
