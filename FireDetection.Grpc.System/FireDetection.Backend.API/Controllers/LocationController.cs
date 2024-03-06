@@ -12,8 +12,7 @@ using Location = FireDetection.Backend.Domain.Entity.Location;
 namespace FireDetection.Backend.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class LocationController : ControllerBase
+    public class LocationController : BaseController
     {
         private readonly ILocationService _context;
         private readonly LinkGenerator _linkGenerator;
@@ -135,7 +134,7 @@ namespace FireDetection.Backend.API.Controllers
         }
 
         [Authorize(Roles = UserRole.Manager)]
-        [HttpPost("/{id}/add")]
+        [HttpPost("{id}/add")]
         public async Task<ActionResult<RestDTO<LocationInformationResponse>>> AddStaff(Guid id, AddStaffRequest request)
         {
             var result = await _context.AddStaffToLocation(id, request);

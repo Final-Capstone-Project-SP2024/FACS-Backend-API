@@ -13,8 +13,7 @@ using static Google.Apis.Requests.BatchRequest;
 namespace FireDetection.Backend.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class CameraController : ControllerBase
+    public class CameraController : BaseController
     {
         private readonly ICameraService _cameraService;
         private readonly LinkGenerator _linkGenerator;

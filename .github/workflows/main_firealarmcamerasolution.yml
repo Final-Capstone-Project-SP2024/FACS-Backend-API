@@ -1,0 +1,69 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy ASP.Net Core app to Azure Web App - FireAlarmCameraSolution
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '7.x'
+          include-prerelease: true
+
+      - name: Direct to the solution folder and show contents
+        run: |
+          cd "FireDetection.Grpc.System/FireDetection.Backend.API"
+          Get-ChildItem -Path .
+        
+      - name: Build with dotnet
+        run: |
+          cd "FireDetection.Grpc.System/FireDetection.Backend.API"
+          dotnet build --configuration Release
+
+      - name: dotnet publish
+        run: |
+          cd "FireDetection.Grpc.System/FireDetection.Backend.API"
+          dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v3
+        with:
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/myapp
+
+  deploy:
+    runs-on: windows-latest
+    needs: build
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: .net-app
+
+      # - name: Migrate database
+      #   run: dotnet ef database update --project ./FireAlarmCameraSolution/FireAlarmCameraSolution.csproj --startup-project ./FireAlarmCameraSolution/FireAlarmCameraSolution.csproj --context ApplicationDbContext
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'FireAlarmCameraSolution'
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_20CB2C376B6440848FF541F0421FE3B8 }}
+          package: .

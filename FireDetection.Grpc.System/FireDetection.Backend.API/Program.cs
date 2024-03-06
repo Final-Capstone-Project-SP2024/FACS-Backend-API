@@ -98,7 +98,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
 
-    app.ApplyMigrations();
+    //app.ApplyMigrations();
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
@@ -121,7 +121,7 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.ApplyMigrations();
+    //app.ApplyMigrations();
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {

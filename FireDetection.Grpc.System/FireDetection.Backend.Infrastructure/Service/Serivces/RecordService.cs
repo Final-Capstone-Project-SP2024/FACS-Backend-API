@@ -208,21 +208,42 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         {
             if (pagingRequest.ColName == null)
             {
-                pagingRequest.ColName = "CameraId"; //Init default Id
+                pagingRequest.ColName = "Id"; //Init default Id
             }
 
             var entity = _mapper.Map<Record>(req);
+
             var query = await _unitOfWork.RecordRepository.GetAll();
+            query = query
+                .Include(alarm => alarm.AlarmRates) //user rating
+                .Include(noti => noti.NotificationLogs)
+                .Include(recordProcess => recordProcess.RecordProcesses) /*User Voting*/ .ThenInclude(action => action.ActionType)
+                .Include(record => record.Camera).ThenInclude(camera => camera.Location);
+
             var records = await query.ToListAsync();
-
-            query = query.Where(x => x.CreatedDate.Date >= req.FirstDate.Date && x.CreatedDate.Date <= req.LastDate.Date);
-
+            
+            query = query.Where(x => x.RecordTime.Date >= req.FromDate.Date && x.RecordTime.Date <= req.ToDate.Date);
+            
             var entityProjected = LinqUtils.DynamicFilter<Record>(query, entity).ProjectTo<RecordResponse>(_mapper.ConfigurationProvider);
 
+            #region filter
             if (req.CameraId != Guid.Empty)
             {
                 query = query.Where(x => x.CameraID == req.CameraId);
             }
+
+            if (req.LocationId != Guid.Empty)
+            {
+                query = query.Where(x => x.Camera.LocationID == req.LocationId);
+            }
+
+            if (req.Status != null)
+            {
+                query = query.Where(x => x.Status == req.Status);
+            }
+            #endregion
+
+            var test = await query.ToListAsync();
 
             var sort = PageHelper<RecordResponse>.Sorting(pagingRequest.SortType, entityProjected, pagingRequest.ColName);
             var pagedEntity = PageHelper<RecordResponse>.Paging(sort, pagingRequest.Page, pagingRequest.PageSize);

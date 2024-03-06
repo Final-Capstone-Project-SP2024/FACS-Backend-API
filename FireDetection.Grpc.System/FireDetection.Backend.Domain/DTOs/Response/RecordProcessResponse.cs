@@ -8,5 +8,8 @@ namespace FireDetection.Backend.Domain.DTOs.Response
 {
     public class RecordProcessResponse
     {
+        public Guid UserId { get; set; }
+        public int VoteLevel { get; set; }
+        public string VoteType { get; set; } = null!;
     }
 }
