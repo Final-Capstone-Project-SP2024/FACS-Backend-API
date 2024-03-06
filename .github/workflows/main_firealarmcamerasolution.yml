@@ -28,12 +28,12 @@ jobs:
           Get-ChildItem -Path .
         
       - name: Build with dotnet
-        run: 
+        run: |
           cd "FireDetection.Grpc.System/FireDetection.Backend.API"
           dotnet build --configuration Release
 
       - name: dotnet publish
-        run: 
+        run: |
           cd "FireDetection.Grpc.System/FireDetection.Backend.API"
           dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
