@@ -20,7 +20,7 @@ namespace Backend.Infrastructure.Tests
                 _controlCameraRepositoryTest.Object,
                 _alarmRepositoryTest.Object,
                 _recordProcessRepositoryTest.Object,
-                _alarmrateRepositoryTest.Object);
+                _alarmrateRepositoryTest.Object,_notificationLogRepositoryTest.Object);
         }
     }
 }

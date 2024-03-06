@@ -48,6 +48,8 @@ namespace Backend.Domain.Tests
 
         protected readonly Mock<IControlCameraRepository> _controlCameraRepositoryTest;
         protected readonly Mock<IAlarmRateRepository> _alarmrateRepositoryTest;
+        protected readonly Mock<INotificationLogRepository> _notificationLogRepositoryTest;
+
         protected readonly Mock<IRecordService> _recordServiceTest;
 
         protected readonly Mock<IMediaRecordRepository> _mediaRecordRepositoryTest;
