@@ -22,12 +22,15 @@ jobs:
           dotnet-version: '7.x'
           include-prerelease: true
 
+      - name: Show directory contents before CD
+        run: Get-ChildItem -Path .
+      
       - name: Direct to the solution folder
         run: cd .\FireDetection.Grpc.System\FireDetection.Backend.API\
-
+      
       - name: Show directory contents after CD
         run: Get-ChildItem -Path .
-
+        
       - name: Build with dotnet
         run: dotnet build --configuration Release
 
