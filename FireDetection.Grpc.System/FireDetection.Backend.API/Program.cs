@@ -98,7 +98,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
 
-    //app.ApplyMigrations();
+    app.ApplyMigrations();
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
@@ -124,7 +124,7 @@ else
     conn = builder.Configuration.GetConnectionString("FireAlarmDatabase");
     builder.Services.AddDbContext<FireDetectionDbContext>(options =>
         options.UseNpgsql(conn));
-    //app.ApplyMigrations();
+    app.ApplyMigrations();
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
