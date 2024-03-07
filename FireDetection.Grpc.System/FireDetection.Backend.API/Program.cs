@@ -86,7 +86,6 @@ var conn = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<FireDetectionDbContext>(options =>
     options.UseNpgsql(conn));
 
-
 builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSingleton<MyMemoryCache>();
@@ -97,7 +96,6 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-
     app.ApplyMigrations();
     app.UseSwagger();
     app.UseSwaggerUI(c =>
@@ -114,16 +112,10 @@ if (app.Environment.IsDevelopment())
         c.EnableFilter();
         c.ShowExtensions();
         c.EnableValidator();
-        
     });
-    
-
 }
 else
 {
-    conn = builder.Configuration.GetConnectionString("FireAlarmDatabase");
-    builder.Services.AddDbContext<FireDetectionDbContext>(options =>
-        options.UseNpgsql(conn));
     app.ApplyMigrations();
     app.UseSwagger();
     app.UseSwaggerUI(c =>
@@ -159,7 +151,7 @@ app.UseAuthorization();
 app.UseMiddleware<CustomExceptionMiddleware>();
 app.MapGraphQL();
 //app.UseHttpsRedirection();
-
+    
 app.MapControllers();
 
 app.Run();
