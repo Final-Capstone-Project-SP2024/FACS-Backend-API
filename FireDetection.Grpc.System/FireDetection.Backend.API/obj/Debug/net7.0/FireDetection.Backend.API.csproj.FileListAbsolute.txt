@@ -254,6 +254,7 @@ D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\obj
 D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\obj\Debug\net7.0\FireDetection.Backend.API.genruntimeconfig.cache
 D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\obj\Debug\net7.0\ref\FireDetection.Backend.API.dll
 =======
+>>>>>>> d60c32b4f488cfb2302b722cbb39292a81343c60
 C:\Code\code\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\appsettings.Development.json
 C:\Code\code\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\FireDetection.Backend.API.exe
 C:\Code\code\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\appsettings.json
@@ -371,4 +372,3 @@ C:\Code\code\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.AP
 C:\Code\code\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\obj\Debug\net7.0\FireDetection.Backend.API.pdb
 C:\Code\code\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\obj\Debug\net7.0\FireDetection.Backend.API.genruntimeconfig.cache
 C:\Code\code\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\obj\Debug\net7.0\ref\FireDetection.Backend.API.dll
->>>>>>> d60c32b4f488cfb2302b722cbb39292a81343c60

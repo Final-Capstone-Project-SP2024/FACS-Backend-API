@@ -45,6 +45,7 @@ D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.Domain\
 D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.Domain\obj\Debug\net7.0\FireDetection.Backend.Domain.genruntimeconfig.cache
 D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.Domain\obj\Debug\net7.0\ref\FireDetection.Backend.Domain.dll
 =======
+>>>>>>> d60c32b4f488cfb2302b722cbb39292a81343c60
 C:\Code\code\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.Domain\bin\Debug\net7.0\FireDetection.Backend.Domain.deps.json
 C:\Code\code\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.Domain\bin\Debug\net7.0\FireDetection.Backend.Domain.runtimeconfig.json
 C:\Code\code\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.Domain\bin\Debug\net7.0\FireDetection.Backend.Domain.dll
@@ -60,4 +61,3 @@ C:\Code\code\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.Do
 C:\Code\code\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.Domain\obj\Debug\net7.0\FireDetection.Backend.Domain.pdb
 C:\Code\code\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.Domain\obj\Debug\net7.0\FireDetection.Backend.Domain.genruntimeconfig.cache
 C:\Code\code\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.Domain\obj\Debug\net7.0\ref\FireDetection.Backend.Domain.dll
->>>>>>> d60c32b4f488cfb2302b722cbb39292a81343c60
