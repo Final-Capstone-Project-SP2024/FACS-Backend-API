@@ -45,6 +45,7 @@ jobs:
 
   test:
     runs-on: windows-latest
+    # needs: build
 
     steps:
       - name: Download artifact from build job
@@ -60,7 +61,7 @@ jobs:
 
       - name: Test API
         run: |
-          cd .net-app
+          Get-ChildItem -Path .
           dotnet test --configuration Release
       
       - name: Test Domain
