@@ -56,11 +56,11 @@ jobs:
         with:
           name: .net-app
 
-      - name: Migrate database
-        run: |
-          cd ../
-          Get-ChildItem -Path .
-          dotnet ef database update --configuration Release
+      # - name: Migrate database
+      #   run: |
+      #     cd ../
+      #     Get-ChildItem -Path .
+      #     dotnet ef database update --configuration Release
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
