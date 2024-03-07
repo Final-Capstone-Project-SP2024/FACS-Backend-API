@@ -62,16 +62,17 @@ jobs:
       - name: Test API
         run: |
           Get-ChildItem -Path .
+          cd ./Backend.API.Tests
           dotnet test --configuration Release
       
       - name: Test Domain
         run: |
-          cd .net-app
+          cd ./Backend.Domain.Tests
           dotnet test --configuration Release
 
       - name: Test Infrastructure
         run: |
-          cd .net-app
+          cd ./Backend.Infrastructure.Tests
           dotnet test --configuration Release
 
   deploy:
