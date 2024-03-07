@@ -58,8 +58,8 @@ jobs:
 
       - name: Migrate database
         run: |
-          cd "FireAlarmCameraSolution/FireAlarmCameraSolution"
-          dotnet ef database update --project ./FireAlarmCameraSolution/FireAlarmCameraSolution.csproj --startup-project ./FireAlarmCameraSolution/FireAlarmCameraSolution.csproj --context ApplicationDbContext
+          cd "FireDetection.Grpc.System/FireDetection.Backend.API"
+          dotnet ef database update --configuration Release
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp

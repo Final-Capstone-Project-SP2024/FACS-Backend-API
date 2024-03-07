@@ -66,7 +66,7 @@ namespace Backend.API.Tests.Mapper
                 .With(x => x.Id)
                 .Create();
 
-            var result = _mapperConfig.Map<CameInformationResponse>(camera);
+            var result = _mapperConfig.Map<CameraInformationResponse>(camera);
 
             result.CameraDestination.Should().Be(camera.CameraDestination);
         }
