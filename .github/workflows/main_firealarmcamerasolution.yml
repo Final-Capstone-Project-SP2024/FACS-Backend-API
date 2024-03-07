@@ -58,7 +58,7 @@ jobs:
 
       - name: Migrate database
         run: |
-          cd "FireDetection.Grpc.System/FireDetection.Backend.API"
+          cd "FireDetection.Backend.API"
           dotnet ef database update --configuration Release
 
       - name: Deploy to Azure Web App
