@@ -58,8 +58,10 @@ jobs:
 
       - name: Migrate database
         run: |
+          Get-ChildItem -Path .
           cd "FireDetection.Backend.API"
           dotnet ef database update --configuration Release
+          Get-ChildItem -Path .
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
