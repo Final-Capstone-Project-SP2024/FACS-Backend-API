@@ -215,10 +215,12 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
             var query = await _unitOfWork.RecordRepository.GetAll();
             query = query
-                .Include(alarm => alarm.AlarmRates) //user rating
+                .Include(alarm => alarm.AlarmRates) //TODO user rating
                 .Include(noti => noti.NotificationLogs)
-                .Include(recordProcess => recordProcess.RecordProcesses) /*User Voting*/ .ThenInclude(action => action.ActionType)
-                .Include(record => record.Camera).ThenInclude(camera => camera.Location);
+                .Include(recordProcess => recordProcess.RecordProcesses) /*TODO User Voting*/
+                    .ThenInclude(action => action.ActionType)
+                .Include(record => record.Camera)
+                    .ThenInclude(camera => camera.Location);
 
             var records = await query.ToListAsync();
             

@@ -121,6 +121,9 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
+    conn = builder.Configuration.GetConnectionString("FireAlarmDatabase");
+    builder.Services.AddDbContext<FireDetectionDbContext>(options =>
+        options.UseNpgsql(conn));
     //app.ApplyMigrations();
     app.UseSwagger();
     app.UseSwaggerUI(c =>

@@ -56,8 +56,10 @@ jobs:
         with:
           name: .net-app
 
-      # - name: Migrate database
-      #   run: dotnet ef database update --project ./FireAlarmCameraSolution/FireAlarmCameraSolution.csproj --startup-project ./FireAlarmCameraSolution/FireAlarmCameraSolution.csproj --context ApplicationDbContext
+      - name: Migrate database
+        run: |
+          cd "FireAlarmCameraSolution/FireAlarmCameraSolution"
+          dotnet ef database update --project ./FireAlarmCameraSolution/FireAlarmCameraSolution.csproj --startup-project ./FireAlarmCameraSolution/FireAlarmCameraSolution.csproj --context ApplicationDbContext
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
