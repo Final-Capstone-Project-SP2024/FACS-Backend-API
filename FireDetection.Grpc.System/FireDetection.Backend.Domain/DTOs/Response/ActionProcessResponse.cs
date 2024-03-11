@@ -8,5 +8,6 @@ namespace FireDetection.Backend.Domain.DTOs.Response
 {
     public class ActionProcessResponse
     {
+        //public string ActionName { get; set; } = null!;
     }
 }

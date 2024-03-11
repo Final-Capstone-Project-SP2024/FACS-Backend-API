@@ -10,6 +10,6 @@ namespace FireDetection.Backend.Domain.DTOs.Response
     {
         public Guid UserId { get; set; }
         public int VoteLevel { get; set; }
-        public string VoteType { get; set; } = null!;
+        public ActionProcessResponse VoteType { get; set; } = null!;
     }
 }

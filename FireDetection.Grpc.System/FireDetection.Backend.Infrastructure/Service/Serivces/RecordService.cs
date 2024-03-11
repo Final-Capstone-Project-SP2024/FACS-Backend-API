@@ -228,7 +228,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             
             var entityProjected = LinqUtils.DynamicFilter<Record>(query, entity).ProjectTo<RecordResponse>(_mapper.ConfigurationProvider);
 
-            #region filter
+            #region filter query
             if (req.CameraId != Guid.Empty)
             {
                 query = query.Where(x => x.CameraID == req.CameraId);

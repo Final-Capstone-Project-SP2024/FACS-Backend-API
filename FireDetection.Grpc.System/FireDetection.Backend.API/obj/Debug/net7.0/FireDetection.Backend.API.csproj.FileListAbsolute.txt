@@ -372,3 +372,10 @@ C:\Code\code\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.AP
 C:\Code\code\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\obj\Debug\net7.0\FireDetection.Backend.API.pdb
 C:\Code\code\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\obj\Debug\net7.0\FireDetection.Backend.API.genruntimeconfig.cache
 C:\Code\code\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\obj\Debug\net7.0\ref\FireDetection.Backend.API.dll
+D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Serilog.AspNetCore.dll
+D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Serilog.Extensions.Hosting.dll
+D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Serilog.Formatting.Compact.dll
+D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Serilog.Settings.Configuration.dll
+D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Serilog.Sinks.Console.dll
+D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Serilog.Sinks.Debug.dll
+D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Serilog.Sinks.File.dll
