@@ -33,12 +33,16 @@ namespace FireDetection.Backend.API.Mapper
             CreateMap<UserInformationResponse, UserRequest>().ReverseMap();
 
             CreateMap<Record, RecordRequest>().ReverseMap();
-            CreateMap<Record, RecordResponse>().ReverseMap();
+
+            CreateMap<Record, RecordResponse>()
+                .ForMember(x => x.UserVotings, src => src.MapFrom(x => x.RecordProcesses))
+                .ForMember(x => x.UserRatings, src => src.MapFrom(x => x.AlarmRates))
+                .ReverseMap();
+
             CreateMap<RecordType, RecordTypeResponse>()
                 .ForMember(x => x.RecordTypeId, src => src.MapFrom(x => x.RecordTypeId))
                 .ForMember(x => x.RecordTypeName, src => src.MapFrom(x => x.Name))
                 .ReverseMap();
-
 
             CreateMap<Camera, AddCameraRequest>()
                 .ForMember(x => x.Destination, src => src.MapFrom(x => x.CameraDestination))
@@ -124,11 +128,12 @@ namespace FireDetection.Backend.API.Mapper
             CreateMap<RecordProcess, RecordProcessResponse>()
                 .ForMember(x => x.UserId, src => src.MapFrom(x => x.UserID))
                 .ForMember(x => x.VoteLevel, src => src.MapFrom(x => x.ActionTypeId))
+                .ForMember(x => x.VoteType, src => src.MapFrom(x => x.ActionType))
                 .ReverseMap();
 
-            //CreateMap<ActionType, ActionProcessResponse>()
-            //    .ForMember(x => x.ActionName, src => src.MapFrom(x => x.ActionName))
-            //    .ReverseMap();
+            CreateMap<ActionType, ActionProcessResponse>()
+                .ForMember(x => x.ActionName, src => src.MapFrom(x => x.ActionName))
+                .ReverseMap();
 
             //CreateMap<RecordProcess, RecordProcessResponse>()
             //    .ForMember(x => x.ActionId, src => src.MapFrom(x => x.ActionTypeId))
