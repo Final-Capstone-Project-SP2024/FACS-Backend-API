@@ -33,50 +33,50 @@ namespace Backend.API.Tests.Controllers
         }
 
 
-      //  [Fact]
-      //  public async Task GetLocation_ShouldReturnCorrectData()
-      //  {
-      //      // Arrange
-      //      List<Location> locations = _fixture.CreateMany<Location>(3).ToList();
+        [Fact]
+        public async Task GetLocation_ShouldReturnCorrectData()
+        {
+            // Arrange
+            List<Location> locations = _fixture.CreateMany<Location>(3).ToList();
 
-      //      // Setup location service
-      //      _locationServiceTest.Setup(x => x.GetLocation()).ReturnsAsync(locations.AsQueryable());
+            // Setup location service
+            _locationServiceTest.Setup(x => x.GetLocation()).ReturnsAsync(locations.AsQueryable());
 
-      //      // Set up the controller with the mock dependencies and HttpContext
-
-
-      //      //   _urlHelperTest.Setup(u => u.Action(It.IsAny<UrlActionContext>())).Returns("/Location"); // Mock the URL path
-
-      //      // _httpContextTest.SetupGet(c => c.Request.Scheme).Returns("http");
+            // Set up the controller with the mock dependencies and HttpContext
 
 
-      //      _linkGeneratorTest.Setup(lg => LinkGeneratorWrapper.GetUriByAction(
-      //    _linkGeneratorTest.Object,
-      //    It.IsAny<HttpContext>(),
-      //    It.IsAny<string>(),
-      //    It.IsAny<string>(),
-      //    It.IsAny<object>(),
-      //    It.IsAny<string>(),
-      //    It.IsAny<HostString>(),
-      //    It.IsAny<PathString>(),
-      //    It.IsAny<FragmentString>(),
-      //    It.IsAny<LinkOptions>()))
-      //.Returns("/location"); // Adjust the return value as needed
-      //      // Use the wrapper method in your controller or service
-      //      var uri = LinkGeneratorWrapper.GetUriByAction(
-      //          _linkGeneratorTest.Object,
-      //          It.IsAny<HttpContext>(), // Pass appropriate HttpContext instance
-      //          "actionName",
-      //          "controllerName",
-      //          new { id = 1 });
-      //      // Act
+            //   _urlHelperTest.Setup(u => u.Action(It.IsAny<UrlActionContext>())).Returns("/Location"); // Mock the URL path
 
-      //      _linkGeneratorTest.SetReturnsDefault(uri);
-      //      var result = await _locationController.Get();
+            // _httpContextTest.SetupGet(c => c.Request.Scheme).Returns("http");
 
-      //      // Assert
 
-      //      Assert.NotNull(result);
-      //  }
+            _linkGeneratorTest.Setup(lg => LinkGeneratorWrapper.GetUriByAction(
+          _linkGeneratorTest.Object,
+          It.IsAny<HttpContext>(),
+          It.IsAny<string>(),
+          It.IsAny<string>(),
+          It.IsAny<object>(),
+          It.IsAny<string>(),
+          It.IsAny<HostString>(),
+          It.IsAny<PathString>(),
+          It.IsAny<FragmentString>(),
+          It.IsAny<LinkOptions>()))
+      .Returns("/location"); // Adjust the return value as needed
+            // Use the wrapper method in your controller or service
+            var uri = LinkGeneratorWrapper.GetUriByAction(
+                _linkGeneratorTest.Object,
+                It.IsAny<HttpContext>(), // Pass appropriate HttpContext instance
+                "actionName",
+                "controllerName",
+                new { id = 1 });
+            // Act
+
+            _linkGeneratorTest.SetReturnsDefault(uri);
+            var result = await _locationController.Get();
+
+            // Assert
+
+            Assert.NotNull(result);
+        }
     }
 }
