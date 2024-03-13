@@ -215,8 +215,12 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             }
 
             var userEntity = _mapper.Map<User>(request);
+
             var usersQuery = await _unitOfWork.UserRepository.GetAll();
-                usersQuery.Include(x => x.Role);
+                usersQuery = usersQuery.Include(x => x.Role);
+
+            var records = await usersQuery.ToListAsync();
+
             var filterQuery = LinqUtils.DynamicFilter<User>(usersQuery, userEntity);
             var usersProjected = filterQuery.ProjectTo<UserInformationResponse>(_mapper.ConfigurationProvider);
 

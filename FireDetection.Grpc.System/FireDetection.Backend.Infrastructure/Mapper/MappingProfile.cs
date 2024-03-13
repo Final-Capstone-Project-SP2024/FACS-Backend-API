@@ -33,6 +33,8 @@ namespace FireDetection.Backend.API.Mapper
 
             CreateMap<UserInformationResponse, UserRequest>().ReverseMap();
 
+            CreateMap<Role, RoleResponse>().ReverseMap();
+
             CreateMap<Record, RecordRequest>().ReverseMap();
 
             CreateMap<Record, RecordResponse>()
