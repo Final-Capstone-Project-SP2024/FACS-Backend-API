@@ -159,10 +159,10 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [HttpPost("{id}/record")]
-        public async Task<ActionResult<RestDTO<DetectResponse>>> Record(Guid id, TakeElectricalIncidentRequest request)
-        {
-            throw new NotImplementedException();
-        }
+        //[HttpPost("{id}/record")]
+        //public async Task<ActionResult<RestDTO<DetectResponse>>> Record(Guid id, TakeElectricalIncidentRequest request)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }
