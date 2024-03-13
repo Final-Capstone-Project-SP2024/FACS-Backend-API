@@ -379,3 +379,16 @@ D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin
 D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Serilog.Sinks.Console.dll
 D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Serilog.Sinks.Debug.dll
 D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Serilog.Sinks.File.dll
+D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Microsoft.Win32.SystemEvents.dll
+D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Quartz.dll
+D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Quartz.Extensions.DependencyInjection.dll
+D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Quartz.Extensions.Hosting.dll
+D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\System.Configuration.ConfigurationManager.dll
+D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\System.Drawing.Common.dll
+D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\System.Security.Cryptography.ProtectedData.dll
+D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\System.Windows.Extensions.dll
+D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll
+D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\runtimes\unix\lib\net6.0\System.Drawing.Common.dll
+D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
+D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
+D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll

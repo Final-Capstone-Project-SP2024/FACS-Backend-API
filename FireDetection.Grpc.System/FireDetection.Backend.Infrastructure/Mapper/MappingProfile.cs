@@ -22,6 +22,7 @@ namespace FireDetection.Backend.API.Mapper
                 .ReverseMap();
 
             CreateMap<User, UserInformationResponse>()
+                .ForMember(x => x.Id, src => src.MapFrom(x => x.Id))
                 .ForMember(x => x.SecurityCode, src => src.MapFrom(x => x.SecurityCode))
                 .ForMember(x => x.Email, src => src.MapFrom(x => x.Email))
                 .ForMember(x => x.Name, src => src.MapFrom(x => x.Name))

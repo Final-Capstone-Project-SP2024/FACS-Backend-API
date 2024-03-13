@@ -43,6 +43,7 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
                 {
                     CameraDestination = x.CameraDestination,
                     CameraId = x.Id,
+                    CameraName = x.CameraName,
                     Status = x.Status
                 }));
     }

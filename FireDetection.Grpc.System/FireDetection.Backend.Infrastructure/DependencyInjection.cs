@@ -4,6 +4,7 @@ using FireDetection.Backend.Infrastructure.Repository.Repositories;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using FireDetection.Backend.Infrastructure.Service.Serivces;
 using Microsoft.Extensions.DependencyInjection;
+using Quartz;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +40,12 @@ namespace FireDetection.Backend.Infrastructure
             services.AddScoped<IUserService , UserService>();
             services.AddScoped<IClaimsService, ClaimsService>();
 
+            services.AddQuartz(opt =>
+            {
+                opt.UseMicrosoftDependencyInjectionJobFactory();
+            });
 
+            services.AddQuartzHostedService();
 
             services.AddAutoMapper(typeof(MappingProfile).Assembly);
 

@@ -91,6 +91,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             string accessToken = GenerateJWT(user, secretKeyConfig, secretKeyDatetime);
             return new UserLoginResponse
             {
+                Id = user.Id,
                 SecurityCode = user.SecurityCode,
                 Name = user.Name,
                 Phone = user.Phone,
@@ -215,6 +216,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
             var userEntity = _mapper.Map<User>(request);
             var usersQuery = await _unitOfWork.UserRepository.GetAll();
+                usersQuery.Include(x => x.Role);
             var filterQuery = LinqUtils.DynamicFilter<User>(usersQuery, userEntity);
             var usersProjected = filterQuery.ProjectTo<UserInformationResponse>(_mapper.ConfigurationProvider);
 

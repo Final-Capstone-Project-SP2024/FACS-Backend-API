@@ -8,6 +8,7 @@ namespace FireDetection.Backend.Domain.DTOs.Response
 {
     public class UserLoginResponse
     {
+        public Guid Id { get; set; }
         public string? SecurityCode { get; set; }
         public string? Name { get; set; }
         public string? Phone { get; set; }
