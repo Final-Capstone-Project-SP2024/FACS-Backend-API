@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace FireDetection.Backend.Domain.DTOs.Response
 {
+    //? base class
     public class RecordResponse
     {
         //public Guid CameraId { get; set; }
@@ -20,5 +21,6 @@ namespace FireDetection.Backend.Domain.DTOs.Response
         public RecordTypeResponse? RecordType { get; set; }
         public List<NotificationLogResponse>? NotificationLogs { get; set; } = new List<NotificationLogResponse>();
     }
+
 
 }

@@ -23,7 +23,13 @@ namespace FireDetection.Backend.Domain.FluentAPIs
                 {
                     RoleId = 2,
                     RoleName = "User"
+                },
+                new Role
+                {
+                    RoleId = 3,
+                    RoleName = "Admin"
                 }
+
             );
        builder.HasMany(x => x.Users).WithOne(x => x.Role).HasForeignKey(x => x.RoleId);
         }

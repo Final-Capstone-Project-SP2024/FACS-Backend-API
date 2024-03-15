@@ -35,6 +35,17 @@ namespace FireDetection.Backend.Domain
         public DbSet<NotificationLog>  NotificationLogs { get; set; }   
         public DbSet<RecordType> RecordTypes { get; set; }
 
+        public DbSet<BugsReport> BugsReports { get; set; }
+
+        public DbSet<Feedback> Feedbacks { get; set; }
+
+        public DbSet<ManualPlan> ManualPlans { get; set; }
+
+        public DbSet<UserTransaction> UserTransactions { get; set; }
+
+        public DbSet<Transaction> Transactions { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

@@ -115,5 +115,11 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
+        [HttpGet("camera/{cameraId}")]
+        public async Task<ActionResult<RestDTO<RecordDetailResponse>>> GetDetailByCameraId(Guid cameraId)
+        {
+            throw new NotImplementedException();    
+        }
+
     }
 }

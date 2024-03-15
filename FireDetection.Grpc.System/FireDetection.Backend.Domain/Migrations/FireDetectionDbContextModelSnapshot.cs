@@ -22,6 +22,34 @@ namespace FireDetection.Backend.Domain.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("FireDetection.Backend.Domain.Entity.ActionPlanType", b =>
+                {
+                    b.Property<int>("ActionPlanTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ActionPlanTypeId"));
+
+                    b.Property<string>("ActionPlanTypeName")
+                        .HasColumnType("text");
+
+                    b.HasKey("ActionPlanTypeId");
+
+                    b.ToTable("ActionPlanType");
+
+                    b.HasData(
+                        new
+                        {
+                            ActionPlanTypeId = 1,
+                            ActionPlanTypeName = "Upgrade"
+                        },
+                        new
+                        {
+                            ActionPlanTypeId = 2,
+                            ActionPlanTypeName = "Downgrade"
+                        });
+                });
+
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.ActionType", b =>
                 {
                     b.Property<int>("ID")
@@ -103,7 +131,7 @@ namespace FireDetection.Backend.Domain.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("LevelID")
                         .HasColumnType("integer");
@@ -112,7 +140,7 @@ namespace FireDetection.Backend.Domain.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("Time")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("UserID")
                         .HasColumnType("uuid");
@@ -126,6 +154,48 @@ namespace FireDetection.Backend.Domain.Migrations
                     b.HasIndex("UserID");
 
                     b.ToTable("AlarmRates");
+                });
+
+            modelBuilder.Entity("FireDetection.Backend.Domain.Entity.BugsReport", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("BugDescription")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid?>("DeleteBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Feature")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid>("ModifiedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserID")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("BugsReports");
                 });
 
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.Camera", b =>
@@ -146,7 +216,7 @@ namespace FireDetection.Backend.Domain.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("DeleteBy")
                         .HasColumnType("uuid");
@@ -155,7 +225,7 @@ namespace FireDetection.Backend.Domain.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("LastModified")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("LocationID")
                         .HasColumnType("uuid");
@@ -193,6 +263,27 @@ namespace FireDetection.Backend.Domain.Migrations
                     b.HasIndex("UserID");
 
                     b.ToTable("ControlCameras");
+                });
+
+            modelBuilder.Entity("FireDetection.Backend.Domain.Entity.Feedback", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Context")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Feedbacks");
                 });
 
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.Level", b =>
@@ -258,7 +349,7 @@ namespace FireDetection.Backend.Domain.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("DeleteBy")
                         .HasColumnType("uuid");
@@ -267,7 +358,7 @@ namespace FireDetection.Backend.Domain.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("LastModified")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("LocationName")
                         .IsRequired()
@@ -279,6 +370,96 @@ namespace FireDetection.Backend.Domain.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Locations");
+                });
+
+            modelBuilder.Entity("FireDetection.Backend.Domain.Entity.ManualPlan", b =>
+                {
+                    b.Property<int>("ManualPlanNameId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ManualPlanNameId"));
+
+                    b.Property<int>("CameraLimited")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid?>("DeleteBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("LocationLimited")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ManualPlanName")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("ModifiedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
+
+                    b.Property<int>("UserLimited")
+                        .HasColumnType("integer");
+
+                    b.HasKey("ManualPlanNameId");
+
+                    b.ToTable("ManualPlans");
+
+                    b.HasData(
+                        new
+                        {
+                            ManualPlanNameId = 1,
+                            CameraLimited = 4,
+                            CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
+                            CreatedDate = new DateTime(2024, 3, 15, 15, 54, 39, 803, DateTimeKind.Utc).AddTicks(4157),
+                            IsDeleted = false,
+                            LastModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LocationLimited = 5,
+                            ManualPlanName = "Basic",
+                            ModifiedBy = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Price = 1000m,
+                            UserLimited = 5
+                        },
+                        new
+                        {
+                            ManualPlanNameId = 2,
+                            CameraLimited = 8,
+                            CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
+                            CreatedDate = new DateTime(2024, 3, 15, 15, 54, 39, 803, DateTimeKind.Utc).AddTicks(4161),
+                            IsDeleted = false,
+                            LastModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LocationLimited = 10,
+                            ManualPlanName = "Standard",
+                            ModifiedBy = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Price = 2000m,
+                            UserLimited = 10
+                        },
+                        new
+                        {
+                            ManualPlanNameId = 3,
+                            CameraLimited = 20,
+                            CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
+                            CreatedDate = new DateTime(2024, 3, 15, 15, 54, 39, 803, DateTimeKind.Utc).AddTicks(4162),
+                            IsDeleted = false,
+                            LastModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LocationLimited = 20,
+                            ManualPlanName = "Premium",
+                            ModifiedBy = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Price = 3000m,
+                            UserLimited = 20
+                        });
                 });
 
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.MediaRecord", b =>
@@ -348,7 +529,7 @@ namespace FireDetection.Backend.Domain.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("DeleteBy")
                         .HasColumnType("uuid");
@@ -357,7 +538,7 @@ namespace FireDetection.Backend.Domain.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("LastModified")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("ModifiedBy")
                         .HasColumnType("uuid");
@@ -441,6 +622,35 @@ namespace FireDetection.Backend.Domain.Migrations
                         });
                 });
 
+            modelBuilder.Entity("FireDetection.Backend.Domain.Entity.PaymentType", b =>
+                {
+                    b.Property<int>("PaymentTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("PaymentTypeId"));
+
+                    b.Property<string>("PaymentTypeName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("PaymentTypeId");
+
+                    b.ToTable("PaymentType");
+
+                    b.HasData(
+                        new
+                        {
+                            PaymentTypeId = 1,
+                            PaymentTypeName = "DirectPayment"
+                        },
+                        new
+                        {
+                            PaymentTypeId = 2,
+                            PaymentTypeName = "OnlinePayment"
+                        });
+                });
+
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.Record", b =>
                 {
                     b.Property<Guid>("Id")
@@ -454,13 +664,13 @@ namespace FireDetection.Backend.Domain.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal>("PredictedPercent")
                         .HasColumnType("numeric");
 
                     b.Property<DateTime>("RecordTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("RecordTypeID")
                         .HasColumnType("integer");
@@ -494,7 +704,7 @@ namespace FireDetection.Backend.Domain.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("RecordID")
                         .HasColumnType("uuid");
@@ -568,7 +778,67 @@ namespace FireDetection.Backend.Domain.Migrations
                         {
                             RoleId = 2,
                             RoleName = "User"
+                        },
+                        new
+                        {
+                            RoleId = 3,
+                            RoleName = "Admin"
                         });
+                });
+
+            modelBuilder.Entity("FireDetection.Backend.Domain.Entity.Transaction", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid?>("DeleteBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid>("ModifiedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("PaymentTypeID")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
+
+                    b.Property<Guid>("UserID")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("UserPlanTypeID")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("UserTransactionID")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("isPaid")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PaymentTypeID");
+
+                    b.HasIndex("UserID");
+
+                    b.HasIndex("UserPlanTypeID");
+
+                    b.HasIndex("UserTransactionID");
+
+                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.User", b =>
@@ -581,7 +851,7 @@ namespace FireDetection.Backend.Domain.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("DeleteBy")
                         .HasColumnType("uuid");
@@ -594,7 +864,7 @@ namespace FireDetection.Backend.Domain.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("LastModified")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("ModifiedBy")
                         .HasColumnType("uuid");
@@ -630,6 +900,81 @@ namespace FireDetection.Backend.Domain.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("3c9a2a1b-f4dc-4468-a89c-f6be8ca3b541"),
+                            CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "Admin@gmail.com",
+                            IsDeleted = false,
+                            LastModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedBy = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Admin",
+                            Password = "12345",
+                            Phone = "0902311453",
+                            RoleId = 3,
+                            SecurityCode = "XAD_000",
+                            Status = "Active",
+                            isActive = true
+                        });
+                });
+
+            modelBuilder.Entity("FireDetection.Backend.Domain.Entity.UserTransaction", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ContractImage")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid?>("DeleteBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("ManualPlanID")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("ModifiedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("numeric");
+
+                    b.Property<Guid>("UserID")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("isPaid")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ManualPlanID");
+
+                    b.HasIndex("UserID")
+                        .IsUnique();
+
+                    b.ToTable("UserTransactions");
                 });
 
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.AlarmRate", b =>
@@ -655,6 +1000,17 @@ namespace FireDetection.Backend.Domain.Migrations
                     b.Navigation("Level");
 
                     b.Navigation("Record");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("FireDetection.Backend.Domain.Entity.BugsReport", b =>
+                {
+                    b.HasOne("FireDetection.Backend.Domain.Entity.User", "User")
+                        .WithMany("BugsReports")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -773,6 +1129,41 @@ namespace FireDetection.Backend.Domain.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("FireDetection.Backend.Domain.Entity.Transaction", b =>
+                {
+                    b.HasOne("FireDetection.Backend.Domain.Entity.PaymentType", "PaymentType")
+                        .WithMany("Transactions")
+                        .HasForeignKey("PaymentTypeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FireDetection.Backend.Domain.Entity.User", "User")
+                        .WithMany("Transactions")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FireDetection.Backend.Domain.Entity.ActionPlanType", "UserPlanType")
+                        .WithMany("Transactions")
+                        .HasForeignKey("UserPlanTypeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FireDetection.Backend.Domain.Entity.UserTransaction", "UserTransaction")
+                        .WithMany("Transaction")
+                        .HasForeignKey("UserTransactionID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PaymentType");
+
+                    b.Navigation("User");
+
+                    b.Navigation("UserPlanType");
+
+                    b.Navigation("UserTransaction");
+                });
+
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.User", b =>
                 {
                     b.HasOne("FireDetection.Backend.Domain.Entity.Role", "Role")
@@ -782,6 +1173,30 @@ namespace FireDetection.Backend.Domain.Migrations
                         .IsRequired();
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("FireDetection.Backend.Domain.Entity.UserTransaction", b =>
+                {
+                    b.HasOne("FireDetection.Backend.Domain.Entity.ManualPlan", "ManualPlan")
+                        .WithMany("UserTransaction")
+                        .HasForeignKey("ManualPlanID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FireDetection.Backend.Domain.Entity.User", "User")
+                        .WithOne("UserTransaction")
+                        .HasForeignKey("FireDetection.Backend.Domain.Entity.UserTransaction", "UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ManualPlan");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("FireDetection.Backend.Domain.Entity.ActionPlanType", b =>
+                {
+                    b.Navigation("Transactions");
                 });
 
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.ActionType", b =>
@@ -806,6 +1221,11 @@ namespace FireDetection.Backend.Domain.Migrations
                     b.Navigation("ControlCameras");
                 });
 
+            modelBuilder.Entity("FireDetection.Backend.Domain.Entity.ManualPlan", b =>
+                {
+                    b.Navigation("UserTransaction");
+                });
+
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.MediaType", b =>
                 {
                     b.Navigation("MediaRecords");
@@ -814,6 +1234,11 @@ namespace FireDetection.Backend.Domain.Migrations
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.NotificationType", b =>
                 {
                     b.Navigation("Log");
+                });
+
+            modelBuilder.Entity("FireDetection.Backend.Domain.Entity.PaymentType", b =>
+                {
+                    b.Navigation("Transactions");
                 });
 
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.Record", b =>
@@ -839,9 +1264,21 @@ namespace FireDetection.Backend.Domain.Migrations
 
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.User", b =>
                 {
+                    b.Navigation("BugsReports");
+
                     b.Navigation("ControlCameras");
 
                     b.Navigation("RecordProcesses");
+
+                    b.Navigation("Transactions");
+
+                    b.Navigation("UserTransaction")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FireDetection.Backend.Domain.Entity.UserTransaction", b =>
+                {
+                    b.Navigation("Transaction");
                 });
 #pragma warning restore 612, 618
         }

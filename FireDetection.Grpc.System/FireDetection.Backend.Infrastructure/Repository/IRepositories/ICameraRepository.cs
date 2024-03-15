@@ -14,5 +14,7 @@ namespace FireDetection.Backend.Infrastructure.Repository.IRepositories
         public  Task<List<Guid>> GetUsersByCameraId(Guid cameraId);
 
          public Task<IQueryable<CameraInformationResponse>> GetAllViewModel();
+
+        public Task<string> HighRiskFireDetectByCamera();
     }
 }

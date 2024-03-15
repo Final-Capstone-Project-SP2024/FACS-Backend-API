@@ -22,7 +22,7 @@ namespace FireDetection.Backend.API.Controllers
             _linkGenerator = linkGenerator;
         }
 
-        //[Authorize(Roles = UserRole.Manager)]
+        [Authorize(Roles = UserRole.Manager + "," + UserRole.Admin)]
         [HttpPost]
         public async Task<ActionResult<RestDTO<UserInformationResponse>>> Add(CreateUserRequest request)
         {
@@ -50,6 +50,8 @@ namespace FireDetection.Backend.API.Controllers
                 }
             };
         }
+    
+        
         [HttpPost("login")]
         public async Task<ActionResult<RestDTO<UserLoginResponse>>> Login(UserLoginRequest req)
         {
@@ -65,7 +67,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = UserRole.Manager)]
+        [Authorize(Roles = UserRole.Manager + "," + UserRole.Admin)]
         [HttpPost("{id}/active")]
         public async Task<ActionResult<RestDTO<UserInformationResponse>>> Active(Guid id)
         {
@@ -136,6 +138,22 @@ namespace FireDetection.Backend.API.Controllers
                     new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(GetAllUsers), "UserController", null, Request.Scheme))!,"self","Get")
                 }
             }) : NotFound();
+        }
+
+
+        [HttpPost("sendAccount")]
+        public async Task<ActionResult<RestDTO<UserInformationResponse>>> SendMail(string emai)
+        {
+            await _userService.SendEmail(emai);
+            return new RestDTO<UserInformationResponse>()
+            {
+                Message = "Inactive Account Successfully!",
+                Data = null,
+                Links = new List<LinkDTO>
+                {
+                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(SendMail), "UserController", null, Request.Scheme))!, "self", "Post")
+                }
+            };
         }
     }
 }

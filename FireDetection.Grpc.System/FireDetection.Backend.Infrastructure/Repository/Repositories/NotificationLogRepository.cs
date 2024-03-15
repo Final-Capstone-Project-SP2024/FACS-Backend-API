@@ -1,4 +1,5 @@
 ﻿using FireDetection.Backend.Domain;
+using FireDetection.Backend.Domain.DTOs.Response;
 using FireDetection.Backend.Domain.Entity;
 using FireDetection.Backend.Infrastructure.Repository.IRepositories;
 using System;
@@ -17,5 +18,7 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
         {
             _context = context;
         }
+
+      
     }
 }

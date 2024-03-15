@@ -20,26 +20,29 @@ using System.Threading.Tasks;
 using FireDetection.Backend.Domain.Ultilities;
 using AutoMapper.QueryableExtensions;
 using FireDetection.Backend.Domain.DTOs.State;
+using FireDetection.Backend.Domain.Helpers.EmailHandler;
 
 namespace FireDetection.Backend.Infrastructure.Service.Serivces
 {
     public class UserService : IUserService
     {
+        private readonly IClaimsService _claimsService;
         private readonly IMapper _mapper;
 
         private readonly IUnitOfWork _unitOfWork;
-        
+
         private readonly IConfiguration _configuration;
-        public UserService(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration config)
+        public UserService(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration config, IClaimsService claimsService)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _configuration = config;
+            _claimsService = claimsService;
         }
 
         public async Task<bool> ActiveUser(Guid userId)
         {
-            if(!await CheckUserStatus(userId, UserState.Active)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Have already actived in system");
+            if (!await CheckUserStatus(userId, UserState.Active)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Have already actived in system");
             User user = await GetUserById(userId);
             user.LastModified = DateTime.UtcNow;
             user.Status = UserState.Active;
@@ -59,6 +62,14 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
             if (!await CheckDuplicatePhone(request.Phone)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Have already this phone number   in system");
 
+            if (_claimsService.GetCurrentUserRole == UserRole.Admin)
+            {
+                request.UserRole = 1;
+            }
+            else
+            {
+                request.UserRole = 2;
+            }
             User user = _mapper.Map<User>(request);
             user.SecurityCode = await GenerateSecurityCode();
             _unitOfWork.UserRepository.InsertAsync(user);
@@ -103,6 +114,9 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 RefreshToken = refreshToken,
             };
         }
+
+
+       
         private string GetRefreshToken()
         {
             var randomCharacter = new byte[64];
@@ -206,7 +220,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             }
             return false;
         }
-            
+
         public async Task<PagedResult<UserInformationResponse>> GetAllUsers(PagingRequest pagingRequest, UserRequest request)
         {
             if (pagingRequest.ColName == null)
@@ -217,7 +231,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             var userEntity = _mapper.Map<User>(request);
 
             var usersQuery = await _unitOfWork.UserRepository.GetAll();
-                usersQuery = usersQuery.Include(x => x.Role);
+            usersQuery = usersQuery.Include(x => x.Role);
 
             var records = await usersQuery.ToListAsync();
 
@@ -230,7 +244,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 usersProjected = usersProjected.Where(_ => _.SecurityCode == request.SecurityCode);
             }
 
-            if(request.Name != null)
+            if (request.Name != null)
             {
                 usersProjected = usersProjected.Where(_ => _.Name == request.Name);
             }
@@ -257,5 +271,14 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             return pagedUsers;
         }
 
+        public async Task<bool> SendEmail(string email)
+        {
+            SendMailHandler sendMail = new SendMailHandler(_configuration);
+            var user = await _unitOfWork.UserRepository.Where(x => x.Email == email).FirstOrDefaultAsync(); 
+            
+            await sendMail.SendMail("Account to access to System",email,user.SecurityCode,user.Password,user.Name);
+            return true;
+
+        }
     }
 }

@@ -46,7 +46,7 @@ namespace FireDetection.Backend.Domain.DTOs.Response
     {
         public Guid userId { get; set; }
 
-        public int Rating { get; set;}
+        public int Rating { get; set; }
     }
 
 
@@ -60,5 +60,53 @@ namespace FireDetection.Backend.Domain.DTOs.Response
     }
 
 
-    
+
+    public class RecordDetailResponseWithNotificationLog : RecordDetailResponse
+    {
+        public int CountAlarm { get; set; } = 0;
+        public Level1Log Level1Log { get; set; } = null!;
+        public Level2Log Level2Log { get; set; } = null!;
+        public Level3Log Level3Log { get; set; } = null!;
+        public Level4Log Level4Log { get; set; } = null!;
+        public Level5Log Level5Log { get; set; } = null!;
+
+
+    }
+
+
+    public class Level1Log { 
+        public List<Guid> userTakeNotification { get; set; }
+
+        public int Count { get; set; }
+    }
+
+    public class Level2Log
+    {
+        public List<Guid> userTakeNotification { get; set; }
+
+        public int Count { get; set; }
+    }
+
+
+    public class Level3Log
+    {
+        public List<Guid> userTakeNotification { get; set; }
+
+        public int Count { get; set; }
+    }
+
+    public class Level4Log
+    {
+        public List<Guid> userTakeNotification { get; set; }
+
+        public int Count { get; set; }
+    }
+
+
+    public class Level5Log
+    {
+        public List<Guid> userTakeNotification { get; set; }
+
+        public int Count { get; set; }
+    }
 }

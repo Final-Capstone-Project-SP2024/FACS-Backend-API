@@ -1,4 +1,5 @@
-﻿using FireDetection.Backend.Domain.DTOs.State;
+﻿using FireDetection.Backend.Domain.DTOs.Response;
+using FireDetection.Backend.Domain.DTOs.State;
 using FireDetection.Backend.Domain.Entity;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using FireDetection.Backend.Infrastructure.UnitOfWork;
@@ -55,7 +56,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             };
 
             _unitOfWork.NotificationLogRepository.InsertAsync(log);
-           
+
         }
 
         private static int TransferType(CacheType type) => type switch
@@ -67,5 +68,19 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             CacheType.AlarmLevel5 => 7,
 
         };
+
+        public async  Task<FireDetectionAnalysis> Analysis()
+        {
+            FireDetectionAnalysis analysis = new FireDetectionAnalysis();
+            analysis.CountFireAlarmLevel1 = _unitOfWork.NotificationLogRepository.Where(x => x.NotificationTypeId == 3).Count();
+            analysis.CountFireAlarmNotification = _unitOfWork.NotificationLogRepository.Where(x => x.NotificationTypeId == 1).Count();
+            analysis.CountFireAlarmLevel2 = _unitOfWork.NotificationLogRepository.Where(x => x.NotificationTypeId == 4).Count();
+            analysis.CountFireAlarmLevel3 = _unitOfWork.NotificationLogRepository.Where(x => x.NotificationTypeId == 5).Count();
+            analysis.CountFireAlarmLevel4 = _unitOfWork.NotificationLogRepository.Where(x => x.NotificationTypeId == 6).Count();
+            analysis.CountFireAlarmLevel5 = _unitOfWork.NotificationLogRepository.Where(x => x.NotificationTypeId == 7).Count();
+            analysis.HighRiskFireArea =  await _unitOfWork.CameraRepository.HighRiskFireDetectByCamera();
+
+            return analysis;
+        }
     }
 }

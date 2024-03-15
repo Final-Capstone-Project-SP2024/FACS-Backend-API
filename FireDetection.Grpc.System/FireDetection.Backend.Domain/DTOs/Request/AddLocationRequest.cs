@@ -10,6 +10,7 @@ namespace FireDetection.Backend.Domain.DTOs.Request
     public class AddLocationRequest
     {
         [Required]
+        [RegularExpression(@"^Location [A-Z]$",ErrorMessage = "Must be Location .....")]
         public string LocationName { get; set; } = null!;
 
         

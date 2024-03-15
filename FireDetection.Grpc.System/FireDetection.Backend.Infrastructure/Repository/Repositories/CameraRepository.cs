@@ -30,9 +30,20 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
             return result;
         }
 
-        public  async Task<IQueryable<CameraInformationResponse>> GetAllViewModel()
+        public async Task<IQueryable<CameraInformationResponse>> GetAllViewModel()
         {
             return GetCameras(_context).AsQueryable();
+        }
+
+        public async Task<string> HighRiskFireDetectByCamera()
+        {
+            var mostFrequentCameraID = _context.Records
+                                        .GroupBy(x => x.CameraID)
+                                         .Select(g => new { CameraID = g.Key, Count = g.Count() }) // Count within the grouping
+                                         .OrderByDescending(x => x.Count)
+                                          .FirstOrDefault()?.CameraID;
+
+            return _context.Cameras.Where(x => x.Id == mostFrequentCameraID ).FirstOrDefault().CameraName;
         }
 
         private static readonly Func<FireDetectionDbContext, IEnumerable<CameraInformationResponse>>

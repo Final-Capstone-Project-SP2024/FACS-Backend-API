@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace FireDetection.Backend.Domain.DTOs.Request
@@ -19,7 +20,7 @@ namespace FireDetection.Backend.Domain.DTOs.Request
 
         public string Password { get; set; } = null!;
 
-        [Range(1,2)]
+        [JsonIgnore]
         public int UserRole { get; set; } 
     }
 }

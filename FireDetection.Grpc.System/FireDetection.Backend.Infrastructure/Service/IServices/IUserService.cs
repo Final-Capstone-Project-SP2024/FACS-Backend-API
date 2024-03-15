@@ -25,5 +25,7 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
         public  Task<bool> CheckDuplicatePhone(string phone);
 
         public  Task<string> GenerateSecurityCode();
+
+        public Task<bool> SendEmail(string email);
     }
 }

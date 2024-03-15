@@ -12,9 +12,9 @@ namespace FireDetection.Backend.Domain.Entity
     {
         public string SecurityCode { get; set; } = null!;
         public string Email { get; set; } = null!;
-        public string Phone { get; set; } = null!;  
+        public string Phone { get; set; } = null!;
         public string Status { get; set; } = null!;
-        public bool isActive { get; set; }
+        public bool isActive { get; set; } = true;
         public string Name { get; set; } = null!;
         public string Password { get; set; } = null!;
         public DateTime CreatedDate { get; set; }
@@ -25,8 +25,12 @@ namespace FireDetection.Backend.Domain.Entity
         public bool IsDeleted { get; set; }
         public int RoleId { get; set; }
         public Role Role { get; set; }
+
+        public UserTransaction  UserTransaction { get; set; }
         public ICollection<ControlCamera> ControlCameras { get; set; } 
         public ICollection<RecordProcess> RecordProcesses { get; set; }
+        public ICollection<Transaction> Transactions { get; set; }
+        public ICollection<BugsReport> BugsReports { get; set; }
    
     }
 }

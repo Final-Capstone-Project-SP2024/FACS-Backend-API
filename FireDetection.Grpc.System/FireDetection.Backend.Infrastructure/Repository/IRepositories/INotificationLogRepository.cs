@@ -1,4 +1,5 @@
-﻿using FireDetection.Backend.Domain.Entity;
+﻿using FireDetection.Backend.Domain.DTOs.Response;
+using FireDetection.Backend.Domain.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;

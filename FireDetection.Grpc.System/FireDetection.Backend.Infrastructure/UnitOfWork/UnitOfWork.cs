@@ -12,7 +12,8 @@ namespace FireDetection.Backend.Infrastructure.UnitOfWork
     {
         private readonly FireDetectionDbContext _context;
         private readonly IUserRepository _userRepository;
-        
+        private readonly IFeedbackRepository _feedbackRepository;
+        private readonly IBugsReportRepository _bugsReportRepository;
         private readonly IAlarmRateRepository _alarmRateRepository;
         private readonly IRecordProcessRepository _processRepository;
         private readonly IMediaRecordRepository _mediaRecordRepository;
@@ -33,7 +34,9 @@ namespace FireDetection.Backend.Infrastructure.UnitOfWork
             IAlarmRepository alarmRepository,
             IRecordProcessRepository processRepository,
             IAlarmRateRepository alarmRateRepository,
-            INotificationLogRepository notificationLogRepository)
+            INotificationLogRepository notificationLogRepository,
+            IFeedbackRepository feedbackRepository,
+            IBugsReportRepository bugsReportRepository)
         {
             _context = context;
             _userRepository = userRepository;
@@ -46,6 +49,8 @@ namespace FireDetection.Backend.Infrastructure.UnitOfWork
             _processRepository = processRepository;
             _alarmRateRepository = alarmRateRepository;
             _notificationLogRepository = notificationLogRepository;
+            _feedbackRepository = feedbackRepository;
+            _bugsReportRepository = bugsReportRepository;
         }
         public IUserRepository UserRepository => _userRepository;
 
@@ -61,6 +66,10 @@ namespace FireDetection.Backend.Infrastructure.UnitOfWork
         public IAlarmRepository AlarmRepository => _alarmRepository;
 
         public INotificationLogRepository NotificationLogRepository => _notificationLogRepository;
+
+        public IBugsReportRepository BugsReportRepository => _bugsReportRepository;
+
+        public IFeedbackRepository FeedbackRepository => _feedbackRepository;
 
         public async Task<int> SaveChangeAsync()
         {
