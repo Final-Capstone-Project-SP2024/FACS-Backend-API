@@ -133,6 +133,8 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 {
                     new Claim(ClaimTypes.Name, user.Name),
                     new Claim(ClaimTypes.Role, user.Role.RoleName),
+                    new Claim("UserId", user.Id.ToString()),
+
                 };
 
             var token = new JwtSecurityToken(

@@ -24,6 +24,12 @@ namespace FireDetection.Backend.Infrastructure.UnitOfWork
         public IBugsReportRepository BugsReportRepository { get; }
 
         public IFeedbackRepository FeedbackRepository { get; }
+
+        public IContractRepository ContractRepository { get; }
+
+        public IManualPlanRepository ManualPlanRepository { get; }
+
+        public ITransactionRepository TransactionRepository { get; }
         public Task<int> SaveChangeAsync();
     }
 }

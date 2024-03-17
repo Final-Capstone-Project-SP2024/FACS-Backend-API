@@ -13,12 +13,12 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
     {
         public ClaimsService(IHttpContextAccessor httpContextAccessor)
         {
-            var id = httpContextAccessor.HttpContext?.User?.FindFirstValue("userId");
-            GetCurrentUserId = int.TryParse(id, out int userId) ? GetCurrentUserId = userId : GetCurrentUserId = 0;
+            var id = httpContextAccessor.HttpContext?.User?.FindFirstValue("UserId");
+            GetCurrentUserId = Guid.TryParse(id, out Guid userId) ? GetCurrentUserId = userId : GetCurrentUserId = Guid.NewGuid();
             var role = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Role);
             GetCurrentUserRole = string.IsNullOrEmpty(role) ? string.Empty : role;
         }
-        public int GetCurrentUserId { get; }
+        public Guid GetCurrentUserId { get; }
         public string GetCurrentUserRole { get; }
     }
 }

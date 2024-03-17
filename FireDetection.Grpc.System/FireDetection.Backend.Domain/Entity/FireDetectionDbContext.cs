@@ -41,7 +41,7 @@ namespace FireDetection.Backend.Domain
 
         public DbSet<ManualPlan> ManualPlans { get; set; }
 
-        public DbSet<UserTransaction> UserTransactions { get; set; }
+        public DbSet<Contract> Contracts { get; set; }
 
         public DbSet<Transaction> Transactions { get; set; }
 

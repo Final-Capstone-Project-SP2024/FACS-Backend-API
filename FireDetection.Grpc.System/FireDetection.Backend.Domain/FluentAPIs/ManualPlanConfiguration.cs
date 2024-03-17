@@ -15,7 +15,7 @@ namespace FireDetection.Backend.Domain.FluentAPIs
         {
             builder.HasData(new ManualPlan
             {
-             ManualPlanNameId = 1,
+             ManualPlanId = 1,
              ManualPlanName = "Basic",
              CameraLimited = 4,
              LocationLimited = 5,
@@ -26,7 +26,7 @@ namespace FireDetection.Backend.Domain.FluentAPIs
              
             }, new ManualPlan
             {
-                ManualPlanNameId = 2,
+                ManualPlanId = 2,
                 ManualPlanName = "Standard",
                 CameraLimited = 8,
                 LocationLimited = 10,
@@ -36,7 +36,7 @@ namespace FireDetection.Backend.Domain.FluentAPIs
                 IsDeleted = false,
             }, new ManualPlan
             {
-                ManualPlanNameId = 3,
+                ManualPlanId = 3,
                 ManualPlanName = "Premium",
                 CameraLimited = 20,
                 LocationLimited = 20,
@@ -46,7 +46,7 @@ namespace FireDetection.Backend.Domain.FluentAPIs
                 IsDeleted = false,
             });
 
-            builder.HasMany(x => x.UserTransaction).WithOne(x => x.ManualPlan).HasForeignKey(x => x.ManualPlanID);
+            builder.HasMany(x => x.Contracts).WithOne(x => x.ManualPlan).HasForeignKey(x => x.ManualPlanID);
 
         }
     }

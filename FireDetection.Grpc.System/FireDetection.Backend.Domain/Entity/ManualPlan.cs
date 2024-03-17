@@ -11,7 +11,7 @@ namespace FireDetection.Backend.Domain.Entity
     public class ManualPlan :  IBaseCreated, IBaseModified
     {
         [Key]
-        public int ManualPlanNameId { get; set; }
+        public int ManualPlanId { get; set; }
         public string? ManualPlanName { get; set; } 
 
         public decimal Price { get; set; }
@@ -30,6 +30,6 @@ namespace FireDetection.Backend.Domain.Entity
         public bool IsDeleted { get; set; }
 
         //? connect with UserTransaction
-        public ICollection<UserTransaction> UserTransaction { get; set; }
+        public ICollection<Contract> Contracts { get; set; }
     }
 }

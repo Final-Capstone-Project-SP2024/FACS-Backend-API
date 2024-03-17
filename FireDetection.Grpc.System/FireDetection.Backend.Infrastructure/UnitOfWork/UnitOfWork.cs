@@ -23,6 +23,9 @@ namespace FireDetection.Backend.Infrastructure.UnitOfWork
         private readonly IControlCameraRepository _controlCameraRepository;
         private readonly IAlarmRepository _alarmRepository;
         private readonly INotificationLogRepository _notificationLogRepository;
+        private readonly IContractRepository _contractRepository;
+        private readonly IManualPlanRepository _manualPlanRepository;
+        private readonly ITransactionRepository _transactionRepository;
 
         public UnitOfWork(FireDetectionDbContext context,
             IUserRepository userRepository,
@@ -36,7 +39,10 @@ namespace FireDetection.Backend.Infrastructure.UnitOfWork
             IAlarmRateRepository alarmRateRepository,
             INotificationLogRepository notificationLogRepository,
             IFeedbackRepository feedbackRepository,
-            IBugsReportRepository bugsReportRepository)
+            IBugsReportRepository bugsReportRepository,
+            IContractRepository contractRepository,
+            IManualPlanRepository manualPlanRepository,
+            ITransactionRepository transactionRepository)
         {
             _context = context;
             _userRepository = userRepository;
@@ -51,6 +57,9 @@ namespace FireDetection.Backend.Infrastructure.UnitOfWork
             _notificationLogRepository = notificationLogRepository;
             _feedbackRepository = feedbackRepository;
             _bugsReportRepository = bugsReportRepository;
+            _contractRepository = contractRepository;
+            _manualPlanRepository = manualPlanRepository;
+            _transactionRepository = transactionRepository;
         }
         public IUserRepository UserRepository => _userRepository;
 
@@ -70,6 +79,12 @@ namespace FireDetection.Backend.Infrastructure.UnitOfWork
         public IBugsReportRepository BugsReportRepository => _bugsReportRepository;
 
         public IFeedbackRepository FeedbackRepository => _feedbackRepository;
+
+        public IContractRepository ContractRepository => _contractRepository;
+
+        public IManualPlanRepository ManualPlanRepository => _manualPlanRepository;
+
+        public ITransactionRepository TransactionRepository => _transactionRepository;
 
         public async Task<int> SaveChangeAsync()
         {

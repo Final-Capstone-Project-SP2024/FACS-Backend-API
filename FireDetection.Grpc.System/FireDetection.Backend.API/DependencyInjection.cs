@@ -62,8 +62,22 @@ namespace FireDetection.Backend.API
             services.AddScoped<IClaimsService, ClaimsService>();
 
             services.AddScoped<IBugsReportRepository, BugsReportRepository>();
+            services.AddScoped<IBugsReportService, BugsReportService>();
 
             services.AddScoped<IFeedbackRepository, FeedbackRepository>();
+            services.AddScoped<IFeedbackService, FeedbackService>();    
+
+            services.AddScoped<ITransactionRepository, TransactionRepository>();
+            services.AddScoped<ITransactionService ,TransactionService>();
+
+
+            services.AddScoped<IManualPlanRepository, ManualPlanRepository>();
+            services.AddScoped<IManualPlanService, ManualPlanService>();
+
+
+            services.AddScoped<IContractRepository, ContractRepository>();
+            services.AddScoped<IContractService, ContractService>();
+
 
 
             services.AddGraphQLServer()

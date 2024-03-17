@@ -11,6 +11,7 @@ namespace FireDetection.Backend.Domain.Entity
     {
         public string Feature { get; set; }
         public string BugDescription { get; set; }
+        public bool IsSolved { get; set; }
         public User User { get; set; }
         public Guid UserID { get; set; }
         public DateTime LastModified { get ; set ; }

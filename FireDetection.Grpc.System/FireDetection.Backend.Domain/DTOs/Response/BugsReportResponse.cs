@@ -12,6 +12,7 @@ namespace FireDetection.Backend.Domain.DTOs.Response
         public string Feature { get; set; }
         public string BugDescription { get; set; }
         public DateTime CreatedDate { get; set; }
+        public bool IsSolved { get; set; }
 
     }
 }

@@ -8,7 +8,7 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
 {
     public interface IClaimsService
     {
-        public int GetCurrentUserId { get; }
+        public Guid GetCurrentUserId { get; }
         public string GetCurrentUserRole { get; }
     }
 }
