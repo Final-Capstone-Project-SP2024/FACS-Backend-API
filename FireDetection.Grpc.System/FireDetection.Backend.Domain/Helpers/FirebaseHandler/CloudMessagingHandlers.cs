@@ -13,7 +13,7 @@ namespace FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler
     public static class CloudMessagingHandlers
     {
 
-        public  static async Task CloudMessaging(string? titleInput = "Fire Alarm Detect",string? bodyInput = "Finding Alarm in Location B",string fcm_token = "dEOCNL8DRsyu6d92SIXOKa:APA91bHw9YmvPBAVNSqtyTkytqUeu64evv4azkd6WJnoSSBMhP5A2GwJEEiKO52lYAN5nBbmlG1PCNfxqsEj6AUuMp1R76wbMkfVUIDnYpSumJ61ItfGLYlwGllyHPT9Fiw9WsSY5mGT")
+        public  static async Task CloudMessaging(string? titleInput = "Fire Alarm Detect",string? bodyInput = "Finding Alarm in Location B",string fcm_token = "eqc8VFfHQ--patqc20R8og:APA91bHthwSnSUM6pO_LrgHvGCiE5uArQJ4BTbcE0SRTiYKs9kiUvg9kBQvpRMd_IT4e9LH5k7v7Yr7R9xFLMJP9zJhikuCzY1qtSnbp6dkrGk1p7Ll3bQnmojzsBu9nfwcxPnRI4-01")
         {
             WebRequest tRequest = WebRequest.Create("https://fcm.googleapis.com/fcm/send");
             tRequest.Method = "post";

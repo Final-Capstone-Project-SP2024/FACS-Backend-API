@@ -42,6 +42,12 @@ namespace FireDetection.Backend.Domain.FluentAPIs
                    LevelID = 5,
                    Description = "Fire ",
                    Name = "Level 5"
+               },
+               new Level
+               {
+                   LevelID = 6,
+                   Description = "Fake Alarm",
+                   Name = "Fake Alarm"
                }
             );
             builder.HasMany(x => x.AlarmRates).WithOne(x => x.Level).HasForeignKey(x => x.LevelID);

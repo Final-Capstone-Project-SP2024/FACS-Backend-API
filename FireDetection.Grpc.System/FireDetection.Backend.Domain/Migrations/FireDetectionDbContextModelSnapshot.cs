@@ -411,6 +411,12 @@ namespace FireDetection.Backend.Domain.Migrations
                             LevelID = 5,
                             Description = "Fire ",
                             Name = "Level 5"
+                        },
+                        new
+                        {
+                            LevelID = 6,
+                            Description = "Fake Alarm",
+                            Name = "Fake Alarm"
                         });
                 });
 
@@ -498,7 +504,7 @@ namespace FireDetection.Backend.Domain.Migrations
                             ManualPlanId = 1,
                             CameraLimited = 4,
                             CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 16, 22, 609, DateTimeKind.Utc).AddTicks(64),
+                            CreatedDate = new DateTime(2024, 3, 18, 0, 52, 6, 382, DateTimeKind.Utc).AddTicks(6885),
                             IsDeleted = false,
                             LastModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LocationLimited = 5,
@@ -512,7 +518,7 @@ namespace FireDetection.Backend.Domain.Migrations
                             ManualPlanId = 2,
                             CameraLimited = 8,
                             CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 16, 22, 609, DateTimeKind.Utc).AddTicks(67),
+                            CreatedDate = new DateTime(2024, 3, 18, 0, 52, 6, 382, DateTimeKind.Utc).AddTicks(6889),
                             IsDeleted = false,
                             LastModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LocationLimited = 10,
@@ -526,7 +532,7 @@ namespace FireDetection.Backend.Domain.Migrations
                             ManualPlanId = 3,
                             CameraLimited = 20,
                             CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            CreatedDate = new DateTime(2024, 3, 16, 17, 16, 22, 609, DateTimeKind.Utc).AddTicks(69),
+                            CreatedDate = new DateTime(2024, 3, 18, 0, 52, 6, 382, DateTimeKind.Utc).AddTicks(6890),
                             IsDeleted = false,
                             LastModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LocationLimited = 20,
