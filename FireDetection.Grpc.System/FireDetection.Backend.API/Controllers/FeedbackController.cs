@@ -23,7 +23,7 @@ namespace FireDetection.Backend.API.Controllers
         }
 
 
-        [Authorize(Roles = UserRole.Manager)]
+        [Authorize(Roles = UserRole.Manager + "" + UserRole.User)]
         [HttpPost]
         public async Task<ActionResult<RestDTO<FeedbackResponse>>> Feedback(AddFeedbackRequest request)
         {
@@ -52,6 +52,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
+        [Authorize(Roles = UserRole.Admin)]
         [HttpGet]
         public async Task<ActionResult<RestDTO<IQueryable<FeedbackResponse>>>> GetAll()
         {

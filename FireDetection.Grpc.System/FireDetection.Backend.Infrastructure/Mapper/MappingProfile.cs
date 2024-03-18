@@ -238,6 +238,18 @@ namespace FireDetection.Backend.API.Mapper
                 .ForMember(x => x.Id, src => src.MapFrom(x => x.TransactionId))
                 .ReverseMap();
 
+            CreateMap<UpdateUserRequest, User>()
+                .ForMember(x => x.Name, src => src.MapFrom(x => x.Name))
+                .ForMember(x => x.Email, src => src.MapFrom(x => x.Email))
+                .ForMember(x => x.Phone, src => src.MapFrom(x => x.Phone))
+                .ReverseMap();
+
+            CreateMap<TransactionGeneralResponse, Transaction>()
+                 .ForMember(x => x.Id, src => src.MapFrom(x => x.TransactionId))
+                 .ForMember(x => x.Price, src => src.MapFrom(x => x.Price))
+                 .ForMember(x => x.isPaid, src => src.MapFrom(x => x.isPaid))
+                 .ForMember(x => x.CreatedDate, src => src.MapFrom(x => x.CreatedDate))
+                .ReverseMap();
         }
     }
 }

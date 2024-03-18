@@ -83,7 +83,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = UserRole.Manager)]
+        [Authorize(Roles = UserRole.Manager + "," + UserRole.Admin)]
         [HttpPost("{id}/inactive")]
         public async Task<ActionResult<RestDTO<UserInformationResponse>>> Inactive(Guid id)
         {
@@ -99,7 +99,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
+        [Authorize(Roles = UserRole.Manager + "," + UserRole.Admin)]
         [HttpPatch("{id}")]
         public async Task<ActionResult<RestDTO<UserInformationResponse>>> Update(Guid id, UpdateUserRequest request)
         {
@@ -115,11 +115,11 @@ namespace FireDetection.Backend.API.Controllers
             UserInformationResponse response = await _userService.UpdateUser(id, request);
             return new RestDTO<UserInformationResponse>()
             {
-                Message = "Login Successfully!",
+                Message = "Update Successfully!",
                 Data = response,
                 Links = new List<LinkDTO>
                 {
-                    new LinkDTO(Url.Action("login","UserController",response, Request.Scheme)!,"self","Post")
+                    new LinkDTO(Url.Action("Update","UserController",response, Request.Scheme)!,"self","Post")
                 }
             };
         }
@@ -140,7 +140,6 @@ namespace FireDetection.Backend.API.Controllers
             }) : NotFound();
         }
 
-
         [HttpPost("sendAccount")]
         public async Task<ActionResult<RestDTO<UserInformationResponse>>> SendMail(string emai)
         {
@@ -155,5 +154,26 @@ namespace FireDetection.Backend.API.Controllers
                 }
             };
         }
+
+        [Authorize(Roles = UserRole.Manager + "," + UserRole.Admin)]
+        [HttpGet("userId")]
+        public async Task<ActionResult<RestDTO<UserInformationDetailResponse>>> GetDetail(Guid userId)
+        {
+
+            var response = await _userService.GetDetail(userId);
+            return new RestDTO<UserInformationDetailResponse>()
+            {
+                Message = "Inactive Account Successfully!",
+                Data = response,
+                Links = new List<LinkDTO>
+                {
+                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(GetDetail), "UserController", userId, Request.Scheme))!, "self", "Get")
+                }
+            };
+        }
+     
+
+
+    
     }
 }

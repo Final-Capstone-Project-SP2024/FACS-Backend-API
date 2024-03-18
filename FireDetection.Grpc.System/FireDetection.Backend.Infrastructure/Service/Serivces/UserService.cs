@@ -81,10 +81,10 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<bool> InactiveUser(Guid userId)
         {
-            if (!await CheckUserStatus(userId, "banned")) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Have already banned in system");
+            if (!await CheckUserStatus(userId, UserState.Inactive)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Have already banned in system");
             User user = await GetUserById(userId);
             user.LastModified = DateTime.UtcNow;
-            user.Status = "banned";
+            user.Status = UserState.Inactive;
 
             _unitOfWork.UserRepository.Update(user);
             await _unitOfWork.SaveChangeAsync();
@@ -95,6 +95,10 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         public async Task<UserLoginResponse> Login(UserLoginRequest req)
         {
             var user = _unitOfWork.UserRepository.Include(u => u.Role).Where(u => u.SecurityCode == req.SecurityCode && u.Password == req.Password).FirstOrDefault();
+            if (user.Status == UserState.Inactive)
+            {
+                throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "User have already banned in system");
+            }
             string secretKeyConfig = _configuration["JWTSecretKey:SecretKey"];
             DateTime secretKeyDatetime = DateTime.UtcNow;
             string refreshToken = GetRefreshToken();
@@ -116,7 +120,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         }
 
 
-       
+
         private string GetRefreshToken()
         {
             var randomCharacter = new byte[64];
@@ -156,7 +160,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             {
                 throw new Exception();
             }
-            _mapper.Map(user, req);
+            _mapper.Map(req, user);
             _unitOfWork.UserRepository.Update(user);
             await _unitOfWork.SaveChangeAsync();
 
@@ -276,11 +280,24 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         public async Task<bool> SendEmail(string email)
         {
             SendMailHandler sendMail = new SendMailHandler(_configuration);
-            var user = await _unitOfWork.UserRepository.Where(x => x.Email == email).FirstOrDefaultAsync(); 
-            
-            await sendMail.SendMail("Account to access to System",email,user.SecurityCode,user.Password,user.Name);
+            var user = await _unitOfWork.UserRepository.Where(x => x.Email == email).FirstOrDefaultAsync();
+
+            await sendMail.SendMail("Account to access to System", email, user.SecurityCode, user.Password, user.Name);
             return true;
 
+        }
+
+        public async Task<UserInformationDetailResponse> GetDetail(Guid userId)
+        {
+            UserInformationDetailResponse userDetail = new UserInformationDetailResponse();
+            var user = await _unitOfWork.UserRepository.GetById(userId);
+            var userContract = await _unitOfWork.ContractRepository.Where(x => x.UserID == userId).FirstOrDefaultAsync();
+            var userTransaction = _unitOfWork.TransactionRepository.Where(x => x.UserID == userId).ToList();
+            _mapper.Map(user, userDetail);
+            userDetail.UserContract = _mapper.Map<ContractDetailResponse>(userContract);
+            userDetail.UserTransaction = userTransaction.Select(x => _mapper.Map<TransactionGeneralResponse>(x)).ToList();
+
+            return userDetail;
         }
     }
 }
