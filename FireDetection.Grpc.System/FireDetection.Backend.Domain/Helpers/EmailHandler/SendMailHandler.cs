@@ -45,5 +45,31 @@ namespace FireDetection.Backend.Domain.Helpers.EmailHandler
             client.EnableSsl = true;
             client.Send(mail);
         }
+
+        public async Task SendOTP( string? Email = "mandayngu@gmail.com",int Otp = 0)
+        {
+
+            MailMessage mail = new MailMessage();
+            mail.To.Add(Email);
+            mail.From = new MailAddress(_config["SendMailAccount:UserName"].ToString(), "From FireDetection_FPT", Encoding.UTF8);
+            mail.Subject = "Reset Password";
+            mail.SubjectEncoding = Encoding.UTF8;
+            using (StreamReader reader = new StreamReader("../FireDetection.Backend.API/Template/sendotp.html"))
+            {
+                mail.Body = reader.ReadToEnd();
+
+            }
+            mail.Body = mail.Body.Replace("{otp}", Otp.ToString());
+            mail.BodyEncoding = Encoding.UTF8;
+            mail.IsBodyHtml = true;
+            mail.Priority = MailPriority.High;
+            var client = new SmtpClient();
+            client.Credentials = new System.Net.NetworkCredential(_config["SendMailAccount:UserName"], _config["SendMailAccount:AppPassword"]);
+            client.Port = 587;
+            client.Host = "smtp.gmail.com";
+            client.EnableSsl = true;
+            client.Send(mail);
+        }
+
     }
 }

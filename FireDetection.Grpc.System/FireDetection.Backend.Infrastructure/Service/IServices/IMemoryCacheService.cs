@@ -24,5 +24,9 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
         public Task IncreaseQuantity(Guid recordId, CacheType cacheType);
 
         public Task<int> CheckEnoughVoting(Guid recordId);
+
+        public  Task SaveOTP(int otp, string mail);
+
+        public Task<int> GetOTP(string email);
     }
 }

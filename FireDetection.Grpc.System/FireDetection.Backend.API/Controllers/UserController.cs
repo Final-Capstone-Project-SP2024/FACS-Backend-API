@@ -8,6 +8,7 @@ using FireDetection.Backend.Infrastructure.Service.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security;
 using static Google.Apis.Requests.BatchRequest;
 namespace FireDetection.Backend.API.Controllers
 {
@@ -50,8 +51,8 @@ namespace FireDetection.Backend.API.Controllers
                 }
             };
         }
-    
-        
+
+
         [HttpPost("login")]
         public async Task<ActionResult<RestDTO<UserLoginResponse>>> Login(UserLoginRequest req)
         {
@@ -126,7 +127,7 @@ namespace FireDetection.Backend.API.Controllers
 
 
 
-        [Authorize(Roles = UserRole.Manager )]
+        [Authorize(Roles = UserRole.Manager)]
         [HttpGet]
         public async Task<ActionResult<RestDTO<List<UserInformationResponse>>>> GetAllUsers([FromQuery] PagingRequest pagingRequest, [FromQuery] UserRequest request)
         {
@@ -175,9 +176,57 @@ namespace FireDetection.Backend.API.Controllers
                 }
             };
         }
-     
 
 
-    
+
+
+        [HttpPost("/forgetpassword")]
+        public async Task<ActionResult<RestDTO<UserInformationResponse>>> ForgetPassword(string securityCode)
+        {
+            await _userService.ForgotPassword(securityCode);
+            return new RestDTO<UserInformationResponse>()
+            {
+                Message = "Check your mail and change the password",
+                Data = null,
+                Links = new List<LinkDTO>
+                {
+                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(ForgetPassword), "UserController", securityCode, Request.Scheme))!, "self", "Post")
+                }
+            };
+        }
+
+
+        [HttpPost("/changepasword")]
+        public async Task<ActionResult<RestDTO<UserInformationResponse>>> ChangePassword(ChangePasswordRequest request)
+        {
+            bool check = await _userService.ChangePassword(request);
+            if (check == true)
+            {
+                return new RestDTO<UserInformationResponse>()
+                {
+                    Message = "Change password successfulyy!",
+                    Data = null,
+                    Links = new List<LinkDTO>
+                {
+                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(ForgetPassword), "UserController", request, Request.Scheme))!, "self", "Post")
+                }
+                };
+            }
+            else
+            {
+                return new RestDTO<UserInformationResponse>()
+                {
+                    Message = "Change password unsuccessfulyy!",
+                    Data = null,
+                    Links = new List<LinkDTO>
+                {
+                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(ForgetPassword), "UserController", request, Request.Scheme))!, "self", "Post")
+                }
+                };
+            }
+
+        }
+
+
     }
 }

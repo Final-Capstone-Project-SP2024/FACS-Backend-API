@@ -11,7 +11,7 @@ using static Google.Apis.Requests.BatchRequest;
 namespace FireDetection.Backend.API.Controllers
 {
     [ApiController]
-    [ApiKey]
+   
     public class NotificationController : BaseController
     {
         private readonly LinkGenerator _linkGenerator;

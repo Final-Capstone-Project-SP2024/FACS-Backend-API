@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FireDetection.Backend.API.Middleware;
 using FireDetection.Backend.Domain.DTOs.Core;
 using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.DTOs.Response;
@@ -113,7 +114,9 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-      //  [Authorize(Roles = Roles.Manager + "," + Roles.User)]
+        //  [Authorize(Roles = Roles.Manager + "," + Roles.User)]
+
+        [ApiKey]
         [HttpPost("{id}/detect")]
         public async Task<ActionResult<RestDTO<DetectResponse>>> DetectFire(Guid id, TakeAlarmRequest request)
         {
@@ -140,7 +143,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-       // [Authorize(Roles = Roles.Manager + "," + Roles.User)]
+        [ApiKey]// [Authorize(Roles = Roles.Manager + "," + Roles.User)]
         [HttpPost("{id}/disconnect")]
         public async Task<ActionResult<RestDTO<DetectResponse>>> ElectricalIncident(Guid id)
         {

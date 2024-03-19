@@ -21,6 +21,8 @@ using FireDetection.Backend.Domain.Ultilities;
 using AutoMapper.QueryableExtensions;
 using FireDetection.Backend.Domain.DTOs.State;
 using FireDetection.Backend.Domain.Helpers.EmailHandler;
+using Google.Apis.Auth.OAuth2;
+using System.Security;
 
 namespace FireDetection.Backend.Infrastructure.Service.Serivces
 {
@@ -28,16 +30,17 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
     {
         private readonly IClaimsService _claimsService;
         private readonly IMapper _mapper;
-
+        private readonly IMemoryCacheService _memoryCacheService;
         private readonly IUnitOfWork _unitOfWork;
 
         private readonly IConfiguration _configuration;
-        public UserService(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration config, IClaimsService claimsService)
+        public UserService(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration config, IClaimsService claimsService, IMemoryCacheService memoryCacheService)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _configuration = config;
             _claimsService = claimsService;
+            _memoryCacheService = memoryCacheService;
         }
 
         public async Task<bool> ActiveUser(Guid userId)
@@ -291,6 +294,37 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             userDetail.UserTransaction = userTransaction.Select(x => _mapper.Map<TransactionGeneralResponse>(x)).ToList();
 
             return userDetail;
+        }
+
+        public async Task ForgotPassword(string SecurityCode)
+        {
+            SendMailHandler SendMail = new SendMailHandler(_configuration);
+            var user = await _unitOfWork.UserRepository.Where(x => x.SecurityCode == SecurityCode).FirstOrDefaultAsync();
+            int otp = await RandomNumber();
+            if (user is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "User have already banned in system");
+
+            await _memoryCacheService.SaveOTP(otp, user.Email);
+            await SendMail.SendOTP(user.Email, otp);
+
+        }
+
+        public async Task<bool> ChangePassword(ChangePasswordRequest request)
+        {
+            var user = await _unitOfWork.UserRepository.Where(x => x.SecurityCode == request.SecurityCode).FirstOrDefaultAsync();
+            int otpCheck = await _memoryCacheService.GetOTP(user.Email);
+            if (request.OTPSending == otpCheck) return true;
+
+
+            user.Password = request.newPassword;
+            _unitOfWork.UserRepository.Update(user);
+            await _unitOfWork.SaveChangeAsync();
+            return false;
+        }
+
+        internal async Task<int> RandomNumber()
+        {
+            Random rand = new Random();
+            return rand.Next(100000, 1000000);
         }
     }
 }

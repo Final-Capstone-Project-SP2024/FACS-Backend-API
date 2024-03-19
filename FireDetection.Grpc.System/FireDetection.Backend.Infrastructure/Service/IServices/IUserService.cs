@@ -29,5 +29,9 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
         public Task<bool> SendEmail(string email);
 
         public Task<UserInformationDetailResponse> GetDetail(Guid userId);
+
+        public Task ForgotPassword(string SecurityCode);
+
+        public Task<bool> ChangePassword(ChangePasswordRequest request);
     }
 }

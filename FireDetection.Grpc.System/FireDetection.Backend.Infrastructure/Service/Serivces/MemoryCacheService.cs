@@ -12,6 +12,7 @@ using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using static System.Net.WebRequestMethods;
 
 namespace FireDetection.Backend.Infrastructure.Service.Serivces
 {
@@ -206,6 +207,24 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         {
             _memoryCache.TryGetValue(NameTransfer(CacheType.VotingCount, recordId), out int result);
             return (int)result;
+        }
+
+        public  async Task SaveOTP(int otp,string mail)
+        {
+            var cacheEntryOptions = new MemoryCacheEntryOptions()
+               .SetSlidingExpiration(TimeSpan.FromMinutes(5))
+               .SetAbsoluteExpiration(TimeSpan.FromMinutes(5))
+               .SetPriority(CacheItemPriority.Normal)
+               .SetSize(1024);
+            _memoryCache.Set($"{mail}_otp", otp, cacheEntryOptions);
+
+
+        }
+
+        public async Task<int> GetOTP(string email)
+        {
+            _memoryCache.TryGetValue($"{email}_otp",out int result );
+            return result;
         }
     }
 }
