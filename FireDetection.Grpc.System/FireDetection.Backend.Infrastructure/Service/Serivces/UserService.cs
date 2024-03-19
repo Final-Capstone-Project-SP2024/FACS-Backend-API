@@ -326,5 +326,20 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             Random rand = new Random();
             return rand.Next(100000, 1000000);
         }
+
+        public async Task<UserInformationDetailResponse> ChangePasswordByUser(ChangePasswordByUserRequest request)
+        {
+            var user = await _unitOfWork.UserRepository.GetById(_claimsService.GetCurrentUserId);
+            if (user is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "User have already banned in system");
+
+            if (user.Password != request.OldPassword) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Your old password is wrong ");
+
+            user.Password = request.NewPassword;
+            _unitOfWork.UserRepository.Update(user);
+            await _unitOfWork.SaveChangeAsync();
+
+            return  _mapper.Map<UserInformationDetailResponse>(_unitOfWork.UserRepository.GetById(user.Id));
+
+        }
     }
 }

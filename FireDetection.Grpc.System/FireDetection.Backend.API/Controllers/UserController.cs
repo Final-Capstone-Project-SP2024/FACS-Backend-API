@@ -196,8 +196,8 @@ namespace FireDetection.Backend.API.Controllers
         }
 
 
-        [HttpPost("/changepasword")]
-        public async Task<ActionResult<RestDTO<UserInformationResponse>>> ChangePassword(ChangePasswordRequest request)
+        [HttpPost("/otpconfirm")]
+        public async Task<ActionResult<RestDTO<UserInformationResponse>>> ConfirmOTP(ChangePasswordRequest request)
         {
             bool check = await _userService.ChangePassword(request);
             if (check == true)
@@ -224,6 +224,23 @@ namespace FireDetection.Backend.API.Controllers
                 }
                 };
             }
+
+        }
+
+
+        [HttpPost("{changepassword}")]
+        public async Task<ActionResult<RestDTO<UserInformationResponse>>> ChangePassword(ChangePasswordByUserRequest request)
+        {
+            var response = await _userService.ChangePasswordByUser(request);
+            return new RestDTO<UserInformationResponse>()
+            {
+                Message = "Change password unsuccessfulyy!",
+                Data = response,
+                Links = new List<LinkDTO>
+                {
+                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(ChangePassword), "UserController", request, Request.Scheme))!, "self", "Post")
+                }
+            };
 
         }
 
