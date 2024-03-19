@@ -21,7 +21,7 @@ namespace FireDetection.Backend.API.Controllers
             _linkGenerator = linkGenerator;
         }
         //todo get analysis about system to view in dashboard
-        [Authorize(Roles = UserRole.Manager + "," + UserRole.Admin)]
+        [Authorize(Roles = UserRole.Manager)]
         [HttpGet]
         public async Task<ActionResult<RestDTO<FireDetectionAnalysis>>> Get()
         {

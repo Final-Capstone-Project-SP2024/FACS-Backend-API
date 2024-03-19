@@ -11,6 +11,7 @@ using static Google.Apis.Requests.BatchRequest;
 
 namespace FireDetection.Backend.API.Controllers
 {
+    
     public class FeedbackController : BaseController
     {
         private readonly IFeedbackService _feedbackService;
@@ -23,9 +24,9 @@ namespace FireDetection.Backend.API.Controllers
         }
 
 
-        [Authorize(Roles = UserRole.Manager + "" + UserRole.User)]
+        [Authorize(Roles = UserRole.Manager)]
         [HttpPost]
-        public async Task<ActionResult<RestDTO<FeedbackResponse>>> Feedback(AddFeedbackRequest request)
+        private async Task<ActionResult<RestDTO<FeedbackResponse>>> Feedback(AddFeedbackRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -52,9 +53,9 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = UserRole.Admin)]
+        [Authorize(Roles = UserRole.Manager)]
         [HttpGet]
-        public async Task<ActionResult<RestDTO<IQueryable<FeedbackResponse>>>> GetAll()
+        private async Task<ActionResult<RestDTO<IQueryable<FeedbackResponse>>>> GetAll()
         {
             var response = await _feedbackService.Get();
             return new RestDTO<IQueryable<FeedbackResponse>>()

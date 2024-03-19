@@ -62,14 +62,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
             if (!await CheckDuplicatePhone(request.Phone)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Have already this phone number   in system");
 
-            if (_claimsService.GetCurrentUserRole == UserRole.Admin)
-            {
-                request.UserRole = 1;
-            }
-            else
-            {
-                request.UserRole = 2;
-            }
+            request.UserRole = 2;
             User user = _mapper.Map<User>(request);
             user.SecurityCode = await GenerateSecurityCode();
             _unitOfWork.UserRepository.InsertAsync(user);

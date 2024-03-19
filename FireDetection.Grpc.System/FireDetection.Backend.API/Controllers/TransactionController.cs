@@ -22,7 +22,7 @@ namespace FireDetection.Backend.API.Controllers
 
         [Authorize(Roles = UserRole.Manager)]
         [HttpPost("{contractId}/renewal")]
-        public async Task<ActionResult<RestDTO<TransactionDetailResponse>>> Renewal(Guid contractId,AddTransactionRequest request)
+        private async Task<ActionResult<RestDTO<TransactionDetailResponse>>> Renewal(Guid contractId,AddTransactionRequest request)
         {
             var response = await _trasactionService.Action(contractId, 3, request);
             return new RestDTO<TransactionDetailResponse>()
@@ -43,7 +43,7 @@ namespace FireDetection.Backend.API.Controllers
 
         [Authorize(Roles = UserRole.Manager)]
         [HttpPost("{contractId}/upgrade")]
-        public async Task<ActionResult<RestDTO<TransactionDetailResponse>>> Upgrade(Guid contractId,AddTransactionRequest request)
+        private async Task<ActionResult<RestDTO<TransactionDetailResponse>>> Upgrade(Guid contractId,AddTransactionRequest request)
         {
             var response = await _trasactionService.Action(contractId, 1, request);
             return new RestDTO<TransactionDetailResponse>()

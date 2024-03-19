@@ -25,7 +25,7 @@ namespace FireDetection.Backend.API.Controllers
             _logger = logger;
         }
 
-        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
+        [Authorize(Roles = UserRole.Manager)]
         [HttpGet]
         public async Task<ActionResult<RestDTO<IQueryable<CameraInformationResponse>>>> Get()
         {

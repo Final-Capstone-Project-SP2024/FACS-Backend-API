@@ -19,7 +19,7 @@ namespace FireDetection.Backend.API.Controllers
             _contractService = contractService;
             _linkGenerator = linkGenerator;
         }
-        [Authorize(Roles = UserRole.Admin)]
+        [Authorize(Roles = UserRole.Manager)]
         [HttpPost]
         public async Task<ActionResult<RestDTO<ContractDetailResponse>>> Add(AddContractRequest request)
         {
@@ -41,6 +41,8 @@ namespace FireDetection.Backend.API.Controllers
         }
 
 
+
+        [Authorize(Roles = UserRole.Manager)]
         [HttpGet]
         public async Task<ActionResult<RestDTO<IQueryable<ContractGeneralResponse>>>> GetAll()
         {
@@ -61,6 +63,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
+        [Authorize(Roles = UserRole.Manager)]
         [HttpGet("{contractId}")]
         public async Task<ActionResult<RestDTO<ContractDetailResponse>>> Get(Guid contractId)
         {
@@ -81,6 +84,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
+        [Authorize(Roles = UserRole.Manager)]
 
         [HttpPatch("{contractId}")]
         public async Task<ActionResult<RestDTO<ContractDetailResponse>>> Update(Guid contractId, UpdateContractRequest request)
@@ -102,6 +106,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
+        [Authorize(Roles = UserRole.Manager)]
 
         [HttpPost("{contractId}/subcribe")]
         public async Task<ActionResult<RestDTO<ContractDetailResponse>>> Subcribe(Guid contractId)
@@ -123,7 +128,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-
+        [Authorize(Roles = UserRole.Manager)]
         [HttpPost("{contractId}/unsubcribe")]
         public async Task<ActionResult<RestDTO<ContractDetailResponse>>> Unsubcribe(Guid contractId)
         {

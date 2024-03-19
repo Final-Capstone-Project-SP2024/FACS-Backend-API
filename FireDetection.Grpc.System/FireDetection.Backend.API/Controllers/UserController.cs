@@ -22,7 +22,7 @@ namespace FireDetection.Backend.API.Controllers
             _linkGenerator = linkGenerator;
         }
 
-        [Authorize(Roles = UserRole.Manager + "," + UserRole.Admin)]
+        [Authorize(Roles = UserRole.Manager)]
         [HttpPost]
         public async Task<ActionResult<RestDTO<UserInformationResponse>>> Add(CreateUserRequest request)
         {
@@ -67,7 +67,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = UserRole.Manager + "," + UserRole.Admin)]
+        [Authorize(Roles = UserRole.Manager)]
         [HttpPost("{id}/active")]
         public async Task<ActionResult<RestDTO<UserInformationResponse>>> Active(Guid id)
         {
@@ -83,7 +83,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = UserRole.Manager + "," + UserRole.Admin)]
+        [Authorize(Roles = UserRole.Manager)]
         [HttpPost("{id}/inactive")]
         public async Task<ActionResult<RestDTO<UserInformationResponse>>> Inactive(Guid id)
         {
@@ -99,7 +99,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = UserRole.Manager + "," + UserRole.Admin)]
+        [Authorize(Roles = UserRole.Manager)]
         [HttpPatch("{id}")]
         public async Task<ActionResult<RestDTO<UserInformationResponse>>> Update(Guid id, UpdateUserRequest request)
         {
@@ -124,7 +124,9 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
+
+
+        [Authorize(Roles = UserRole.Manager )]
         [HttpGet]
         public async Task<ActionResult<RestDTO<List<UserInformationResponse>>>> GetAllUsers([FromQuery] PagingRequest pagingRequest, [FromQuery] UserRequest request)
         {
@@ -140,6 +142,8 @@ namespace FireDetection.Backend.API.Controllers
             }) : NotFound();
         }
 
+
+        [Authorize(Roles = UserRole.Manager)]
         [HttpPost("sendAccount")]
         public async Task<ActionResult<RestDTO<UserInformationResponse>>> SendMail(string emai)
         {
@@ -155,7 +159,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = UserRole.Manager + "," + UserRole.Admin)]
+        [Authorize(Roles = UserRole.Manager)]
         [HttpGet("userId")]
         public async Task<ActionResult<RestDTO<UserInformationDetailResponse>>> GetDetail(Guid userId)
         {
@@ -163,7 +167,7 @@ namespace FireDetection.Backend.API.Controllers
             var response = await _userService.GetDetail(userId);
             return new RestDTO<UserInformationDetailResponse>()
             {
-                Message = "Inactive Account Successfully!",
+                Message = "Get  Account Detail Successfully!",
                 Data = response,
                 Links = new List<LinkDTO>
                 {

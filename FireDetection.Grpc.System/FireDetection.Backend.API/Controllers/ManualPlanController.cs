@@ -1,9 +1,11 @@
 ﻿using FireDetection.Backend.Domain.DTOs.Core;
 using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.DTOs.Response;
+using FireDetection.Backend.Domain.DTOs.State;
 using FireDetection.Backend.Domain.Entity;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using FireDetection.Backend.Infrastructure.UnitOfWork;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using static Google.Apis.Requests.BatchRequest;
@@ -20,6 +22,9 @@ namespace FireDetection.Backend.API.Controllers
             _linkGenerator = linkGenerator;
 
         }
+
+
+        [Authorize(Roles = UserRole.Manager)]
         [HttpGet]
         public async Task<ActionResult<RestDTO<IQueryable<ManualPlanGeneralResponse>>>> GetAll()
         {
@@ -39,7 +44,7 @@ namespace FireDetection.Backend.API.Controllers
                 }
             };
         }
-
+        [Authorize(Roles = UserRole.Manager)]
         [HttpGet("{Id}")]
         public async Task<ActionResult<RestDTO<ManualPlanDetailResponse>>> GetDetail(int Id)
         {
@@ -60,6 +65,8 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
+
+        [Authorize(Roles = UserRole.Manager)]
         [HttpPost("{Id}")]
         public async Task<ActionResult<RestDTO<ManualPlanDetailResponse>>> Update(int Id,UpdateManualPlanRequest request)
         {

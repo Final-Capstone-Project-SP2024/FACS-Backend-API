@@ -24,7 +24,7 @@ namespace FireDetection.Backend.API.Controllers
 
         }
 
-        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
+        [Authorize(Roles = UserRole.Manager)]
         [HttpPost("{RecordId}/vote")]
         public async Task<ActionResult<RestDTO<VoteAlarmResponse>>> Vote(Guid RecordId, RateAlarmRequest request)
         {
@@ -46,7 +46,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
+        [Authorize(Roles = UserRole.Manager)]
         [HttpPost("{RecordId}/action")]
         public async Task<ActionResult<RestDTO<ActionProcessResponse>>> Action(Guid RecordId, AddRecordActionRequest request)
         {
@@ -67,7 +67,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
+        [Authorize(Roles = UserRole.Manager)]
         [HttpGet]
         public async Task<ActionResult<RestDTO<PagedResult<RecordResponse>>>> Get([FromQuery] PagingRequest pagingRequest, [FromQuery] RecordRequest recordRequest)
         {
@@ -75,7 +75,7 @@ namespace FireDetection.Backend.API.Controllers
             return Ok(response);
         }
 
-        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
+        [Authorize(Roles = UserRole.Manager)]
         [HttpGet("{recordId}")]
         public async Task<ActionResult<RestDTO<RecordDetailResponse>>> GetDetail(Guid recordId)
         {

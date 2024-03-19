@@ -22,9 +22,9 @@ namespace FireDetection.Backend.API.Controllers
             _linkGenerator = linkGenerator;
         }
 
-        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
+        [Authorize(Roles = UserRole.Manager)]
         [HttpPost]
-        public async Task<ActionResult<RestDTO<BugsReportResponse>>> Add(BugsReportRequest request)
+        private async Task<ActionResult<RestDTO<BugsReportResponse>>> Add(BugsReportRequest request)
         {
             var response = await _bugsReportService.Add(request);
             return new RestDTO<BugsReportResponse>()
@@ -47,7 +47,7 @@ namespace FireDetection.Backend.API.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<RestDTO<IQueryable<BugsReportResponse>>>> Get()
+        private async Task<ActionResult<RestDTO<IQueryable<BugsReportResponse>>>> Get()
         {
             var response = await _bugsReportService.GetAll();
             return new RestDTO<IQueryable<BugsReportResponse>>()
@@ -67,7 +67,7 @@ namespace FireDetection.Backend.API.Controllers
         }
 
         [HttpPost("{Id}")]
-        public async Task<ActionResult<RestDTO<BugsReportResponse>>> Solve(Guid Id)
+        private async Task<ActionResult<RestDTO<BugsReportResponse>>> Solve(Guid Id)
         {
            var response = await _bugsReportService.Solve(Id);
             return new RestDTO<BugsReportResponse>()
