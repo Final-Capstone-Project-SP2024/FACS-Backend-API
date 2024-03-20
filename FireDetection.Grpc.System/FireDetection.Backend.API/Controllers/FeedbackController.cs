@@ -24,7 +24,7 @@ namespace FireDetection.Backend.API.Controllers
         }
 
 
-        [Authorize(Roles = UserRole.Manager)]
+        [Authorize(Roles = UserRole.User)]
         [HttpPost]
         private async Task<ActionResult<RestDTO<FeedbackResponse>>> Feedback(AddFeedbackRequest request)
         {

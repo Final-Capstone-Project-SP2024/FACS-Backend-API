@@ -50,6 +50,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<CameraInformationResponse> Add(AddCameraRequest request)
         {
+            if(  await _unitOfWork.LocationRepository.GetById(request.LocationId) is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "LocationId not in the system");
             if (!await CheckDuplicateDestination(request.Destination)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Destination have already add in system");
 
             if (!await CheckDuplicateCameraName(request.CameraName)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Camera Name have already add in system");
@@ -82,6 +83,11 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         public async Task<CameraInformationResponse> Update(Guid id, AddCameraRequest request)
         {
             Camera camera = await _unitOfWork.CameraRepository.GetById(id);
+            if(camera is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "CameraId not in system");
+
+            if (!await CheckDuplicateDestination(request.Destination)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Destination have already add in system");
+
+            if (!await CheckDuplicateCameraName(request.CameraName)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Camera Name have already add in system");
             camera.CameraDestination = request.Destination;
             camera.Status = request.Status;
             camera.LastModified = DateTime.UtcNow;
@@ -109,6 +115,17 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             return true;
         }
 
+        internal async Task<bool> CheckCameraIdInSystem(Guid cameraId)
+        {
+            var camera = await _unitOfWork.CameraRepository.GetById(cameraId);
+            if(camera is null)
+            {
+                return false;
+            }
+            return true;
+        }
+             
+
 
         private async Task<bool> CheckDuplicateCameraName(string CameraName)
         {
@@ -122,6 +139,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         }
         public async Task<DetectResponse> DetectFire(Guid id, TakeAlarmRequest request)
         {
+            
             //TODO: Check camera in system 
             Camera camera = await _unitOfWork.CameraRepository.GetById(id);
             string locationName = _unitOfWork.LocationRepository.GetById(camera.LocationID).Result.LocationName;

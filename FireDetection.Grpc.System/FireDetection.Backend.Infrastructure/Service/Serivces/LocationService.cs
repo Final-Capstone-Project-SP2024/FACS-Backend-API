@@ -150,6 +150,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         public  async Task<LocationInformationResponse> GetById(Guid locationId)
         {
             var data = await _context.LocationRepository.GetStaffInLocation(locationId);
+            if(data is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Not Found this locationId");
             var cameras = _context.CameraRepository.Where(x => x.LocationID == locationId).Select(x => x.Id).ToList().AsReadOnly();
 
             return new LocationInformationResponse()

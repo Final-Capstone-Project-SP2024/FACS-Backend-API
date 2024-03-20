@@ -21,7 +21,7 @@ namespace FireDetection.Backend.API.Controllers
         }
         [Authorize(Roles = UserRole.Manager)]
         [HttpPost]
-        public async Task<ActionResult<RestDTO<ContractDetailResponse>>> Add(AddContractRequest request)
+        private async Task<ActionResult<RestDTO<ContractDetailResponse>>> Add(AddContractRequest request)
         {
             var response = await _contractService.Add(request);
             return new RestDTO<ContractDetailResponse>()
@@ -44,7 +44,7 @@ namespace FireDetection.Backend.API.Controllers
 
         [Authorize(Roles = UserRole.Manager)]
         [HttpGet]
-        public async Task<ActionResult<RestDTO<IQueryable<ContractGeneralResponse>>>> GetAll()
+        private async Task<ActionResult<RestDTO<IQueryable<ContractGeneralResponse>>>> GetAll()
         {
             var response = await _contractService.GetAll();
             return new RestDTO<IQueryable<ContractGeneralResponse>>()
@@ -65,7 +65,7 @@ namespace FireDetection.Backend.API.Controllers
 
         [Authorize(Roles = UserRole.Manager)]
         [HttpGet("{contractId}")]
-        public async Task<ActionResult<RestDTO<ContractDetailResponse>>> Get(Guid contractId)
+        private async Task<ActionResult<RestDTO<ContractDetailResponse>>> Get(Guid contractId)
         {
             var response = await _contractService.GetDetail(contractId);    
             return new RestDTO<ContractDetailResponse>()
@@ -87,7 +87,7 @@ namespace FireDetection.Backend.API.Controllers
         [Authorize(Roles = UserRole.Manager)]
 
         [HttpPatch("{contractId}")]
-        public async Task<ActionResult<RestDTO<ContractDetailResponse>>> Update(Guid contractId, UpdateContractRequest request)
+        private async Task<ActionResult<RestDTO<ContractDetailResponse>>> Update(Guid contractId, UpdateContractRequest request)
         {
             var response = await _contractService.Update(contractId, request);
             return new RestDTO<ContractDetailResponse>()
@@ -109,7 +109,7 @@ namespace FireDetection.Backend.API.Controllers
         [Authorize(Roles = UserRole.Manager)]
 
         [HttpPost("{contractId}/subcribe")]
-        public async Task<ActionResult<RestDTO<ContractDetailResponse>>> Subcribe(Guid contractId)
+        private async Task<ActionResult<RestDTO<ContractDetailResponse>>> Subcribe(Guid contractId)
         {
             var response = await _contractService.Subcribe(contractId);
             return new RestDTO<ContractDetailResponse>()
@@ -130,7 +130,7 @@ namespace FireDetection.Backend.API.Controllers
 
         [Authorize(Roles = UserRole.Manager)]
         [HttpPost("{contractId}/unsubcribe")]
-        public async Task<ActionResult<RestDTO<ContractDetailResponse>>> Unsubcribe(Guid contractId)
+        private async Task<ActionResult<RestDTO<ContractDetailResponse>>> Unsubcribe(Guid contractId)
         {
             var response = await _contractService.Unsubcribe(contractId);
             return new RestDTO<ContractDetailResponse>()

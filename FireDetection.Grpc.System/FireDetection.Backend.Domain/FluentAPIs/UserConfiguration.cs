@@ -31,7 +31,7 @@ namespace FireDetection.Backend.Domain.FluentAPIs
                 Id = Guid.Parse("3c9a2a1b-f4dc-4468-a89c-f6be8ca3b541"),
                 Phone = "0902311453",
                 isActive = true,
-                RoleId = 3,
+                RoleId = 1,
                 SecurityCode = "XAD_000",
                 IsDeleted = false,
                 Status = UserState.Active

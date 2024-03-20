@@ -11,7 +11,7 @@ using static Google.Apis.Requests.BatchRequest;
 namespace FireDetection.Backend.API.Controllers
 {
     [ApiController]
-   
+
     public class NotificationController : BaseController
     {
         private readonly LinkGenerator _linkGenerator;
@@ -20,7 +20,7 @@ namespace FireDetection.Backend.API.Controllers
             _linkGenerator = linkGenerator;
         }
 
-        //[Authorize(Roles = UserRole.Manager)]
+        [Authorize(Roles = UserRole.Manager)]
         [HttpPost]
         public async Task<IActionResult> Add(AddNotificationRequest request)
         {
@@ -29,7 +29,7 @@ namespace FireDetection.Backend.API.Controllers
 
         }
 
-//        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
+        [Authorize(Roles = UserRole.Manager )]
         [HttpGet]
         public async Task<ActionResult<RestDTO<NotificationListResponse>>> GetAll()
         {
@@ -49,7 +49,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-      //  [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
+        [Authorize(Roles = UserRole.Manager)]
         [HttpGet("{id}")]
         public async Task<ActionResult<RestDTO<NotficationDetailResponse>>> GetDetail(int id)
         {

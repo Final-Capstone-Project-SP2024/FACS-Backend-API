@@ -52,7 +52,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = UserRole.Manager + "" + UserRole.Staff)]
+        [Authorize(Roles = UserRole.Manager + "" + UserRole.User)]
         [HttpGet("{id}")]
         public async Task<ActionResult<RestDTO<LocationInformationResponse>>> GetById(Guid id)
         {
@@ -64,8 +64,8 @@ namespace FireDetection.Backend.API.Controllers
                 Links = new List<LinkDTO> {
                   new LinkDTO(
                     Url.Action(
-                     _linkGenerator.GetUriByAction(HttpContext,nameof(GetById),"LocationController",
-                      "",
+                     _linkGenerator.GetUriByAction(HttpContext,nameof(GetById),"/LocationController",
+                      id,
                       Request.Scheme))!,
                 "self",
                  "Post")

@@ -91,6 +91,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         public async Task<UserLoginResponse> Login(UserLoginRequest req)
         {
             var user = _unitOfWork.UserRepository.Include(u => u.Role).Where(u => u.SecurityCode == req.SecurityCode && u.Password == req.Password).FirstOrDefault();
+            if(user is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Check your security code and password again");
             if (user.Status == UserState.Inactive)
             {
                 throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "User have already banned in system");
@@ -154,7 +155,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             User user = await GetUserById(id);
             if (user == null)
             {
-                throw new Exception();
+                throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Not find this user");
             }
             _mapper.Map(req, user);
             _unitOfWork.UserRepository.Update(user);
