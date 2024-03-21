@@ -24,7 +24,7 @@ namespace Backend.Infrastructure.Tests.Service
 
         public UserServiceTest()
         {
-            _userService = new UserService(_unitOfWork.Object, _mapperConfig, _configuration.Object);
+            _userService = new UserService(_unitOfWork.Object, _mapperConfig, _configuration.Object,_claimServiceTest.Object,_memoryCacheServiceTest.Object);
 
         }
 

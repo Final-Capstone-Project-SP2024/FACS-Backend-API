@@ -41,13 +41,9 @@ namespace FireDetection.Backend.API.Controllers
                 Message = "Add Location Successfully",
                 Data = response,
                 Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Add),"/LocationController",
-                        request,
-                        Request.Scheme))!,
-                    "self",
-                    "Post")
+                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(Update),"/LocationController",request,Request.Scheme))!,"update_location","Post"),
+                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(Delete),"/LocationController",request,Request.Scheme))!,"delete_location","Delete"),
+                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(CameraController.Add),"/CamearaController",request,Request.Scheme))!,"add_camera_to_location","Post")
                 }
             };
         }
@@ -62,14 +58,9 @@ namespace FireDetection.Backend.API.Controllers
                 Message = "View Location Detail Successfully",
                 Data = response,
                 Links = new List<LinkDTO> {
-                  new LinkDTO(
-                    Url.Action(
-                     _linkGenerator.GetUriByAction(HttpContext,nameof(GetById),"/LocationController",
-                      id,
-                      Request.Scheme))!,
-                "self",
-                 "Post")
-    }
+                  new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(Delete),"/LocationController",id,Request.Scheme))!,"self","Post"),
+                  new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(Update),"/LocationController",id,Request.Scheme))!,"update_location","Post")
+                }
             };
         }
 
@@ -84,13 +75,7 @@ namespace FireDetection.Backend.API.Controllers
                 Message = "Vote Record Successfully",
                 Data = response,
                 Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Update),"/LocationController",
-                        request,
-                        Request.Scheme))!,
-                    "self",
-                    "Patch")
+                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(GetById),"/LocationController",id,Request.Scheme))!,"self","Get"),
                 }
             };
         }
@@ -105,17 +90,13 @@ namespace FireDetection.Backend.API.Controllers
                 Message = "Delete Location Successfully",
                 Data = null,
                 Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Delete),"LocationController",Request.Scheme))!,
-                    "self",
-                    "Delete")
+                    new LinkDTO(Url.Action( _linkGenerator.GetUriByAction(HttpContext,nameof(Get),"/LocationController",Request.Scheme))!,"self","Get")
                 }
             };
         }
 
         [Authorize(Roles = UserRole.Manager)]
-        [HttpGet]   
+        [HttpGet]
         public async Task<ActionResult<RestDTO<IQueryable<Location>>>> Get()
         {
             IQueryable<Location> location = await _context.GetLocation();
@@ -125,11 +106,7 @@ namespace FireDetection.Backend.API.Controllers
                 Message = "Get Location Successfully",
                 Data = location,
                 Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Get),"LocationController",Request.Scheme))!,
-                    "self",
-                    "Get")
+                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(GetById),"/LocationController",Request.Scheme))!,"self","Get")
                 }
             };
         }
@@ -144,13 +121,7 @@ namespace FireDetection.Backend.API.Controllers
                 Message = "Add Staff Successfully",
                 Data = result,
                 Links = new List<LinkDTO> {
-                  new LinkDTO(
-                    Url.Action(
-                     _linkGenerator.GetUriByAction(HttpContext,nameof(AddStaff),"LocationController",
-                      request,
-                      Request.Scheme))!,
-                "self",
-                 "Post")
+                  new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(GetById),"/LocationController",id,Request.Scheme))!,"self","Get")
                 }
             };
         }

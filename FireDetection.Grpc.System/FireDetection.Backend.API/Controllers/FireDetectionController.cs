@@ -31,8 +31,9 @@ namespace FireDetection.Backend.API.Controllers
                 Data = await _notificationLogService.Analysis(),
                 Links = new List<LinkDTO>
                 {
-          new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(Get), "FireDetectionController", null, Request.Scheme))!, "self", "Get")
-      }
+                 new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(CameraController.Get), "/CameraController", null, Request.Scheme))!, "self", "Get"),
+                 new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(UserController.GetAllUsers), "/UserController", null, Request.Scheme))!, "self", "Get"),
+                }
             };
         }
 

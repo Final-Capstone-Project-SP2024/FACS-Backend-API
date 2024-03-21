@@ -39,11 +39,8 @@ namespace FireDetection.Backend.API.Controllers
                 Message = "Get All Camera  Successfully",
                 Data = response,
                 Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Get),"/CameraController",Request.Scheme))!,
-                    "self",
-                    "Get")
+                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(Delete),"/CameraController",Request.Scheme))!,"delete_camera","Delete"),
+                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(Update),"/CameraController",Request.Scheme))!,"delete_camera","Delete")
                 }
             };
         }
@@ -66,11 +63,7 @@ namespace FireDetection.Backend.API.Controllers
                 Message = "Add Camera Successfully",
                 Data = response,
                 Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Add),"CameraController",Request.Scheme))!,
-                    "self",
-                    "Add")
+                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(Get),"/CameraController",Request.Scheme))!,"self","Get")
                 }
             };
         }
@@ -86,10 +79,7 @@ namespace FireDetection.Backend.API.Controllers
                 Data = response,
                 Links = new List<LinkDTO> {
                     new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Update),"Location",Request.Scheme))!,
-                    "self",
-                    "Patch")
+                    Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(Get),"/CameraController",Request.Scheme))!,"self","Get")
                 }
             };
         }
@@ -105,11 +95,7 @@ namespace FireDetection.Backend.API.Controllers
                 Message = "Delete Camera Successfully",
                 Data = response,
                 Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Delete),"Location",Request.Scheme))!,
-                    "self",
-                    "Delete")
+                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(Get),"/Cameacontroller",Request.Scheme))!,"self","Get")
                 }
             };
         }
@@ -134,11 +120,7 @@ namespace FireDetection.Backend.API.Controllers
                 Message = "Detect Fire  Successfully",
                 Data = response,
                 Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(DetectFire),"CameraController",Request.Scheme))!,
-                    "self",
-                    "Post")
+                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(RecordController.Vote),"/RecordController",Request.Scheme))!,"self","Post")
                 }
             };
         }

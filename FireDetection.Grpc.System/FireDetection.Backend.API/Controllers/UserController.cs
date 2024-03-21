@@ -41,13 +41,7 @@ namespace FireDetection.Backend.API.Controllers
                 Message = "Create User Successfully",
                 Data = response,
                 Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Add),"/UserController",
-                        request,
-                        Request.Scheme))!,
-                    "self",
-                    "Post")
+                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(GetAllUsers),"/UserController","",Request.Scheme))!,"self","Get")
                 }
             };
         }
@@ -63,7 +57,9 @@ namespace FireDetection.Backend.API.Controllers
                 Data = response,
                 Links = new List<LinkDTO>
                 {
-                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(Login),"UserController",req, Request.Scheme))!,"self","Post")
+                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(LocationController.Get),"/LocationController",null, Request.Scheme))!,"self","Get"),
+                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(CameraController.Get),"/CamearController",null, Request.Scheme))!,"self","Get"),
+                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(GetAllUsers),"/UserController",null, Request.Scheme))!,"self","Get")
                 }
             };
         }
@@ -79,7 +75,7 @@ namespace FireDetection.Backend.API.Controllers
                 Data = null,
                 Links = new List<LinkDTO>
                 {
-                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(Active), "UserController", null, Request.Scheme))!, "self", "Post")
+                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(GetAllUsers), "/UserController", null, Request.Scheme))!, "self", "Get")
                 }
             };
         }
@@ -95,7 +91,7 @@ namespace FireDetection.Backend.API.Controllers
                 Data = null,
                 Links = new List<LinkDTO>
                 {
-                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(Inactive), "UserController", null, Request.Scheme))!, "self", "Post")
+                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(GetAllUsers), "/UserController", null, Request.Scheme))!, "self", "Get")
                 }
             };
         }
@@ -120,7 +116,7 @@ namespace FireDetection.Backend.API.Controllers
                 Data = response,
                 Links = new List<LinkDTO>
                 {
-                    new LinkDTO(Url.Action("Update","UserController",response, Request.Scheme)!,"self","Post")
+                   new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(GetAllUsers), "/UserController", null, Request.Scheme))!, "self", "Get")
                 }
             };
         }
@@ -172,7 +168,7 @@ namespace FireDetection.Backend.API.Controllers
                 Data = response,
                 Links = new List<LinkDTO>
                 {
-                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(GetDetail), "UserController", userId, Request.Scheme))!, "self", "Get")
+                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(GetDetail), "/UserController", null, Request.Scheme))!, "self", "Get")
                 }
             };
         }
@@ -190,7 +186,7 @@ namespace FireDetection.Backend.API.Controllers
                 Data = null,
                 Links = new List<LinkDTO>
                 {
-                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(ForgetPassword), "UserController", securityCode, Request.Scheme))!, "self", "Post")
+                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(ConfirmOTP), "/UserController", null, Request.Scheme))!, "confirm_otp", "Post")
                 }
             };
         }
@@ -208,7 +204,7 @@ namespace FireDetection.Backend.API.Controllers
                     Data = null,
                     Links = new List<LinkDTO>
                 {
-                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(ForgetPassword), "UserController", request, Request.Scheme))!, "self", "Post")
+                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(Login), "/UserController", null, Request.Scheme))!, "self", "Post")
                 }
                 };
             }
@@ -220,7 +216,7 @@ namespace FireDetection.Backend.API.Controllers
                     Data = null,
                     Links = new List<LinkDTO>
                 {
-                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(ForgetPassword), "UserController", request, Request.Scheme))!, "self", "Post")
+                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(ConfirmOTP), "/UserController", request, Request.Scheme))!, "type_again", "Post")
                 }
                 };
             }
@@ -238,7 +234,7 @@ namespace FireDetection.Backend.API.Controllers
                 Data = response,
                 Links = new List<LinkDTO>
                 {
-                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(ChangePassword), "UserController", request, Request.Scheme))!, "self", "Post")
+                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(Login), "/UserController", null, Request.Scheme))!, "self", "Post")
                 }
             };
 

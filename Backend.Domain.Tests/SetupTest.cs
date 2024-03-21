@@ -60,7 +60,22 @@ namespace Backend.Domain.Tests
 
         protected readonly Mock<LinkGenerator> _linkGeneratorTest;
         protected readonly FireDetectionDbContext _dbContext;
+        protected readonly Mock<INotificationLogService> _notificationLogServiceTest;
 
+        protected readonly Mock<IFeedbackRepository> _feedbackRepositoryTest;
+        protected readonly Mock<IFeedbackService> _firedbackServiceTest;
+
+        protected readonly Mock<IContractRepository> _contractRepositoryTest;
+        protected readonly Mock<IManualPlanRepository> _planRepositoryTest;
+
+        protected readonly Mock<ITransactionRepository> _transactionRepositoryTest;
+
+
+        protected readonly Mock<IBugsReportRepository> _bugsReportRepositoryTest;
+
+        protected readonly Mock<IClaimsService> _claimServiceTest;
+
+        protected readonly Mock<IMemoryCacheService> _memoryCacheServieTest;
         public SetupTest()
         {
             var mappingConfig = new MapperConfiguration(mc =>
@@ -73,14 +88,25 @@ namespace Backend.Domain.Tests
             _linkGeneratorTest = new Mock<LinkGenerator>();
             _fixture = new Fixture();
 
+
             _fixture.Behaviors.Remove(new ThrowingRecursionBehavior());
             _fixture.Behaviors.Add(new OmitOnRecursionBehavior());
 
             _fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList()
     .ForEach(b => _fixture.Behaviors.Remove(b));
 
-            _configuration = new Mock<IConfiguration>();
+            _claimServiceTest = new Mock<IClaimsService>();
+            _memoryCacheServiceTest = new Mock<IMemoryCacheService>();
+            _contractRepositoryTest = new Mock<IContractRepository>();
+            _planRepositoryTest = new Mock<IManualPlanRepository> ();
+            _transactionRepositoryTest = new Mock<ITransactionRepository> ();
+            _bugsReportRepositoryTest = new Mock<IBugsReportRepository> ();
 
+            _configuration = new Mock<IConfiguration>();
+            _bugsReportRepositoryTest = new Mock<IBugsReportRepository>();
+            _feedbackRepositoryTest = new Mock<IFeedbackRepository>();
+            _notificationLogRepositoryTest = new Mock<INotificationLogRepository> ();
+            _notificationLogServiceTest = new Mock<INotificationLogService>();
             _mockHttpRequestTest = new Mock<HttpRequest>();
             _mockContextAccessorTest = new Mock<IHttpContextAccessor>();
             _httpContextTest = new Mock<HttpContext>();
@@ -102,7 +128,7 @@ namespace Backend.Domain.Tests
             _alarmServiceTest = new Mock<IAlarmService>();
             _recordRepositoryTest = new Mock<IRecordRepository>();
             _recordProcessRepositoryTest = new Mock<IRecordProcessRepository>();
-
+            _firedbackServiceTest = new Mock<IFeedbackService>();
             _urlHelperTest = new Mock<IUrlHelper>();
             var options = new DbContextOptionsBuilder<FireDetectionDbContext>()
                  .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
@@ -110,8 +136,8 @@ namespace Backend.Domain.Tests
             _dbContext = new FireDetectionDbContext(options);
         }
         public void Dispose()
-        {
-            _dbContext.Dispose();
+       {
+           _dbContext.Dispose();
         }
     }
 }
