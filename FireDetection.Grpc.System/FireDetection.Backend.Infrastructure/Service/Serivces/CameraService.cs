@@ -146,10 +146,16 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
            
             if (camera is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "CameraId is invalid");
 
+
+
             //TODO: save record to database
             Record record = _mapper.Map<Record>(request);
             record.CameraID = id;
             record.Id = Guid.NewGuid();
+            
+            //todo  create checking user do the next task ( vote task) and sending notification 
+            _timerService.CheckIsVoting(record.Id, camera.CameraDestination, locationName);
+         
             _unitOfWork.RecordRepository.InsertAsync(record);
             await _unitOfWork.SaveChangeAsync();
 
@@ -157,15 +163,13 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             await _memoryCacheService.Create(record.Id, CacheType.FireNotify);
             await _memoryCacheService.Create(record.Id, CacheType.IsVoting);
 
-            //todo  create checking user do the next task ( vote task)
-            _timerService.CheckIsVoting(record.Id, camera.CameraDestination, locationName);
 
             //! get the people who have responsibility in this camreId,
             // List<Guid> userIds = await _unitOfWork.CameraRepository.GetUsersByCameraId(id);
 
             // 4. save image and video to database 
-            await _mediaRecordService.AddImage(request.PictureUrl, record.Id);
-            await _mediaRecordService.Addvideo(request.VideoUrl, record.Id);
+            await _mediaRecordService.AddImage(request.PictureUrl.ToString(), record.Id);
+            await _mediaRecordService.Addvideo(request.VideoUrl.ToString(), record.Id);
 
 
             return _mapper.Map<DetectResponse>(record);

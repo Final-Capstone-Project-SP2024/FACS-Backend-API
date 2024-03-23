@@ -41,15 +41,6 @@ namespace FireDetection.Backend.API.Controllers.Future
             {
                 Message = "Feedback Successfully",
                 Data = response,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Feedback),"FeedbackController",
-                        request,
-                        Request.Scheme))!,
-                    "self",
-                    "Post")
-                }
             };
         }
 
@@ -62,15 +53,6 @@ namespace FireDetection.Backend.API.Controllers.Future
             {
                 Message = "Feedback Successfully",
                 Data = response,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(GetAll),"FeedbackController",""
-                        ,
-                        Request.Scheme))!,
-                    "self",
-                    "Get")
-                }
             };
         }
     }

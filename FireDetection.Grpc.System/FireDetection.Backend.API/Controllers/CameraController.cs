@@ -62,9 +62,6 @@ namespace FireDetection.Backend.API.Controllers
             {
                 Message = "Add Camera Successfully",
                 Data = response,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(Get),"/CameraController",Request.Scheme))!,"self","Get")
-                }
             };
         }
 
@@ -77,10 +74,6 @@ namespace FireDetection.Backend.API.Controllers
             {
                 Message = "Delete Location Successfully",
                 Data = response,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(Get),"/CameraController",Request.Scheme))!,"self","Get")
-                }
             };
         }
 
@@ -94,9 +87,6 @@ namespace FireDetection.Backend.API.Controllers
             {
                 Message = "Delete Camera Successfully",
                 Data = response,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(Get),"/Cameacontroller",Request.Scheme))!,"self","Get")
-                }
             };
         }
 
@@ -104,7 +94,7 @@ namespace FireDetection.Backend.API.Controllers
 
         [ApiKey]
         [HttpPost("{id}/detect")]
-        public async Task<ActionResult<RestDTO<DetectResponse>>> DetectFire(Guid id, TakeAlarmRequest request)
+        public async Task<ActionResult<RestDTO<DetectResponse>>> DetectFire(Guid id,[FromForm] TakeAlarmRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -119,9 +109,6 @@ namespace FireDetection.Backend.API.Controllers
             {
                 Message = "Detect Fire  Successfully",
                 Data = response,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(RecordController.Vote),"/RecordController",Request.Scheme))!,"self","Post")
-                }
             };
         }
 
@@ -134,13 +121,6 @@ namespace FireDetection.Backend.API.Controllers
             {
                 Message = "Get Alarm Electrical Incident Successfully",
                 Data = response,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(ElectricalIncident),"CameraController",Request.Scheme))!,
-                    "self",
-                    "Post")
-                }
             };
         }
 

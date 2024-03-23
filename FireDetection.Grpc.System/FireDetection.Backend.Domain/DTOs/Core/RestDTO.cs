@@ -11,6 +11,6 @@ namespace FireDetection.Backend.Domain.DTOs.Core
         public string Message { get; set; } = null!;
         public T Data { get; set; } 
 
-        public List<LinkDTO> Links { get; set; } = new List<LinkDTO>();
+       // public List<LinkDTO> Links { get; set; } = new List<LinkDTO>();
     }
 }

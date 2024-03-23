@@ -29,15 +29,6 @@ namespace FireDetection.Backend.API.Controllers.Future
             {
                 Message = "Vote Record Successfully",
                 Data = response,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Renewal),"/TransactionController",
-                        request,
-                        Request.Scheme))!,
-                    "self",
-                    "Post")
-                }
             };
         }
 
@@ -50,15 +41,6 @@ namespace FireDetection.Backend.API.Controllers.Future
             {
                 Message = "Vote Record Successfully",
                 Data = response,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Upgrade),"/TransactionController",
-                        request,
-                        Request.Scheme))!,
-                    "self",
-                    "Post")
-                }
             };
         }
 
@@ -72,15 +54,6 @@ namespace FireDetection.Backend.API.Controllers.Future
             {
                 Message = "Vote Record Successfully",
                 Data = response,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Downgrade),"/TransactionController",
-                        request,
-                        Request.Scheme))!,
-                    "self",
-                    "Post")
-                }
             };
         }
         [HttpPost("{transactionId}/paid")]
@@ -92,15 +65,6 @@ namespace FireDetection.Backend.API.Controllers.Future
             {
                 Message = "Set Paid Successfully",
                 Data = response,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Paid),"/TransactionController",
-                        transactionId,
-                        Request.Scheme))!,
-                    "self",
-                    "Get")
-                }
             };
         }
 
@@ -112,20 +76,7 @@ namespace FireDetection.Backend.API.Controllers.Future
             {
                 Message = "Vote Record Successfully",
                 Data = response,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(GetAll),"/TransactionController",
-                        contractId,
-                        Request.Scheme))!,
-                    "self",
-                    "Get")
-                }
             };
         }
-
-
-
-
     }
 }

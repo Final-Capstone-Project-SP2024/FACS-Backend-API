@@ -29,11 +29,6 @@ namespace FireDetection.Backend.API.Controllers
             {
                 Message = "Get data analysis  Successfully!",
                 Data = await _notificationLogService.Analysis(),
-                Links = new List<LinkDTO>
-                {
-                 new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(CameraController.Get), "/CameraController", null, Request.Scheme))!, "self", "Get"),
-                 new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(UserController.GetAllUsers), "/UserController", null, Request.Scheme))!, "self", "Get"),
-                }
             };
         }
 

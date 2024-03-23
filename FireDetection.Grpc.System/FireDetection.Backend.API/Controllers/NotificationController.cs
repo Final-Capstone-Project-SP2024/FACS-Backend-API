@@ -3,6 +3,7 @@ using FireDetection.Backend.Domain.DTOs.Core;
 using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.DTOs.Response;
 using FireDetection.Backend.Domain.DTOs.State;
+using FireDetection.Backend.Domain.Helpers.Media;
 using FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,7 @@ namespace FireDetection.Backend.API.Controllers
 
         }
 
-        [Authorize(Roles = UserRole.Manager )]
+        [Authorize(Roles = UserRole.Manager)]
         [HttpGet]
         public async Task<ActionResult<RestDTO<NotificationListResponse>>> GetAll()
         {
@@ -67,6 +68,15 @@ namespace FireDetection.Backend.API.Controllers
                     "Get")
                 }
             };
+        }
+
+
+        [HttpPost("/upload")]
+        public async Task<IActionResult> TestUpload(IFormFile fileUpload)
+        {
+              //await StorageHandlers.UploadFileAsync(fileUpload, "video");
+           string result = VideoConverterHandler.SaveAviFile(fileUpload);
+            return Ok($"Upload successfull ");
         }
     }
 }

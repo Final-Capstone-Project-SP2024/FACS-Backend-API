@@ -32,8 +32,8 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             //1. Push notifications 
             CloudMessagingHandlers.CloudMessaging();
             // 2. Save Media Record to System 
-            await SaveMediaFileInStorage(request.PictureUrl);
-            await SaveMediaFileInStorage(request.VideoUrl);
+            await SaveMediaFileInStorage(request.PictureUrl.ToString());
+            await SaveMediaFileInStorage(request.VideoUrl.ToString());
             await SaveRecord(record);
 
             return true;

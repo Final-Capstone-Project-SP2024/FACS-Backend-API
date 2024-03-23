@@ -77,7 +77,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             }
            
         }
-        private async Task CheckAndSendNotification(Guid recordID, string CameraDestination, string LocationName)
+        protected async Task CheckAndSendNotification(Guid recordID, string CameraDestination, string LocationName)
         {
             int countAlarmTime = 0;
             bool check = true;
@@ -124,7 +124,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             }
         }
 
-        private async Task CheckAndAutoAction(Guid recordId)
+        protected async Task CheckAndAutoAction(Guid recordId)
         {
             bool check = true;
             while (check)
@@ -156,7 +156,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         }
 
 
-        private async Task SpamNotificationAndCheckFinish(Guid recordId, int alarmLevel)
+        protected async Task SpamNotificationAndCheckFinish(Guid recordId, int alarmLevel)
         {
             /*
              Variable have been create before 

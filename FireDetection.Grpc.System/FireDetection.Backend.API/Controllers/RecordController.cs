@@ -34,15 +34,6 @@ namespace FireDetection.Backend.API.Controllers
             {
                 Message = "Vote Record Successfully",
                 Data = null,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Vote),"RecordController",
-                        request,
-                        Request.Scheme))!,
-                    "self",
-                    "Post")
-                }
             };
         }
 
@@ -55,15 +46,6 @@ namespace FireDetection.Backend.API.Controllers
             {
                 Message = "Action Successfully",
                 Data = null,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Action),"RecordController",
-                        request,
-                        Request.Scheme))!,
-                    "self",
-                    "Post")
-                }
             };
         }
 
@@ -84,14 +66,6 @@ namespace FireDetection.Backend.API.Controllers
             {
                 Message = "View Record Detail Successfully",
                 Data = response,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(GetDetail),"RecordController",
-                        Request.Scheme))!,
-                    "self",
-                    "Get")
-                }
             };
         }
 
@@ -106,14 +80,6 @@ namespace FireDetection.Backend.API.Controllers
             {
                 Message = "End Vote Record  Successfully",
                 Data = response,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(EndVote),"RecordController",
-                        Request.Scheme))!,
-                    "self",
-                    "Post")
-                }
             };
         }
 

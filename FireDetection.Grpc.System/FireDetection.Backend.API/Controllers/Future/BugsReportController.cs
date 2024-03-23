@@ -31,15 +31,6 @@ namespace FireDetection.Backend.API.Controllers.Future
             {
                 Message = "Add Bug Report Successfully",
                 Data = response,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Add),"BugsReportController",
-                        request,
-                        Request.Scheme))!,
-                    "self",
-                    "Post")
-                }
             };
         }
 
@@ -54,15 +45,6 @@ namespace FireDetection.Backend.API.Controllers.Future
             {
                 Message = "Get Bug Report Successfully",
                 Data = response,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Get),"BugsReportController",
-                        "",
-                        Request.Scheme))!,
-                    "self",
-                    "Get")
-                }
             };
         }
 
@@ -74,15 +56,6 @@ namespace FireDetection.Backend.API.Controllers.Future
             {
                 Message = "Solve Bug Report Successfully",
                 Data = response,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Feedback),"BugsReportController",
-                        "",
-                        Request.Scheme))!,
-                    "self",
-                    "Post")
-                }
             };
         }
     }

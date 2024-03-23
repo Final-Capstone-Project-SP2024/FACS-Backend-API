@@ -55,12 +55,6 @@ namespace FireDetection.Backend.API.Controllers
             {
                 Message = "Login Successfully!",
                 Data = response,
-                Links = new List<LinkDTO>
-                {
-                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(LocationController.Get),"/LocationController",null, Request.Scheme))!,"self","Get"),
-                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(CameraController.Get),"/CamearController",null, Request.Scheme))!,"self","Get"),
-                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(GetAllUsers),"/UserController",null, Request.Scheme))!,"self","Get")
-                }
             };
         }
 
@@ -73,10 +67,6 @@ namespace FireDetection.Backend.API.Controllers
             {
                 Message = "Active Account Successfully!",
                 Data = null,
-                Links = new List<LinkDTO>
-                {
-                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(GetAllUsers), "/UserController", null, Request.Scheme))!, "self", "Get")
-                }
             };
         }
 
@@ -89,10 +79,6 @@ namespace FireDetection.Backend.API.Controllers
             {
                 Message = "Inactive Account Successfully!",
                 Data = null,
-                Links = new List<LinkDTO>
-                {
-                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(GetAllUsers), "/UserController", null, Request.Scheme))!, "self", "Get")
-                }
             };
         }
 
@@ -114,10 +100,6 @@ namespace FireDetection.Backend.API.Controllers
             {
                 Message = "Update Successfully!",
                 Data = response,
-                Links = new List<LinkDTO>
-                {
-                   new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(GetAllUsers), "/UserController", null, Request.Scheme))!, "self", "Get")
-                }
             };
         }
 
@@ -132,10 +114,6 @@ namespace FireDetection.Backend.API.Controllers
             {
                 Message = "Get All Users Successfully!",
                 Data = response,
-                Links = new List<LinkDTO>
-                {
-                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(GetAllUsers), "UserController", null, Request.Scheme))!,"self","Get")
-                }
             }) : NotFound();
         }
 
@@ -149,10 +127,6 @@ namespace FireDetection.Backend.API.Controllers
             {
                 Message = "Inactive Account Successfully!",
                 Data = null,
-                Links = new List<LinkDTO>
-                {
-                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(SendMail), "UserController", null, Request.Scheme))!, "self", "Post")
-                }
             };
         }
 
@@ -166,10 +140,7 @@ namespace FireDetection.Backend.API.Controllers
             {
                 Message = "Get  Account Detail Successfully!",
                 Data = response,
-                Links = new List<LinkDTO>
-                {
-                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(GetDetail), "/UserController", null, Request.Scheme))!, "self", "Get")
-                }
+                
             };
         }
 
@@ -184,10 +155,6 @@ namespace FireDetection.Backend.API.Controllers
             {
                 Message = "Check your mail and change the password",
                 Data = null,
-                Links = new List<LinkDTO>
-                {
-                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(ConfirmOTP), "/UserController", null, Request.Scheme))!, "confirm_otp", "Post")
-                }
             };
         }
 
@@ -202,10 +169,6 @@ namespace FireDetection.Backend.API.Controllers
                 {
                     Message = "Change password successfulyy!",
                     Data = null,
-                    Links = new List<LinkDTO>
-                {
-                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(Login), "/UserController", null, Request.Scheme))!, "self", "Post")
-                }
                 };
             }
             else
@@ -214,10 +177,6 @@ namespace FireDetection.Backend.API.Controllers
                 {
                     Message = "Change password unsuccessfulyy!",
                     Data = null,
-                    Links = new List<LinkDTO>
-                {
-                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(ConfirmOTP), "/UserController", request, Request.Scheme))!, "type_again", "Post")
-                }
                 };
             }
 
@@ -232,10 +191,6 @@ namespace FireDetection.Backend.API.Controllers
             {
                 Message = "Change password unsuccessfulyy!",
                 Data = response,
-                Links = new List<LinkDTO>
-                {
-                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(Login), "/UserController", null, Request.Scheme))!, "self", "Post")
-                }
             };
 
         }

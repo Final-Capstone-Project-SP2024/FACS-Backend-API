@@ -75,6 +75,7 @@ namespace Backend.Domain.Tests
 
         protected readonly Mock<IClaimsService> _claimServiceTest;
 
+        protected readonly Mock<IAPICallService> _apiCallServiceTest;
         protected readonly Mock<IMemoryCacheService> _memoryCacheServieTest;
         public SetupTest()
         {
@@ -95,6 +96,7 @@ namespace Backend.Domain.Tests
             _fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList()
     .ForEach(b => _fixture.Behaviors.Remove(b));
 
+            _apiCallServiceTest = new Mock<IAPICallService>();
             _claimServiceTest = new Mock<IClaimsService>();
             _memoryCacheServiceTest = new Mock<IMemoryCacheService>();
             _contractRepositoryTest = new Mock<IContractRepository>();

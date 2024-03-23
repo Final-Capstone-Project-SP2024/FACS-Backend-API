@@ -28,15 +28,6 @@ namespace FireDetection.Backend.API.Controllers.Future
             {
                 Message = "Create Contract Successfully",
                 Data = response,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Add),"/ContractController",
-                        request,
-                        Request.Scheme))!,
-                    "self",
-                    "Post")
-                }
             };
         }
 
@@ -51,15 +42,6 @@ namespace FireDetection.Backend.API.Controllers.Future
             {
                 Message = "Get Contracts Successfully",
                 Data = response,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(GetAll),"/ContractController",
-                        "",
-                        Request.Scheme))!,
-                    "self",
-                    "Get")
-                }
             };
         }
 
@@ -72,15 +54,6 @@ namespace FireDetection.Backend.API.Controllers.Future
             {
                 Message = "Get Contract Detail Successfully",
                 Data = response,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Get),"/ContractController",
-                        contractId,
-                        Request.Scheme))!,
-                    "self",
-                    "Get")
-                }
             };
         }
 
@@ -94,15 +67,6 @@ namespace FireDetection.Backend.API.Controllers.Future
             {
                 Message = "Update Contract  Successfully",
                 Data = response,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Update),"/ContractController",
-                        contractId,
-                        Request.Scheme))!,
-                    "self",
-                    "Patch")
-                }
             };
         }
 
@@ -116,15 +80,6 @@ namespace FireDetection.Backend.API.Controllers.Future
             {
                 Message = "Subcribe Contract  Successfully",
                 Data = response,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Subcribe),"/ContractController",
-                        contractId,
-                        Request.Scheme))!,
-                    "self",
-                    "Post")
-                }
             };
         }
 
@@ -137,15 +92,6 @@ namespace FireDetection.Backend.API.Controllers.Future
             {
                 Message = "Unsubcribe Contract  Successfully",
                 Data = response,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Unsubcribe),"/ContractController",
-                        contractId,
-                        Request.Scheme))!,
-                    "self",
-                    "Post")
-                }
             };
         }
 

@@ -33,15 +33,6 @@ namespace FireDetection.Backend.API.Controllers.Future
             {
                 Message = "Get All ManualPlan Successfully",
                 Data = response,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(GetAll),"ManualPlanController",
-                        "",
-                        Request.Scheme))!,
-                    "self",
-                    "Get")
-                }
             };
         }
         [Authorize(Roles = UserRole.Manager)]
@@ -53,15 +44,6 @@ namespace FireDetection.Backend.API.Controllers.Future
             {
                 Message = "Get All ManualPlan Successfully",
                 Data = response,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(GetDetail),"ManualPlanController",
-                        Id,
-                        Request.Scheme))!,
-                    "self",
-                    "Post")
-                }
             };
         }
 
@@ -83,15 +65,6 @@ namespace FireDetection.Backend.API.Controllers.Future
             {
                 Message = "Update ManualPlan Successfully",
                 Data = response,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Update),"ManualPlanController",
-                        Id,
-                        Request.Scheme))!,
-                    "self",
-                    "Post")
-                }
             };
         }
     }

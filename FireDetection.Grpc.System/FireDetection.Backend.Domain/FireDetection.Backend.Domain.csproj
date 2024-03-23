@@ -13,6 +13,7 @@
   </ItemGroup>
 
 	 <ItemGroup>
+		 <PackageReference Include="FFMpegSharp" Version="2.1.0" />
 		 <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
 		 <PackageReference Include="Firebase.Auth" Version="1.0.0" />
 		 <PackageReference Include="FirebaseAdmin" Version="2.3.0" />
@@ -26,6 +27,7 @@
 			 <PrivateAssets>all</PrivateAssets>
 			 <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		 </PackageReference>
+		 <PackageReference Include="NReco.VideoConverter" Version="1.2.1" />
 		 <PackageReference Include="Quartz" Version="3.8.1" />
 		 <PackageReference Include="Quartz.Extensions.Hosting" Version="3.8.1" />
 		 <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.11">
@@ -41,6 +43,82 @@
   <ItemGroup>
     <Folder Include="Helpers\Attribute\" />
     <Folder Include="Migrations\" />
+  </ItemGroup>
+	 
+  <ItemGroup>
+    <Content Remove="C:\Users\manda\.nuget\packages\accord\3.8.0\build\Accord.dll.config" />
+  </ItemGroup>
+	 
+  <ItemGroup>
+    <None Remove="C:\Users\manda\.nuget\packages\accord.video.ffmpeg\3.8.0\build\avcodec-57.dll" />
+  </ItemGroup>
+	 
+  <ItemGroup>
+    <None Remove="C:\Users\manda\.nuget\packages\accord.video.ffmpeg\3.8.0\build\avdevice-57.dll" />
+  </ItemGroup>
+	 
+  <ItemGroup>
+    <None Remove="C:\Users\manda\.nuget\packages\accord.video.ffmpeg\3.8.0\build\avfilter-6.dll" />
+  </ItemGroup>
+	 
+  <ItemGroup>
+    <None Remove="C:\Users\manda\.nuget\packages\accord.video.ffmpeg\3.8.0\build\avformat-57.dll" />
+  </ItemGroup>
+	 
+  <ItemGroup>
+    <None Remove="C:\Users\manda\.nuget\packages\accord.video.ffmpeg\3.8.0\build\avutil-55.dll" />
+  </ItemGroup>
+	 
+  <ItemGroup>
+    <None Remove="C:\Users\manda\.nuget\packages\accord.video.ffmpeg\3.8.0\build\postproc-54.dll" />
+  </ItemGroup>
+	 
+  <ItemGroup>
+    <None Remove="C:\Users\manda\.nuget\packages\accord.video.ffmpeg\3.8.0\build\swresample-2.dll" />
+  </ItemGroup>
+	 
+  <ItemGroup>
+    <None Remove="C:\Users\manda\.nuget\packages\accord.video.ffmpeg\3.8.0\build\swscale-4.dll" />
+  </ItemGroup>
+	 
+  <ItemGroup>
+    <Content Remove="C:\Users\manda\.nuget\packages\accord\3.8.0\build\Accord.dll.config" />
+  </ItemGroup>
+	 
+  <ItemGroup>
+    <None Remove="C:\Users\manda\.nuget\packages\accord.video.ffmpeg\3.8.0\build\avcodec-57.dll" />
+  </ItemGroup>
+	 
+  <ItemGroup>
+    <None Remove="C:\Users\manda\.nuget\packages\accord.video.ffmpeg\3.8.0\build\avdevice-57.dll" />
+  </ItemGroup>
+	 
+  <ItemGroup>
+    <None Remove="C:\Users\manda\.nuget\packages\accord.video.ffmpeg\3.8.0\build\avfilter-6.dll" />
+  </ItemGroup>
+	 
+  <ItemGroup>
+    <None Remove="C:\Users\manda\.nuget\packages\accord.video.ffmpeg\3.8.0\build\avformat-57.dll" />
+  </ItemGroup>
+	 
+  <ItemGroup>
+    <None Remove="C:\Users\manda\.nuget\packages\accord.video.ffmpeg\3.8.0\build\avutil-55.dll" />
+  </ItemGroup>
+	 
+  <ItemGroup>
+    <None Remove="C:\Users\manda\.nuget\packages\accord.video.ffmpeg\3.8.0\build\postproc-54.dll" />
+  </ItemGroup>
+	 
+  <ItemGroup>
+    <None Remove="C:\Users\manda\.nuget\packages\accord.video.ffmpeg\3.8.0\build\swresample-2.dll" />
+  </ItemGroup>
+	 
+  <ItemGroup>
+    <None Remove="C:\Users\manda\.nuget\packages\accord.video.ffmpeg\3.8.0\build\swscale-4.dll" />
+  </ItemGroup>
+	 
+  <ItemGroup>
+    <None Remove="C:\Users\manda\.nuget\packages\accord.video.ffmpeg\3.8.0\build\swscale-4.dll" />
   </ItemGroup>
 
 </Project>

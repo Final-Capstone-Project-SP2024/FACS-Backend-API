@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -14,8 +15,9 @@ namespace FireDetection.Backend.Domain.DTOs.Request
         public  decimal PredictedPercent { get; set; } = 0;
 
 
-        public string PictureUrl { get; set; } = null!;
+        public IFormFile PictureUrl { get; set; } = null!;
 
-        public string VideoUrl { get; set; } = null!;
+
+        public IFormFile VideoUrl { get; set; } = null!;
     }
 }

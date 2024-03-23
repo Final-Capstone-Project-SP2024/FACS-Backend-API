@@ -27,4 +27,8 @@
     <ProjectReference Include="..\FireDetection.Grpc.System\FireDetection.Backend.API\FireDetection.Backend.API.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
 </Project>
