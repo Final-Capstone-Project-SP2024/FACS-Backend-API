@@ -15,12 +15,10 @@ namespace FireDetection.Backend.API.Controllers
     public class LocationController : BaseController
     {
         private readonly ILocationService _context;
-        private readonly LinkGenerator _linkGenerator;
 
-        public LocationController(ILocationService context, LinkGenerator linkGenerator)
+        public LocationController(ILocationService context)
         {
             _context = context;
-            _linkGenerator = linkGenerator;
         }
 
         [Authorize(Roles = UserRole.Manager)]
@@ -82,11 +80,11 @@ namespace FireDetection.Backend.API.Controllers
 
         [Authorize(Roles = UserRole.Manager)]
         [HttpGet]
-        public async Task<ActionResult<RestDTO<IQueryable<Location>>>> Get()
+        public async Task<ActionResult<RestDTO<IQueryable<LocationGeneralResponse>>>> Get()
         {
-            IQueryable<Location> location = await _context.GetLocation();
+            IQueryable<LocationGeneralResponse> location = await _context.GetLocation();
 
-            return new RestDTO<IQueryable<Location>>()
+            return new RestDTO<IQueryable<LocationGeneralResponse>>()
             {
                 Message = "Get Location Successfully",
                 Data = location,

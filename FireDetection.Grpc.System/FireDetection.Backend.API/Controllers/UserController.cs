@@ -40,9 +40,6 @@ namespace FireDetection.Backend.API.Controllers
             {
                 Message = "Create User Successfully",
                 Data = response,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(GetAllUsers),"/UserController","",Request.Scheme))!,"self","Get")
-                }
             };
         }
 

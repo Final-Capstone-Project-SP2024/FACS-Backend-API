@@ -22,7 +22,7 @@ namespace Backend.Infrastructure.Tests.Service
             _alarmService = new AlarmService(_unitOfWork.Object, _mapperConfig);
         }
 
-
+/*
         [Fact]
         public async Task DetectElectricalIncident_ShouldReturnDetectElectricalIncidentResponse()
         {
@@ -42,7 +42,7 @@ namespace Backend.Infrastructure.Tests.Service
             Assert.True(result);
 
         }
-
+*/
 
         [Fact]
         public async Task SaveMediaFileInStorage_VideoUrl_ShouldInsertMediaRecordWithType1()

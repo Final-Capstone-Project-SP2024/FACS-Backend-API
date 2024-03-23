@@ -25,14 +25,16 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         private readonly IMapper _mapper;
         private readonly IMemoryCacheService _memoryCacheService;
         private readonly INotificationLogService _log;
+        private readonly IClaimsService _claimService;
 
-        public RecordService(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCacheService memoryCacheService, ITimerService timerService, INotificationLogService log)
+        public RecordService(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCacheService memoryCacheService, ITimerService timerService, INotificationLogService log, IClaimsService claimService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _memoryCacheService = memoryCacheService;
             _timerService = timerService;
             _log = log;
+            _claimService = claimService;   
         }
         public async Task<bool> ActionInAlarm(Guid recordID, AddRecordActionRequest request)
         {
@@ -42,7 +44,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
             // if (!await checkActionInRecord(recordID)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Have already this location in system");
 
-            if(request.ActionId < 6)
+            if (request.ActionId < 6)
             {
                 //todo save data int variale sutiable with request.actionID
                 await _memoryCacheService.Create(recordID, setKey(request.ActionId));
@@ -50,7 +52,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 await _memoryCacheService.Create(recordID, CacheType.IsFinish);
                 _timerService.SpamNotification(recordID, request.ActionId);
             }
-        
+
 
             //? cancel check
             await _memoryCacheService.UnCheck(recordID, CacheType.Action);
@@ -66,7 +68,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 _log.SaveNotificationVotingRequire(recordID, await _memoryCacheService.GetResult(recordID, CacheType.VotingValue));
                 foreach (var item in output)
                 {
-                     _log.SaveNotificationActionRequire(recordID, await _memoryCacheService.GetResult(recordID, setKey(item)),setKey(item));
+                    _log.SaveNotificationActionRequire(recordID, await _memoryCacheService.GetResult(recordID, setKey(item)), setKey(item));
                     Console.WriteLine(await _memoryCacheService.GetResult(recordID, setKey(item)));
                 }
                 await _unitOfWork.SaveChangeAsync();
@@ -97,7 +99,11 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<bool> VoteAlarmLevel(Guid recordID, RateAlarmRequest request)
         {
-
+            var userId =  _claimService.GetCurrentUserId;
+            if(_unitOfWork.AlarmRateRepository.Where(x => x.RecordID == recordID && x.UserID == userId) is not null)
+            {
+                throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "You have voted before");
+            }
             //Create Voting Point for RecordId 
             if (_unitOfWork.AlarmRepository.Where(x => x.RecordID == recordID).FirstOrDefault() is null)
             {
@@ -134,9 +140,10 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             Console.WriteLine(await _memoryCacheService.GetResult(recordID, CacheType.FireNotify));
             //todo save log the fireNotify Task
             await _log.SaveNotificationFireNotifyLog(recordID, await _memoryCacheService.GetResult(recordID, CacheType.FireNotify));
-
+            request.LevelRating = request.LevelRating == 0 ? 6 : request.LevelRating;
             AlarmRate alarmRate = _mapper.Map<AlarmRate>(request);
             alarmRate.RecordID = recordID;
+            alarmRate.UserID = userId;
             _unitOfWork.AlarmRateRepository.InsertAsync(alarmRate);
             return await _unitOfWork.SaveChangeAsync() > 0;
 
@@ -223,9 +230,9 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                     .ThenInclude(camera => camera.Location);
 
             var records = await query.ToListAsync();
-            
+
             query = query.Where(x => x.RecordTime.Date >= req.FromDate.Date && x.RecordTime.Date <= req.ToDate.Date);
-            
+
             var entityProjected = LinqUtils.DynamicFilter<Record>(query, entity).ProjectTo<RecordResponse>(_mapper.ConfigurationProvider);
 
             #region filter query

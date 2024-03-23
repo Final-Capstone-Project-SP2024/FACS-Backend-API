@@ -38,15 +38,6 @@ namespace FireDetection.Backend.API.Controllers
             {
                 Message = "Get Notifications Successfully",
                 Data = await NotificationHandler.GetAll(),
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(GetAll),"/NotificationController",
-                        "",
-                        Request.Scheme))!,
-                    "self",
-                    "Get")
-                }
             };
         }
 
@@ -58,15 +49,6 @@ namespace FireDetection.Backend.API.Controllers
             {
                 Message = "Get Notifications Successfully",
                 Data = await NotificationHandler.Get(id),
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(GetDetail),"/NotificationController",
-                        id,
-                        Request.Scheme))!,
-                    "self",
-                    "Get")
-                }
             };
         }
 

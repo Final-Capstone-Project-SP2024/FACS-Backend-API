@@ -38,10 +38,6 @@ namespace FireDetection.Backend.API.Controllers
             {
                 Message = "Get All Camera  Successfully",
                 Data = response,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(Delete),"/CameraController",Request.Scheme))!,"delete_camera","Delete"),
-                    new LinkDTO(Url.Action(_linkGenerator.GetUriByAction(HttpContext,nameof(Update),"/CameraController",Request.Scheme))!,"delete_camera","Delete")
-                }
             };
         }
 
@@ -94,7 +90,7 @@ namespace FireDetection.Backend.API.Controllers
 
         [ApiKey]
         [HttpPost("{id}/detect")]
-        public async Task<ActionResult<RestDTO<DetectResponse>>> DetectFire(Guid id,[FromForm] TakeAlarmRequest request)
+        public async Task<ActionResult<RestDTO<DetectResponse>>> DetectFire(Guid id, TakeAlarmRequest request)
         {
             if (!ModelState.IsValid)
             {

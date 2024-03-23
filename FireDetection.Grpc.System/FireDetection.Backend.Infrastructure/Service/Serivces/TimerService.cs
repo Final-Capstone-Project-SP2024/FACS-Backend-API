@@ -25,7 +25,8 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         private readonly IMemoryCacheService _memorycachedservice;
         private readonly IAPICallService _apiCall;
-        public TimerService(IMemoryCacheService memoryCacheService,IAPICallService aPICall)
+        private CancellationTokenSource _cancellationTokenSource;
+        public TimerService(IMemoryCacheService memoryCacheService, IAPICallService aPICall)
         {
             _memorycachedservice = memoryCacheService;
             _apiCall = aPICall;
@@ -59,13 +60,13 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             {
                 Console.WriteLine("========End Voting Phase=====");
                 await Task.Delay(5000);
-                if ( await _memorycachedservice.CheckEnoughVoting(recordId) >= 5)
+                if (await _memorycachedservice.CheckEnoughVoting(recordId) >= 5)
                 {
-                    check = false; 
-                    
+                    check = false;
+
                 }
 
-                if((DateTime.Now - startTime).TotalMinutes >= 2)
+                if ((DateTime.Now - startTime).TotalMinutes >= 2)
                 {
                     check = false;
                 }
@@ -75,25 +76,27 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             {
                 await _apiCall.AutoCompleteVoting(recordId);
             }
-           
+
         }
         protected async Task CheckAndSendNotification(Guid recordID, string CameraDestination, string LocationName)
         {
             int countAlarmTime = 0;
             bool check = true;
-            while (check)
+            var startTime = DateTime.UtcNow;
+
+            while (check && (DateTime.UtcNow - startTime).TotalMinutes <= 1)
             {
                 try
                 {
                     if (!await _memorycachedservice.CheckRecordKeyIsVote(recordID))
                     {
-                        //? CountVoting 
+                        // Perform actions if the record key is not voted
                         NotficationDetailResponse data = await NotificationHandler.Get(11);
 
-                        await CloudMessagingHandlers.CloudMessaging(
+                    /*    await CloudMessagingHandlers.CloudMessaging(
                             HandleTextUtil.HandleTitle(data.Title, CameraDestination),
-                            HandleTextUtil.HandleContext(
-                                data.Context, LocationName, CameraDestination));
+                            HandleTextUtil.HandleContext(data.Context, LocationName, CameraDestination));*/
+
                         await _memorycachedservice.IncreaseQuantity(recordID, CacheType.FireNotify);
 
                         Console.WriteLine(countAlarmTime);
@@ -101,8 +104,11 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                     }
                     else
                     {
+                        await Task.Delay(5000); // Delay for 5 seconds before checking again
+                        Console.WriteLine("End Task");
+                        // If record key is voted, set check to false and exit the loop
                         check = false;
-                      //  await _memorycachedservice.SettingCount(recordID, CacheType.FireNotify, countAlarmTime);
+                        //  await _memorycachedservice.SettingCount(recordID, CacheType.FireNotify, countAlarmTime);
                     }
                 }
                 catch (Exception ex)
@@ -111,17 +117,11 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                     Console.WriteLine($"Error in phase 1: {ex.Message}");
                 }
 
-                await Task.Delay(5000);
-                /*   if (!check)
-                   {
-                       //await Task.Delay(5000);
-                       //record.UserRatingPercent = await _memorycachedservice.VotingResult();
-                       //_unitOfWork.RecordRepository.Update(record);
-                       //await _unitOfWork.SaveChangeAsync();
-                   }*/
-
-                Console.WriteLine("End Task");
+             
             }
+            await Task.Delay(5000); // Delay for 5 seconds before checking again
+            Console.WriteLine("End Task");
+
         }
 
         protected async Task CheckAndAutoAction(Guid recordId)
@@ -165,8 +165,8 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
             int timeAwait = AwaitTime(alarmLevel);
             bool check = true;
-           // NotficationDetailResponse data = await NotificationHandler.Get(alarmLevel);
-           
+            // NotficationDetailResponse data = await NotificationHandler.Get(alarmLevel);
+
             while (check)
             {
                 try

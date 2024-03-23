@@ -50,9 +50,11 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             return true;
         }
 
-        public async Task<IQueryable<Location>> GetLocation()
+        public async Task<IQueryable<LocationGeneralResponse>> GetLocation()
         {
-            return await _context.LocationRepository.GetAll();
+            var  data  = await _context.LocationRepository.GetAll();
+            var mapper = data.Select(x => _mapper.Map<LocationGeneralResponse>(x));
+            return mapper.AsQueryable();
         }
 
         public async Task<LocationInformationResponse> UpdateLocation(Guid locationId, AddLocationRequest request)
