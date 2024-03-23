@@ -63,6 +63,42 @@ namespace FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler
             else throw new Exception("File is not existed!");
         }
 
+        public static async Task<FireBaseFile> UploadFileStream(this Stream fileUpload, string folderName, string fileName)
+        {
+            if (fileUpload.Length > 0)
+            {
+                var auth = new FirebaseAuthProvider(new FirebaseConfig(API_KEY));
+                var a = await auth.SignInWithEmailAndPasswordAsync(AuthEmail, AuthPassword);
+                var cancellation = new FirebaseStorage(
+                    Bucket,
+                    new FirebaseStorageOptions
+                    {
+                        AuthTokenAsyncFactory = () => Task.FromResult(a.FirebaseToken),
+                        ThrowOnCancel = true
+
+                    }
+                    ).Child(folderName).Child(fileName)
+                    .PutAsync(fileUpload, CancellationToken.None);
+                try
+                {
+                    var result = await cancellation;
+
+                    return new FireBaseFile
+                    {
+                        FileName = fileName,
+                        URL = result
+                    };
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+
+                }
+
+            }
+            else throw new Exception("File is not existed!");
+        }
+
 
 
 
@@ -79,5 +115,8 @@ namespace FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler
             return true;
 
         }
+
+
+        
     }
 }

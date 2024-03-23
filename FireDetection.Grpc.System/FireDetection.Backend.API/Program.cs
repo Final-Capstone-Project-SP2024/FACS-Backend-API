@@ -138,7 +138,7 @@ else
 app.Use((context, next) =>
 {
     context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-    context.Response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+    context.Response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH");
     context.Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type, Authorization");
     return next.Invoke();
 });

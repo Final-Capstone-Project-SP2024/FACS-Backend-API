@@ -47,11 +47,12 @@ namespace FireDetection.Backend.API.Mapper
                 .ForMember(x => x.RecordTypeName, src => src.MapFrom(x => x.Name))
                 .ReverseMap();
 
-            CreateMap<Camera, AddCameraRequest>()
-                .ForMember(x => x.Destination, src => src.MapFrom(x => x.CameraDestination))
+            CreateMap<AddCameraRequest, Camera>()
+                .ForMember(x => x.CameraDestination, src => src.MapFrom(x => x.Destination))
                 .ForMember(x => x.CameraName, src => src.MapFrom(x => x.CameraName))
                 .ForMember(x => x.Status, src => src.MapFrom(x => x.Status))
-                .ForMember(x => x.LocationId, src => src.MapFrom(x => x.LocationID))
+                .ForMember(x => x.LocationID, src => src.MapFrom(x => x.LocationId))
+                .ForMember(x => x.CreatedDate, src => src.MapFrom(x => DateTime.UtcNow))
                 .ReverseMap();
 
             CreateMap<CameraInformationResponse, Camera>()
@@ -102,7 +103,6 @@ namespace FireDetection.Backend.API.Mapper
                  .ForMember(x => x.Time, src => src.MapFrom(x => DateTime.UtcNow))
                  .ForMember(x => x.CreatedDate, src => src.MapFrom(x => DateTime.UtcNow))
                  .ForMember(x => x.LevelID, src => src.MapFrom(x => x.LevelRating))
-                 .ForMember(x => x.UserID, src => src.MapFrom(x => x.UserId))
                  .ReverseMap();
 
             CreateMap<AddRecordActionRequest, RecordProcess>()
@@ -250,6 +250,13 @@ namespace FireDetection.Backend.API.Mapper
                  .ForMember(x => x.isPaid, src => src.MapFrom(x => x.isPaid))
                  .ForMember(x => x.CreatedDate, src => src.MapFrom(x => x.CreatedDate))
                 .ReverseMap();
+
+
+            CreateMap<LocationGeneralResponse, Location>()
+                   .ForMember(x => x.Id, src => src.MapFrom(x => x.LocationId))
+                   .ForMember(x => x.LocationName, src => src.MapFrom(x => x.LocationName))
+                   .ReverseMap();
+
         }
     }
 }

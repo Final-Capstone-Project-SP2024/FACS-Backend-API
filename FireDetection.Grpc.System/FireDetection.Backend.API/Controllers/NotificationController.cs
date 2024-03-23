@@ -3,6 +3,7 @@ using FireDetection.Backend.Domain.DTOs.Core;
 using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.DTOs.Response;
 using FireDetection.Backend.Domain.DTOs.State;
+using FireDetection.Backend.Domain.Helpers.Media;
 using FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,7 @@ namespace FireDetection.Backend.API.Controllers
 
         }
 
-        [Authorize(Roles = UserRole.Manager )]
+        [Authorize(Roles = UserRole.Manager)]
         [HttpGet]
         public async Task<ActionResult<RestDTO<NotificationListResponse>>> GetAll()
         {
@@ -37,15 +38,6 @@ namespace FireDetection.Backend.API.Controllers
             {
                 Message = "Get Notifications Successfully",
                 Data = await NotificationHandler.GetAll(),
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(GetAll),"/NotificationController",
-                        "",
-                        Request.Scheme))!,
-                    "self",
-                    "Get")
-                }
             };
         }
 
@@ -57,16 +49,16 @@ namespace FireDetection.Backend.API.Controllers
             {
                 Message = "Get Notifications Successfully",
                 Data = await NotificationHandler.Get(id),
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(GetDetail),"/NotificationController",
-                        id,
-                        Request.Scheme))!,
-                    "self",
-                    "Get")
-                }
             };
+        }
+
+
+        [HttpPost("/upload")]
+        public async Task<IActionResult> TestUpload(IFormFile fileUpload)
+        {
+              //await StorageHandlers.UploadFileAsync(fileUpload, "video");
+           string result = VideoConverterHandler.SaveAviFile(fileUpload);
+            return Ok($"Upload successfull ");
         }
     }
 }

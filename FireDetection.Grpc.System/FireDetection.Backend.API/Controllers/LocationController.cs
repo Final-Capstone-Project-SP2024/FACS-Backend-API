@@ -15,12 +15,10 @@ namespace FireDetection.Backend.API.Controllers
     public class LocationController : BaseController
     {
         private readonly ILocationService _context;
-        private readonly LinkGenerator _linkGenerator;
 
-        public LocationController(ILocationService context, LinkGenerator linkGenerator)
+        public LocationController(ILocationService context)
         {
             _context = context;
-            _linkGenerator = linkGenerator;
         }
 
         [Authorize(Roles = UserRole.Manager)]
@@ -40,15 +38,6 @@ namespace FireDetection.Backend.API.Controllers
             {
                 Message = "Add Location Successfully",
                 Data = response,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Add),"/LocationController",
-                        request,
-                        Request.Scheme))!,
-                    "self",
-                    "Post")
-                }
             };
         }
 
@@ -61,15 +50,6 @@ namespace FireDetection.Backend.API.Controllers
             {
                 Message = "View Location Detail Successfully",
                 Data = response,
-                Links = new List<LinkDTO> {
-                  new LinkDTO(
-                    Url.Action(
-                     _linkGenerator.GetUriByAction(HttpContext,nameof(GetById),"/LocationController",
-                      id,
-                      Request.Scheme))!,
-                "self",
-                 "Post")
-    }
             };
         }
 
@@ -83,15 +63,6 @@ namespace FireDetection.Backend.API.Controllers
             {
                 Message = "Vote Record Successfully",
                 Data = response,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Update),"/LocationController",
-                        request,
-                        Request.Scheme))!,
-                    "self",
-                    "Patch")
-                }
             };
         }
 
@@ -104,33 +75,19 @@ namespace FireDetection.Backend.API.Controllers
             {
                 Message = "Delete Location Successfully",
                 Data = null,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Delete),"LocationController",Request.Scheme))!,
-                    "self",
-                    "Delete")
-                }
             };
         }
 
         [Authorize(Roles = UserRole.Manager)]
-        [HttpGet]   
-        public async Task<ActionResult<RestDTO<IQueryable<Location>>>> Get()
+        [HttpGet]
+        public async Task<ActionResult<RestDTO<IQueryable<LocationGeneralResponse>>>> Get()
         {
-            IQueryable<Location> location = await _context.GetLocation();
+            IQueryable<LocationGeneralResponse> location = await _context.GetLocation();
 
-            return new RestDTO<IQueryable<Location>>()
+            return new RestDTO<IQueryable<LocationGeneralResponse>>()
             {
                 Message = "Get Location Successfully",
                 Data = location,
-                Links = new List<LinkDTO> {
-                    new LinkDTO(
-                    Url.Action(
-                        _linkGenerator.GetUriByAction(HttpContext,nameof(Get),"LocationController",Request.Scheme))!,
-                    "self",
-                    "Get")
-                }
             };
         }
 
@@ -143,15 +100,6 @@ namespace FireDetection.Backend.API.Controllers
             {
                 Message = "Add Staff Successfully",
                 Data = result,
-                Links = new List<LinkDTO> {
-                  new LinkDTO(
-                    Url.Action(
-                     _linkGenerator.GetUriByAction(HttpContext,nameof(AddStaff),"LocationController",
-                      request,
-                      Request.Scheme))!,
-                "self",
-                 "Post")
-                }
             };
         }
     }

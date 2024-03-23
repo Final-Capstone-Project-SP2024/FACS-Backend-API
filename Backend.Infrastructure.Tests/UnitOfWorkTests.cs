@@ -14,13 +14,23 @@ namespace Backend.Infrastructure.Tests
         public UnitOfWorkTests()
         {
             _unitOfWork = new UnitOfWork(
-                _dbContext,_userRepositoryTest.Object,
-                _locationRepositoryTest.Object,_cameraRepositoryTest.Object,
-                _mediaRecordRepositoryTest.Object,_recordRepositoryTest.Object,
+                _dbContext,
+                _userRepositoryTest.Object,
+                _locationRepositoryTest.Object
+                ,_cameraRepositoryTest.Object,
+                _mediaRecordRepositoryTest.Object,
+                _recordRepositoryTest.Object,
                 _controlCameraRepositoryTest.Object,
                 _alarmRepositoryTest.Object,
                 _recordProcessRepositoryTest.Object,
-                _alarmrateRepositoryTest.Object,_notificationLogRepositoryTest.Object);
+                _alarmrateRepositoryTest.Object,
+                _notificationLogRepositoryTest.Object,
+                _feedbackRepositoryTest.Object,
+                _bugsReportRepositoryTest.Object,
+                _contractRepositoryTest.Object,
+                _planRepositoryTest.Object,
+                _transactionRepositoryTest.Object
+                );
         }
     }
 }

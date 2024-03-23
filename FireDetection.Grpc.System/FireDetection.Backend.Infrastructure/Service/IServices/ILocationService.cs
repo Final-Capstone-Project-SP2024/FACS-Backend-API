@@ -12,16 +12,10 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
     public  interface ILocationService
     {
         Task<LocationInformationResponse> AddNewLocation(AddLocationRequest request);
-
         Task<LocationInformationResponse> UpdateLocation(Guid locationId, AddLocationRequest request);
-
         Task<bool> DeleteLocation(Guid id);
-
-
-        Task<IQueryable<Location>> GetLocation();
-
+        public  Task<IQueryable<LocationGeneralResponse>> GetLocation();
         Task<LocationInformationResponse> AddStaffToLocation(Guid locationId, AddStaffRequest request);
-
         Task<LocationInformationResponse> GetById(Guid locationId);
 
          

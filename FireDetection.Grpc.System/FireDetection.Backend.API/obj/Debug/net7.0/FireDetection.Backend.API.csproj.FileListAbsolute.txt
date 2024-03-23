@@ -78,6 +78,7 @@ C:\Code\code\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.AP
 C:\Code\code\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Newtonsoft.Json.dll
 C:\Code\code\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Npgsql.dll
 C:\Code\code\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
+C:\Code\code\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\NReco.VideoConverter.dll
 C:\Code\code\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\NTQ.Sdk.Core.dll
 C:\Code\code\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Quartz.dll
 C:\Code\code\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\Quartz.Extensions.DependencyInjection.dll
@@ -135,3 +136,4 @@ C:\Code\code\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.AP
 C:\Code\code\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\obj\Debug\net7.0\FireDetection.Backend.API.pdb
 C:\Code\code\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\obj\Debug\net7.0\FireDetection.Backend.API.genruntimeconfig.cache
 C:\Code\code\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\obj\Debug\net7.0\ref\FireDetection.Backend.API.dll
+C:\Code\code\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.API\bin\Debug\net7.0\FFMpegSharp.dll

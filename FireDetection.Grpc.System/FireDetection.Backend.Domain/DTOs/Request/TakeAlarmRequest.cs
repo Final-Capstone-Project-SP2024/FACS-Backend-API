@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace FireDetection.Backend.Domain.DTOs.Request
 
 
         public string PictureUrl { get; set; } = null!;
+
 
         public string VideoUrl { get; set; } = null!;
     }

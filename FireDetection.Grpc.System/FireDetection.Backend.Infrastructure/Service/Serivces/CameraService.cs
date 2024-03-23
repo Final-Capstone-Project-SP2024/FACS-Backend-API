@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -50,11 +51,18 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<CameraInformationResponse> Add(AddCameraRequest request)
         {
-            if(  await _unitOfWork.LocationRepository.GetById(request.LocationId) is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "LocationId not in the system");
+           
+            request.CameraName = await GenerateCameraName();
+            if (await _unitOfWork.LocationRepository.GetById(request.LocationId) is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "LocationId not in the system");
+
             if (!await CheckDuplicateDestination(request.Destination)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Destination have already add in system");
 
             if (!await CheckDuplicateCameraName(request.CameraName)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Camera Name have already add in system");
+
+
+
             _unitOfWork.CameraRepository.InsertAsync(_mapper.Map<Camera>(request));
+            
             await _unitOfWork.SaveChangeAsync();
 
             return _mapper.Map<CameraInformationResponse>(await GetCameraByName(request.Destination));
@@ -79,11 +87,26 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             return _mapper.Map<CameraInformationResponse>(camera);
 
         }
+        internal async Task<string> GenerateCameraName()
+        {
+            var cameraNameQuery = _unitOfWork.CameraRepository.GetAll();
+            if (cameraNameQuery.Result.Count() == 0)
+            {
+                return "camera_001";
+            }
+            else
+            {
+                int number = int.Parse(cameraNameQuery.Result.OrderByDescending(x => x.CreatedDate).FirstOrDefault().CameraName.Substring(7));
+                number++;
+                return $"camera_{number:D3}";
+
+            }
+        }
 
         public async Task<CameraInformationResponse> Update(Guid id, AddCameraRequest request)
         {
             Camera camera = await _unitOfWork.CameraRepository.GetById(id);
-            if(camera is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "CameraId not in system");
+            if (camera is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "CameraId not in system");
 
             if (!await CheckDuplicateDestination(request.Destination)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Destination have already add in system");
 
@@ -118,13 +141,13 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         internal async Task<bool> CheckCameraIdInSystem(Guid cameraId)
         {
             var camera = await _unitOfWork.CameraRepository.GetById(cameraId);
-            if(camera is null)
+            if (camera is null)
             {
                 return false;
             }
             return true;
         }
-             
+
 
 
         private async Task<bool> CheckDuplicateCameraName(string CameraName)
@@ -139,33 +162,35 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         }
         public async Task<DetectResponse> DetectFire(Guid id, TakeAlarmRequest request)
         {
-            
+
             //TODO: Check camera in system 
             Camera camera = await _unitOfWork.CameraRepository.GetById(id);
             string locationName = _unitOfWork.LocationRepository.GetById(camera.LocationID).Result.LocationName;
-           
+
             if (camera is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "CameraId is invalid");
+
+
 
             //TODO: save record to database
             Record record = _mapper.Map<Record>(request);
             record.CameraID = id;
             record.Id = Guid.NewGuid();
-            _unitOfWork.RecordRepository.InsertAsync(record);
-            await _unitOfWork.SaveChangeAsync();
+
 
             //? add tp check 
             await _memoryCacheService.Create(record.Id, CacheType.FireNotify);
             await _memoryCacheService.Create(record.Id, CacheType.IsVoting);
-
-            //todo  create checking user do the next task ( vote task)
+            //todo  create checking user do the next task ( vote task) and sending notification 
             _timerService.CheckIsVoting(record.Id, camera.CameraDestination, locationName);
 
+            _unitOfWork.RecordRepository.InsertAsync(record);
+            await _unitOfWork.SaveChangeAsync();
             //! get the people who have responsibility in this camreId,
             // List<Guid> userIds = await _unitOfWork.CameraRepository.GetUsersByCameraId(id);
 
             // 4. save image and video to database 
-            await _mediaRecordService.AddImage(request.PictureUrl, record.Id);
-            await _mediaRecordService.Addvideo(request.VideoUrl, record.Id);
+            await _mediaRecordService.AddImage(request.PictureUrl.ToString(), record.Id);
+            await _mediaRecordService.Addvideo(request.VideoUrl.ToString(), record.Id);
 
 
             return _mapper.Map<DetectResponse>(record);
