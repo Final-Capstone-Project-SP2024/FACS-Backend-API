@@ -41,7 +41,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = UserRole.Manager + "" + UserRole.User)]
+       // [Authorize(Roles = UserRole.Manager + " " + UserRole.User)]
         [HttpGet("{id}")]
         public async Task<ActionResult<RestDTO<LocationInformationResponse>>> GetById(Guid id)
         {
