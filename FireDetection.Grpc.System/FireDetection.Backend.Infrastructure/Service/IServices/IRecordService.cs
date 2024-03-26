@@ -22,6 +22,7 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
 
         Task EndVotePhase(Guid recordID);
 
+        public Task<IEnumerable<NotificationAlarmResponse>> GetNotificationAlarm();
 
 
     }

@@ -49,7 +49,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = UserRole.Manager + "" + UserRole.User)]
+      //  [Authorize(Roles = UserRole.Manager + "" + UserRole.User)]
         [HttpGet]
         public async Task<ActionResult<RestDTO<PagedResult<RecordResponse>>>> Get([FromQuery] PagingRequest pagingRequest, [FromQuery] RecordRequest recordRequest)
         {

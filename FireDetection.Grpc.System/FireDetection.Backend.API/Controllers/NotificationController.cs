@@ -5,6 +5,7 @@ using FireDetection.Backend.Domain.DTOs.Response;
 using FireDetection.Backend.Domain.DTOs.State;
 using FireDetection.Backend.Domain.Helpers.Media;
 using FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler;
+using FireDetection.Backend.Infrastructure.Service.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static Google.Apis.Requests.BatchRequest;
@@ -16,9 +17,11 @@ namespace FireDetection.Backend.API.Controllers
     public class NotificationController : BaseController
     {
         private readonly LinkGenerator _linkGenerator;
-        public NotificationController(LinkGenerator linkGenerator)
+        private readonly IRecordService _recordService;
+        public NotificationController(LinkGenerator linkGenerator, IRecordService recordService)
         {
             _linkGenerator = linkGenerator;
+            _recordService = recordService;
         }
 
         [Authorize(Roles = UserRole.Manager)]
@@ -56,9 +59,32 @@ namespace FireDetection.Backend.API.Controllers
         [HttpPost("/upload")]
         public async Task<IActionResult> TestUpload(IFormFile fileUpload)
         {
-              //await StorageHandlers.UploadFileAsync(fileUpload, "video");
-           string result = VideoConverterHandler.SaveAviFile(fileUpload);
+            //await StorageHandlers.UploadFileAsync(fileUpload, "video");
+            string result = VideoConverterHandler.SaveAviFile(fileUpload);
             return Ok($"Upload successfull ");
+        }
+
+        [HttpGet("/firealarms")]
+        public async Task<ActionResult<RestDTO<IEnumerable<NotificationAlarmResponse>>>> GetNotify()
+        {
+            var response = await _recordService.GetNotificationAlarm();
+            if (response != null)
+            {
+                return new RestDTO<IEnumerable<NotificationAlarmResponse>>()
+                {
+                    Message = "Get Notifications Successfully",
+                    Data = await _recordService.GetNotificationAlarm()
+                };
+            }else
+            {
+                return new RestDTO<IEnumerable<NotificationAlarmResponse>>()
+                {
+                    Message = "Don't have any Alarm",
+                    Data = null
+                };
+            }
+
+
         }
     }
 }

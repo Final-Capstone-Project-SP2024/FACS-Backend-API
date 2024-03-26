@@ -13,5 +13,6 @@ namespace FireDetection.Backend.Infrastructure.Repository.IRepositories
         public IEnumerable<RecordResponse> Get();
 
         public RecordDetailResponse RecordDetailResponse(Guid recordId);
+        public Task<IEnumerable<NotificationAlarmResponse>> NotificationAlarmResponse();
     }
 }

@@ -12,6 +12,7 @@ namespace FireDetection.Backend.Domain.DTOs.Response
     {
         //public Guid CameraId { get; set; }
         public Guid Id { get; set; }
+        public string Status { get; set; }
         public DateTime RecordTime { get; set; }
         public decimal UserRatingPercent { get; set; }
         public decimal PredictedPercent { get; set; }

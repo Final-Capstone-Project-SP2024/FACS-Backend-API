@@ -288,6 +288,12 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             }
         }
 
+        public async Task<IEnumerable<NotificationAlarmResponse>> GetNotificationAlarm()
+        {
+            var data =  await _unitOfWork.RecordRepository.NotificationAlarmResponse();
+            return data;
+        }
+
 
         //  private async Task SaveVoteAndAction(Guid recordId, Type )
     }
