@@ -73,7 +73,9 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                     Console.WriteLine(await _memoryCacheService.GetResult(recordID, setKey(item)));
                 }
                 await _unitOfWork.SaveChangeAsync();
+             
                 await updateRecordToEnd(recordID);
+                return true;
             }
             if (request.ActionId == 7) await updateRecordToEnd(recordID);
 
