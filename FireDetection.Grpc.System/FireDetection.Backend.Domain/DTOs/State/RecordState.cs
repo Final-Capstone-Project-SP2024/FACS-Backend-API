@@ -14,6 +14,8 @@ namespace FireDetection.Backend.Domain.DTOs.State
         public const string InVote = "InVote";
 
         public const string EndVote = "EndVote";
+
+        public const string InAction = "InAction";
         
         public const string InFinish = "InFinish";
 

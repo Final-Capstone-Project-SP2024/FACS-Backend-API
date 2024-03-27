@@ -35,7 +35,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             _memoryCacheService = memoryCacheService;
             _timerService = timerService;
             _log = log;
-            _claimService = claimService;   
+            _claimService = claimService;
         }
         public async Task<bool> ActionInAlarm(Guid recordID, AddRecordActionRequest request)
         {
@@ -44,7 +44,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             if (!await CheckActionInSystem(recordID, request.ActionId)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Can not action smaller than the action before");
 
             // if (!await checkActionInRecord(recordID)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Have already this location in system");
-            
+
             if (request.ActionId < 6)
             {
                 //todo save data int variale sutiable with request.actionID
@@ -77,6 +77,9 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             }
             if (request.ActionId == 7) await updateRecordToEnd(recordID);
 
+            await ChangeInActionRecordState(recordID);
+
+
             RecordProcess recordProcess = _mapper.Map<RecordProcess>(request);
             recordProcess.RecordID = recordID;
             _unitOfWork.RecordProcessRepository.InsertAsync(recordProcess);
@@ -86,6 +89,16 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             // updateRecordToEnd(recordID, 1);
 
             return true;
+        }
+
+        internal async Task ChangeInActionRecordState(Guid recordId)
+        {
+            var record = await _unitOfWork.RecordRepository.GetById(recordId);
+            record.Status = RecordState.InAction;
+            _unitOfWork.RecordRepository.Update(record);
+            await _unitOfWork.SaveChangeAsync();
+
+
         }
 
         private static CacheType setKey(int actionid) => actionid switch
@@ -100,8 +113,8 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<bool> VoteAlarmLevel(Guid recordID, RateAlarmRequest request)
         {
-            var userId =  _claimService.GetCurrentUserId;
-            if(_unitOfWork.AlarmRateRepository.Where(x => x.RecordID == recordID && x.UserID == userId).FirstOrDefault() is not null)
+            var userId = _claimService.GetCurrentUserId;
+            if (_unitOfWork.AlarmRateRepository.Where(x => x.RecordID == recordID && x.UserID == userId).FirstOrDefault() is not null)
             {
                 throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "You have voted before");
             }
@@ -138,7 +151,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             _timerService.CheckIsAction(recordID);
 
 
-            Console.WriteLine(await _memoryCacheService.GetResult(recordID, CacheType.FireNotify));
+            //Console.WriteLine(await _memoryCacheService.GetResult(recordID, CacheType.FireNotify));
 
             //? update to another in Record (InVote)
             await RecordInVote(recordID);
@@ -157,7 +170,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         internal async Task RecordInVote(Guid recordId)
         {
             var record = await _unitOfWork.RecordRepository.GetById(recordId);
-            if(record.Status == RecordState.InAlram)
+            if (record.Status == RecordState.InAlram)
             {
                 record.Status = RecordState.InVote;
                 _unitOfWork.RecordRepository.Update(record);
@@ -278,7 +291,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<RecordDetailResponse> GetDetail(Guid recordID)
         {
-            return await  _unitOfWork.RecordRepository.RecordDetailResponse(recordID);
+            return await _unitOfWork.RecordRepository.RecordDetailResponse(recordID);
         }
 
         public async Task AutoAction(Guid recordID, int actioTypeId)
@@ -306,7 +319,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<IEnumerable<NotificationAlarmResponse>> GetNotificationAlarm()
         {
-            var data =  await _unitOfWork.RecordRepository.NotificationAlarmResponse();
+            var data = await _unitOfWork.RecordRepository.NotificationAlarmResponse();
             return data;
         }
 
