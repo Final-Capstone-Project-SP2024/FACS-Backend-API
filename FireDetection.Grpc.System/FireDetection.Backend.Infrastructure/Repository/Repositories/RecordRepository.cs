@@ -41,7 +41,7 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
              EF.CompileQuery(
          (FireDetectionDbContext context) =>
              context.Records.Include(x => x.Camera).Include(x => x.Camera.Location)
-                 .Where(x => x.Status == RecordState.InAlram || x.Status  == RecordState.EndVote || x.Status == RecordState.InVote)
+                 .Where(x => x.Status == RecordState.InAlram || x.Status  == RecordState.EndVote || x.Status == RecordState.InVote || x.Status == RecordState.InAction)
                  .Select(record => new NotificationAlarmResponse
                  {
                      CameraDestination = record.Camera.CameraDestination,
