@@ -24,7 +24,7 @@ namespace FireDetection.Backend.API.Controllers
 
         }
 
-        [Authorize(Roles = UserRole.Manager + " " + UserRole.User)]
+        ///[Authorize(Roles = UserRole.Manager + " " + UserRole.User)]
         [HttpPost("{RecordId}/vote")]
         public async Task<ActionResult<RestDTO<VoteAlarmResponse>>> Vote(Guid RecordId, RateAlarmRequest request)
         {
@@ -37,7 +37,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = UserRole.Manager + " " + UserRole.User)]
+        //[Authorize(Roles = UserRole.Manager + " " + UserRole.User)]
         [HttpPost("{RecordId}/action")]
         public async Task<ActionResult<RestDTO<ActionProcessResponse>>> Action(Guid RecordId, AddRecordActionRequest request)
         {

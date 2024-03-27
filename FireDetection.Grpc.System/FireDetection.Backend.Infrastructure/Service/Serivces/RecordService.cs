@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -38,12 +39,12 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         }
         public async Task<bool> ActionInAlarm(Guid recordID, AddRecordActionRequest request)
         {
-
+            request.UserID = _claimService.GetCurrentUserId;
             //? check input can action type 
             if (!await CheckActionInSystem(recordID, request.ActionId)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Can not action smaller than the action before");
 
             // if (!await checkActionInRecord(recordID)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Have already this location in system");
-
+            
             if (request.ActionId < 6)
             {
                 //todo save data int variale sutiable with request.actionID
@@ -100,7 +101,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         public async Task<bool> VoteAlarmLevel(Guid recordID, RateAlarmRequest request)
         {
             var userId =  _claimService.GetCurrentUserId;
-            if(_unitOfWork.AlarmRateRepository.Where(x => x.RecordID == recordID && x.UserID == userId) is not null)
+            if(_unitOfWork.AlarmRateRepository.Where(x => x.RecordID == recordID && x.UserID == userId).FirstOrDefault() is not null)
             {
                 throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "You have voted before");
             }
@@ -138,6 +139,9 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
 
             Console.WriteLine(await _memoryCacheService.GetResult(recordID, CacheType.FireNotify));
+
+            //? update to another in Record (InVote)
+            await RecordInVote(recordID);
             //todo save log the fireNotify Task
             await _log.SaveNotificationFireNotifyLog(recordID, await _memoryCacheService.GetResult(recordID, CacheType.FireNotify));
             request.LevelRating = request.LevelRating == 0 ? 6 : request.LevelRating;
@@ -147,6 +151,18 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             _unitOfWork.AlarmRateRepository.InsertAsync(alarmRate);
             return await _unitOfWork.SaveChangeAsync() > 0;
 
+        }
+
+
+        internal async Task RecordInVote(Guid recordId)
+        {
+            var record = await _unitOfWork.RecordRepository.GetById(recordId);
+            if(record.Status == RecordState.InAlram)
+            {
+                record.Status = RecordState.InVote;
+                _unitOfWork.RecordRepository.Update(record);
+                await _unitOfWork.SaveChangeAsync();
+            }
         }
 
         public async Task<bool> CheckActionInSystem(Guid recordId, int levelid)
@@ -262,7 +278,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<RecordDetailResponse> GetDetail(Guid recordID)
         {
-            return _unitOfWork.RecordRepository.RecordDetailResponse(recordID);
+            return await  _unitOfWork.RecordRepository.RecordDetailResponse(recordID);
         }
 
         public async Task AutoAction(Guid recordID, int actioTypeId)

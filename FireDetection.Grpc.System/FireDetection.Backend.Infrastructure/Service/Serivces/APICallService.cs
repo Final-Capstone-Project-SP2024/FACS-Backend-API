@@ -13,6 +13,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly static string httpLink = "https://localhost:4222";
+        private readonly static string httpLinkPublish = "https://firealarmcamerasolution.azurewebsites.net/api/v1";
 
         public APICallService(IUnitOfWork unitOfWork)
         {

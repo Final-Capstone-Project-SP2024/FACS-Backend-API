@@ -9,9 +9,13 @@ namespace FireDetection.Backend.Domain.DTOs.State
     public static class RecordState
     {
         public const string InAlram = "InAlarm";
+        
 
-        public const string InFinish = "InFinish";
+        public const string InVote = "InVote";
 
         public const string EndVote = "EndVote";
+        
+        public const string InFinish = "InFinish";
+
     }
 }

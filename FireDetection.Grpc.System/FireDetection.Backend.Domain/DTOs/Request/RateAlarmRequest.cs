@@ -11,7 +11,7 @@ namespace FireDetection.Backend.Domain.DTOs.Request
     {
 
 
-        [Range(0,6)]
+        [Range(0,5)]
         public int LevelRating { get; set; }
 
   

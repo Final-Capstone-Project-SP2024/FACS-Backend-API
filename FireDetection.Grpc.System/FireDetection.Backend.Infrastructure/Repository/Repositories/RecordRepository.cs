@@ -27,7 +27,7 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
             return null; //result;
         }
 
-        public RecordDetailResponse RecordDetailResponse(Guid recordId)
+        public async  Task<RecordDetailResponse> RecordDetailResponse(Guid recordId)
         {
             return GetRecordCompiledQuery(_context, recordId);
         }
@@ -41,7 +41,7 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
              EF.CompileQuery(
          (FireDetectionDbContext context) =>
              context.Records.Include(x => x.Camera).Include(x => x.Camera.Location)
-                 .Where(x => x.Status == RecordState.InAlram || x.Status  == RecordState.EndVote)
+                 .Where(x => x.Status == RecordState.InAlram || x.Status  == RecordState.EndVote || x.Status == RecordState.InVote)
                  .Select(record => new NotificationAlarmResponse
                  {
                      CameraDestination = record.Camera.CameraDestination,

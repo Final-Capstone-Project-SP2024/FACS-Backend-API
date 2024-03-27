@@ -56,7 +56,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         {
             DateTime startTime = DateTime.Now;
             bool check = true;
-            while (check)
+            while (check && (DateTime.UtcNow - startTime).TotalMinutes <= 30)
             {
                 Console.WriteLine("========End Voting Phase=====");
                 await Task.Delay(5000);
@@ -84,7 +84,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             bool check = true;
             var startTime = DateTime.UtcNow;
 
-            while (check && (DateTime.UtcNow - startTime).TotalMinutes <= 1)
+            while (check && (DateTime.UtcNow - startTime).TotalMinutes <= 30)
             {
                 try
                 {
@@ -126,8 +126,9 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         protected async Task CheckAndAutoAction(Guid recordId)
         {
+            var startTime = DateTime.UtcNow;
             bool check = true;
-            while (check)
+            while (check && (DateTime.UtcNow - startTime).TotalMinutes <= 30)
             {
                 try
                 {
@@ -162,12 +163,12 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
              Variable have been create before 
             can add fast like the so create the function to quantity++;
              */
-
+            var startTime = DateTime.UtcNow;
             int timeAwait = AwaitTime(alarmLevel);
             bool check = true;
             // NotficationDetailResponse data = await NotificationHandler.Get(alarmLevel);
 
-            while (check)
+            while (check && (DateTime.UtcNow - startTime).TotalMinutes <= 30)
             {
                 try
                 {
