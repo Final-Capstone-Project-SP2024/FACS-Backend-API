@@ -35,5 +35,6 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
         public Task<bool> ChangePassword(ChangePasswordRequest request);
 
         public Task<UserInformationDetailResponse> ChangePasswordByUser(ChangePasswordByUserRequest request);
+
     }
 }

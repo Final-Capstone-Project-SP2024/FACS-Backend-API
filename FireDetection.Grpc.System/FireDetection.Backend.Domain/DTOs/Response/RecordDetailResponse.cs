@@ -28,6 +28,8 @@ namespace FireDetection.Backend.Domain.DTOs.Response
         public List<UserRating> userRatings { get; set; } = null!;
 
         public List<UserVoting> userVoting { get; set; } = null!;
+
+        public List<string> evidences { get; set; } 
     }
 
     public class VideoRecord
@@ -38,7 +40,7 @@ namespace FireDetection.Backend.Domain.DTOs.Response
 
     public class ImageRecord
     {
-        public string? VideoUrl { get; set; }
+        public string? ImageUrl { get; set; }
     }
 
 
@@ -50,6 +52,10 @@ namespace FireDetection.Backend.Domain.DTOs.Response
     }
 
 
+    public class Evidence
+    {
+        public string? EvidenceImage { get; set; }
+    }
     public class UserVoting
     {
         public Guid userId { get; set; }

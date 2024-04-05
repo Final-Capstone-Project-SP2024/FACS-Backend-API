@@ -90,7 +90,7 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
                                     .ToList(),
                       ImageRecord = x.MediaRecords
                           .Where(m => m.MediaTypeId == 2 && m.RecordId == recordId)
-                          .Select(m => new ImageRecord { VideoUrl = m.Url })
+                          .Select(m => new ImageRecord { ImageUrl = m.Url })
                           .FirstOrDefault(),
                       VideoRecord = x.MediaRecords
                           .Where(m => m.MediaTypeId == 1 && m.RecordId == recordId)

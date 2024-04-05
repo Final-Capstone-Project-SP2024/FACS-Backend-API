@@ -6,9 +6,11 @@ using FireDetection.Backend.Domain.DTOs.State;
 using FireDetection.Backend.Domain.Entity;
 using FireDetection.Backend.Domain.Helpers.GetHandler;
 using FireDetection.Backend.Infrastructure.Helpers.ErrorHandler;
+using FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler;
 using FireDetection.Backend.Infrastructure.Helpers.GetHandler;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using FireDetection.Backend.Infrastructure.UnitOfWork;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -73,7 +75,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                     Console.WriteLine(await _memoryCacheService.GetResult(recordID, setKey(item)));
                 }
                 await _unitOfWork.SaveChangeAsync();
-             
+
                 await updateRecordToEnd(recordID);
                 return true;
             }
@@ -293,7 +295,9 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<RecordDetailResponse> GetDetail(Guid recordID)
         {
-            return await _unitOfWork.RecordRepository.RecordDetailResponse(recordID);
+           var response = await _unitOfWork.RecordRepository.RecordDetailResponse(recordID);
+            response.evidences = _unitOfWork.MediaRecordRepository.Where(x => x.RecordId == recordID && x.Url.Contains("evidene")).Select(x => x.Url).ToList();
+            return response;
         }
 
         public async Task AutoAction(Guid recordID, int actioTypeId)
@@ -324,6 +328,43 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             var data = await _unitOfWork.RecordRepository.NotificationAlarmResponse();
             return data;
         }
+
+        public async Task AddEvidence(IFormFile file, Guid RecordId)
+        {
+            var record = await _unitOfWork.RecordRepository.GetById(RecordId);
+            if (record == null)
+            {
+                throw new Exception("Not in database ");
+
+            }
+            var mediaRecords = _unitOfWork.MediaRecordRepository.Where(x => x.RecordId == RecordId && x.MediaTypeId == 2).Count();
+            if (mediaRecords == 1)
+            {
+                var modifyFile = new FormFile(file.OpenReadStream(), 0, file.Length, null, $"evidene1_{RecordId}.png")
+                {
+                    Headers = file.Headers,
+                    ContentType = file.ContentType
+                };
+                await StorageHandlers.UploadFileAsync(modifyFile, "ImageEvidene");
+                MediaRecord newMediaRecord = new MediaRecord { RecordId = RecordId, MediaTypeId = 2, Url = modifyFile.FileName };
+                _unitOfWork.MediaRecordRepository.InsertAsync(newMediaRecord);
+                await _unitOfWork.SaveChangeAsync();
+            }
+            else
+            {
+                var modifyFile = new FormFile(file.OpenReadStream(), 0, file.Length, null, $"evidene{mediaRecords}_{RecordId}.png")
+                {
+                    Headers = file.Headers,
+                    ContentType = file.ContentType
+                };
+                await StorageHandlers.UploadFileAsync(modifyFile, "ImageEvidene");
+                MediaRecord newMediaRecord = new MediaRecord { RecordId = RecordId, MediaTypeId = 2, Url = modifyFile.FileName };
+                _unitOfWork.MediaRecordRepository.InsertAsync(newMediaRecord);
+                await _unitOfWork.SaveChangeAsync();
+            }
+        }
+
+
 
 
         //  private async Task SaveVoteAndAction(Guid recordId, Type )

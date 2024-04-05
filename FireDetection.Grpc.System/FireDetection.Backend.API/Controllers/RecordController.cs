@@ -49,7 +49,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-      //  [Authorize(Roles = UserRole.Manager + " " + UserRole.User)]
+        //  [Authorize(Roles = UserRole.Manager + " " + UserRole.User)]
         [HttpGet]
         public async Task<ActionResult<RestDTO<PagedResult<RecordResponse>>>> Get([FromQuery] PagingRequest pagingRequest, [FromQuery] RecordRequest recordRequest)
         {
@@ -61,7 +61,7 @@ namespace FireDetection.Backend.API.Controllers
         [HttpGet("{recordId}")]
         public async Task<ActionResult<RestDTO<RecordDetailResponse>>> GetDetail(Guid recordId)
         {
-            RecordDetailResponse  response = await _recordService.GetDetail(recordId);
+            RecordDetailResponse response = await _recordService.GetDetail(recordId);
             return new RestDTO<RecordDetailResponse>()
             {
                 Message = "View Record Detail Successfully",
@@ -86,8 +86,20 @@ namespace FireDetection.Backend.API.Controllers
         [HttpGet("camera/{cameraId}")]
         public async Task<ActionResult<RestDTO<RecordDetailResponse>>> GetDetailByCameraId(Guid cameraId)
         {
-            throw new NotImplementedException();    
+            throw new NotImplementedException();
         }
 
+        [HttpPost("{recordId}/addEvidence")]
+        public async Task<ActionResult<RestDTO<RecordDetailResponse>>> AddNewEvidenet(Guid recordId,IFormFile evidenAdding)
+        {
+            await _recordService.AddEvidence(evidenAdding, recordId);
+            return new RestDTO<RecordDetailResponse>()
+            {
+                Message = "End Vote Record  Successfully",
+                Data = null,
+            };
+        }
     }
+
 }
+
