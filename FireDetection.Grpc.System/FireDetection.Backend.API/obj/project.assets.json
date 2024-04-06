@@ -61,15 +61,6 @@
           "lib/netstandard2.0/ConnectingApps.SmartInject.dll": {}
         }
       },
-      "FFMpegSharp/2.1.0": {
-        "type": "package",
-        "compile": {
-          "lib/net45/FFMpegSharp.dll": {}
-        },
-        "runtime": {
-          "lib/net45/FFMpegSharp.dll": {}
-        }
-      },
       "Firebase.Auth/1.0.0": {
         "type": "package",
         "dependencies": {
@@ -1980,19 +1971,6 @@
           }
         }
       },
-      "NReco.VideoConverter/1.2.1": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/NReco.VideoConverter.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/netstandard2.0/NReco.VideoConverter.dll": {
-            "related": ".xml"
-          }
-        }
-      },
       "NTQ.Sdk.Core/1.1.7": {
         "type": "package",
         "dependencies": {
@@ -3831,7 +3809,6 @@
         "dependencies": {
           "AutoMapper": "12.0.1",
           "AutoMapper.Extensions.Microsoft.DependencyInjection": "12.0.1",
-          "FFMpegSharp": "2.1.0",
           "FireSharp": "2.0.4",
           "Firebase.Auth": "1.0.0",
           "FirebaseAdmin": "2.3.0",
@@ -3841,7 +3818,6 @@
           "Microsoft.EntityFrameworkCore": "7.0.11",
           "Microsoft.Extensions.Configuration": "7.0.0",
           "Microsoft.Extensions.Configuration.Json": "7.0.0",
-          "NReco.VideoConverter": "1.2.1",
           "NTQ.Sdk.Core": "1.1.7",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "7.0.11",
           "Quartz": "3.8.1",
@@ -3924,59 +3900,6 @@
         "connectingapps.smartinject.2.0.2.nupkg.sha512",
         "connectingapps.smartinject.nuspec",
         "lib/netstandard2.0/ConnectingApps.SmartInject.dll"
-      ]
-    },
-    "FFMpegSharp/2.1.0": {
-      "sha512": "qfm4LAkCe/IE/8avXx4V1MhY0DpqgJHPAnpDJ26Ylo6YjCVxzdaZ+11esaeqGY4AZ141WP5uGKlqmrTwrjbKCQ==",
-      "type": "package",
-      "path": "ffmpegsharp/2.1.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "content/FFMPEG/bin/presets/ffprobe.xsd",
-        "content/FFMPEG/bin/presets/libvpx-1080p.ffpreset",
-        "content/FFMPEG/bin/presets/libvpx-1080p50_60.ffpreset",
-        "content/FFMPEG/bin/presets/libvpx-360p.ffpreset",
-        "content/FFMPEG/bin/presets/libvpx-720p.ffpreset",
-        "content/FFMPEG/bin/presets/libvpx-720p50_60.ffpreset",
-        "content/FFMPEG/bin/presets/libvpx-ultrafast.ffpreset",
-        "content/FFMPEG/bin/presets/libx264-baseline.ffpreset",
-        "content/FFMPEG/bin/presets/libx264-fast.ffpreset",
-        "content/FFMPEG/bin/presets/libx264-fast_firstpass.ffpreset",
-        "content/FFMPEG/bin/presets/libx264-faster.ffpreset",
-        "content/FFMPEG/bin/presets/libx264-faster_firstpass.ffpreset",
-        "content/FFMPEG/bin/presets/libx264-ipod320.ffpreset",
-        "content/FFMPEG/bin/presets/libx264-ipod640.ffpreset",
-        "content/FFMPEG/bin/presets/libx264-lossless_fast.ffpreset",
-        "content/FFMPEG/bin/presets/libx264-lossless_max.ffpreset",
-        "content/FFMPEG/bin/presets/libx264-lossless_medium.ffpreset",
-        "content/FFMPEG/bin/presets/libx264-lossless_slow.ffpreset",
-        "content/FFMPEG/bin/presets/libx264-lossless_slower.ffpreset",
-        "content/FFMPEG/bin/presets/libx264-lossless_ultrafast.ffpreset",
-        "content/FFMPEG/bin/presets/libx264-main.ffpreset",
-        "content/FFMPEG/bin/presets/libx264-medium.ffpreset",
-        "content/FFMPEG/bin/presets/libx264-medium_firstpass.ffpreset",
-        "content/FFMPEG/bin/presets/libx264-placebo.ffpreset",
-        "content/FFMPEG/bin/presets/libx264-placebo_firstpass.ffpreset",
-        "content/FFMPEG/bin/presets/libx264-slow.ffpreset",
-        "content/FFMPEG/bin/presets/libx264-slow_firstpass.ffpreset",
-        "content/FFMPEG/bin/presets/libx264-slower.ffpreset",
-        "content/FFMPEG/bin/presets/libx264-slower_firstpass.ffpreset",
-        "content/FFMPEG/bin/presets/libx264-superfast.ffpreset",
-        "content/FFMPEG/bin/presets/libx264-superfast_firstpass.ffpreset",
-        "content/FFMPEG/bin/presets/libx264-ultrafast.ffpreset",
-        "content/FFMPEG/bin/presets/libx264-ultrafast_firstpass.ffpreset",
-        "content/FFMPEG/bin/presets/libx264-veryfast.ffpreset",
-        "content/FFMPEG/bin/presets/libx264-veryfast_firstpass.ffpreset",
-        "content/FFMPEG/bin/presets/libx264-veryslow.ffpreset",
-        "content/FFMPEG/bin/presets/libx264-veryslow_firstpass.ffpreset",
-        "content/FFMPEG/bin/x64/ffmpeg.exe",
-        "content/FFMPEG/bin/x64/ffprobe.exe",
-        "content/FFMPEG/bin/x86/ffmpeg.exe",
-        "content/FFMPEG/bin/x86/ffprobe.exe",
-        "ffmpegsharp.2.1.0.nupkg.sha512",
-        "ffmpegsharp.nuspec",
-        "lib/net45/FFMpegSharp.dll"
       ]
     },
     "Firebase.Auth/1.0.0": {
@@ -6874,21 +6797,6 @@
         "npgsql.entityframeworkcore.postgresql.7.0.11.nupkg.sha512",
         "npgsql.entityframeworkcore.postgresql.nuspec",
         "postgresql.png"
-      ]
-    },
-    "NReco.VideoConverter/1.2.1": {
-      "sha512": "d/V78hRW6Iqi9+lNrivCWL9qMiiJ8WCrwN1wpEvGq+3mE3uIy7VYhkgHrJBkUzx4RRQKEJ9UvCvVb+0ELIbGWg==",
-      "type": "package",
-      "path": "nreco.videoconverter/1.2.1",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/net45/NReco.VideoConverter.dll",
-        "lib/net45/NReco.VideoConverter.xml",
-        "lib/netstandard2.0/NReco.VideoConverter.dll",
-        "lib/netstandard2.0/NReco.VideoConverter.xml",
-        "nreco.videoconverter.1.2.1.nupkg.sha512",
-        "nreco.videoconverter.nuspec"
       ]
     },
     "NTQ.Sdk.Core/1.1.7": {
@@ -11218,7 +11126,6 @@
       "Microsoft.EntityFrameworkCore.Design >= 7.0.11",
       "Microsoft.EntityFrameworkCore.Tools >= 7.0.11",
       "Microsoft.VisualStudio.Azure.Containers.Tools.Targets >= 1.19.5",
-      "NReco.VideoConverter >= 1.2.1",
       "Quartz >= 3.8.1",
       "Quartz.Extensions.Hosting >= 3.8.1",
       "Serilog >= 3.1.1",
@@ -11228,19 +11135,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\manda\\.nuget\\packages\\": {}
+    "C:\\Users\\ducan\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.API\\FireDetection.Backend.API.csproj",
+      "projectUniqueName": "D:\\FACS\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.API\\FireDetection.Backend.API.csproj",
       "projectName": "FireDetection.Backend.API",
-      "projectPath": "C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.API\\FireDetection.Backend.API.csproj",
-      "packagesPath": "C:\\Users\\manda\\.nuget\\packages\\",
-      "outputPath": "C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.API\\obj\\",
+      "projectPath": "D:\\FACS\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.API\\FireDetection.Backend.API.csproj",
+      "packagesPath": "C:\\Users\\ducan\\.nuget\\packages\\",
+      "outputPath": "D:\\FACS\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.API\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\manda\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\ducan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -11248,14 +11160,15 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Infrastructure\\FireDetection.Backend.Infrastructure.csproj": {
-              "projectPath": "C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Infrastructure\\FireDetection.Backend.Infrastructure.csproj"
+            "D:\\FACS\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Infrastructure\\FireDetection.Backend.Infrastructure.csproj": {
+              "projectPath": "D:\\FACS\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Infrastructure\\FireDetection.Backend.Infrastructure.csproj"
             }
           }
         }
@@ -11264,6 +11177,11 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -11306,10 +11224,6 @@
             "target": "Package",
             "version": "[1.19.5, )"
           },
-          "NReco.VideoConverter": {
-            "target": "Package",
-            "version": "[1.2.1, )"
-          },
           "Quartz": {
             "target": "Package",
             "version": "[3.8.1, )"
@@ -11346,6 +11260,24 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[7.0.17, 7.0.17]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Host.win-x64",
+            "version": "[7.0.17, 7.0.17]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[7.0.17, 7.0.17]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[7.0.17, 7.0.17]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -11354,21 +11286,11 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202\\RuntimeIdentifierGraph.json"
       }
     }
   },
   "logs": [
-    {
-      "code": "NU1701",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'FFMpegSharp 2.1.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net7.0'. This package may not be fully compatible with your project.",
-      "libraryId": "FFMpegSharp",
-      "targetGraphs": [
-        "net7.0"
-      ]
-    },
     {
       "code": "NU1701",
       "level": "Warning",

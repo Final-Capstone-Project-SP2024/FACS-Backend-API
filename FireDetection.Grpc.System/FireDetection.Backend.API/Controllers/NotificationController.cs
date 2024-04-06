@@ -3,7 +3,6 @@ using FireDetection.Backend.Domain.DTOs.Core;
 using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.DTOs.Response;
 using FireDetection.Backend.Domain.DTOs.State;
-using FireDetection.Backend.Domain.Helpers.Media;
 using FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using Microsoft.AspNetCore.Authorization;
@@ -53,15 +52,6 @@ namespace FireDetection.Backend.API.Controllers
                 Message = "Get Notifications Successfully",
                 Data = await NotificationHandler.Get(id),
             };
-        }
-
-
-        [HttpPost("/upload")]
-        public async Task<IActionResult> TestUpload(IFormFile fileUpload)
-        {
-            //await StorageHandlers.UploadFileAsync(fileUpload, "video");
-            string result = VideoConverterHandler.SaveAviFile(fileUpload);
-            return Ok($"Upload successfull ");
         }
 
         [HttpGet("/firealarms")]
