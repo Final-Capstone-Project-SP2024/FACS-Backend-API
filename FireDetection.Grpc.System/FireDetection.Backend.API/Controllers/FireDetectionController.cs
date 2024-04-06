@@ -14,14 +14,12 @@ namespace FireDetection.Backend.API.Controllers
     public class FireDetectionController : BaseController
     {
         private readonly INotificationLogService _notificationLogService;
-        private readonly LinkGenerator _linkGenerator;
-        public FireDetectionController(INotificationLogService notificationLogService, LinkGenerator linkGenerator)
+        public FireDetectionController(INotificationLogService notificationLogService)
         {
             _notificationLogService = notificationLogService;
-            _linkGenerator = linkGenerator;
         }
         //todo get analysis about system to view in dashboard
-        [Authorize(Roles = UserRole.Manager)]
+        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpGet]
         public async Task<ActionResult<RestDTO<FireDetectionAnalysis>>> Get()
         {

@@ -16,7 +16,7 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
         public Task<bool> InactiveUser(Guid userId);
         public Task<UserLoginResponse> Login(UserLoginRequest req);
         public Task<PagedResult<UserInformationResponse>> GetAllUsers(PagingRequest pagingRequest, UserRequest request);
-        public Task<UserInformationResponse> UpdateUser(Guid id, UpdateUserRequest req);
+        public Task<UserInformationResponse> UpdateUser(UpdateUserRequest req);
         public Task<User> GetUserById(Guid id);
         public Task<bool> CheckUserStatus(Guid id, string status);
 

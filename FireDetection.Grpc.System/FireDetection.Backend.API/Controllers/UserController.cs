@@ -16,11 +16,9 @@ namespace FireDetection.Backend.API.Controllers
     public class UserController : BaseController
     {
         private readonly IUserService _userService;
-        private readonly LinkGenerator _linkGenerator;
-        public UserController(IUserService userService, LinkGenerator linkGenerator)
+        public UserController(IUserService userService)
         {
             _userService = userService;
-            _linkGenerator = linkGenerator;
         }
 
         [Authorize(Roles = UserRole.Manager)]
@@ -55,7 +53,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = UserRole.Manager)]
+        [Authorize(Roles = UserRole.User + "," + UserRole.Manager)]
         [HttpPost("{id}/active")]
         public async Task<ActionResult<RestDTO<UserInformationResponse>>> Active(Guid id)
         {
@@ -79,9 +77,9 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = UserRole.Manager)]
-        [HttpPatch("{id}")]
-        public async Task<ActionResult<RestDTO<UserInformationResponse>>> Update(Guid id, UpdateUserRequest request)
+        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
+        [HttpPatch]
+        public async Task<ActionResult<RestDTO<UserInformationResponse>>> Update(UpdateUserRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -92,7 +90,7 @@ namespace FireDetection.Backend.API.Controllers
                 return new BadRequestObjectResult(details);
             }
 
-            UserInformationResponse response = await _userService.UpdateUser(id, request);
+            UserInformationResponse response = await _userService.UpdateUser(request);
             return new RestDTO<UserInformationResponse>()
             {
                 Message = "Update Successfully!",
@@ -128,7 +126,7 @@ namespace FireDetection.Backend.API.Controllers
         }
 
         [Authorize(Roles = UserRole.Manager)]
-        [HttpGet("userId")]
+        [HttpGet("{userId}")]
         public async Task<ActionResult<RestDTO<UserInformationDetailResponse>>> GetDetail(Guid userId)
         {
 
@@ -137,13 +135,13 @@ namespace FireDetection.Backend.API.Controllers
             {
                 Message = "Get  Account Detail Successfully!",
                 Data = response,
-                
+
             };
         }
 
 
 
-
+        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpPost("/forgetpassword")]
         public async Task<ActionResult<RestDTO<UserInformationResponse>>> ForgetPassword(string securityCode)
         {
@@ -155,7 +153,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-
+        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpPost("/otpconfirm")]
         public async Task<ActionResult<RestDTO<UserInformationResponse>>> ConfirmOTP(ChangePasswordRequest request)
         {
@@ -180,7 +178,8 @@ namespace FireDetection.Backend.API.Controllers
         }
 
 
-        [HttpPost("{changepassword}")]
+        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
+        [HttpPost("/changepassword")]
         public async Task<ActionResult<RestDTO<UserInformationResponse>>> ChangePassword(ChangePasswordByUserRequest request)
         {
             var response = await _userService.ChangePasswordByUser(request);

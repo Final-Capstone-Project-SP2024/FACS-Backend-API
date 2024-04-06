@@ -15,16 +15,14 @@ namespace FireDetection.Backend.API.Controllers
     public class RecordController : BaseController
     {
         private readonly IRecordService _recordService;
-        private readonly LinkGenerator _linkGenerator;
 
-        public RecordController(IRecordService recordService, LinkGenerator linkGenerator)
+        public RecordController(IRecordService recordService)
         {
             _recordService = recordService;
-            _linkGenerator = linkGenerator;
 
         }
 
-        ///[Authorize(Roles = UserRole.Manager + " " + UserRole.User)]
+        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpPost("{RecordId}/vote")]
         public async Task<ActionResult<RestDTO<VoteAlarmResponse>>> Vote(Guid RecordId, RateAlarmRequest request)
         {
@@ -37,7 +35,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        //[Authorize(Roles = UserRole.Manager + " " + UserRole.User)]
+        [Authorize(Roles = UserRole.Manager)]
         [HttpPost("{RecordId}/action")]
         public async Task<ActionResult<RestDTO<ActionProcessResponse>>> Action(Guid RecordId, AddRecordActionRequest request)
         {
@@ -49,7 +47,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        //  [Authorize(Roles = UserRole.Manager + " " + UserRole.User)]
+        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpGet]
         public async Task<ActionResult<RestDTO<PagedResult<RecordResponse>>>> Get([FromQuery] PagingRequest pagingRequest, [FromQuery] RecordRequest recordRequest)
         {
@@ -57,7 +55,7 @@ namespace FireDetection.Backend.API.Controllers
             return Ok(response);
         }
 
-        //[Authorize(Roles = UserRole.Manager + " " + UserRole.User)]
+        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpGet("{recordId}")]
         public async Task<ActionResult<RestDTO<RecordDetailResponse>>> GetDetail(Guid recordId)
         {
@@ -83,16 +81,12 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [HttpGet("camera/{cameraId}")]
-        public async Task<ActionResult<RestDTO<RecordDetailResponse>>> GetDetailByCameraId(Guid cameraId)
-        {
-            throw new NotImplementedException();
-        }
 
+        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpPost("{recordId}/addEvidence")]
-        public async Task<ActionResult<RestDTO<RecordDetailResponse>>> AddNewEvidenet(Guid recordId,IFormFile evidenAdding)
+        public async Task<ActionResult<RestDTO<RecordDetailResponse>>> AddNewEvident(Guid recordId,IFormFile evidentAdding)
         {
-            await _recordService.AddEvidence(evidenAdding, recordId);
+            await _recordService.AddEvidence(evidentAdding, recordId);
             return new RestDTO<RecordDetailResponse>()
             {
                 Message = "End Vote Record  Successfully",

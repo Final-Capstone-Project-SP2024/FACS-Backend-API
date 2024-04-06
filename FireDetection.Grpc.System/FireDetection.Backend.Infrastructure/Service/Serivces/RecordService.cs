@@ -61,6 +61,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             await _memoryCacheService.UnCheck(recordID, CacheType.Action);
             if (request.ActionId == 6)
             {
+                
                 List<RecordProcess> idInput = _unitOfWork.RecordProcessRepository.Where(x => x.RecordID == recordID).ToList();
                 List<int> output = new List<int>();
                 foreach (var item in idInput)

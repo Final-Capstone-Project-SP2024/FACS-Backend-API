@@ -26,5 +26,6 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
         public Task<IEnumerable<NotificationAlarmResponse>> GetNotificationAlarm();
 
         public Task AddEvidence(IFormFile file, Guid RecordId);
+      
     }
 }

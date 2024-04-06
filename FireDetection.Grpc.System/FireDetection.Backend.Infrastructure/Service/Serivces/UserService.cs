@@ -132,9 +132,9 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new List<Claim>
                 {
+                    new Claim("UserId", user.Id.ToString()),
                     new Claim(ClaimTypes.Name, user.Name),
                     new Claim(ClaimTypes.Role, user.Role.RoleName),
-                    new Claim("UserId", user.Id.ToString()),
 
                 };
 
@@ -150,9 +150,9 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
 
 
-        public async Task<UserInformationResponse> UpdateUser(Guid id, UpdateUserRequest req)
+        public async Task<UserInformationResponse> UpdateUser( UpdateUserRequest req)
         {
-            User user = await GetUserById(id);
+            User user = await GetUserById(_claimsService.GetCurrentUserId);
             if (user == null)
             {
                 throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Not find this user");
@@ -161,7 +161,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             _unitOfWork.UserRepository.Update(user);
             await _unitOfWork.SaveChangeAsync();
 
-            return _mapper.Map<UserInformationResponse>(_unitOfWork.UserRepository.Where(x => x.Id == id).FirstOrDefault());
+            return _mapper.Map<UserInformationResponse>(_unitOfWork.UserRepository.Where(x => x.Id == user.Id).FirstOrDefault());
 
         }
 

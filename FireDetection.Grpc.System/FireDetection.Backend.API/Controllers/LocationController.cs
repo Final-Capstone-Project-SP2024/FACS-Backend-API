@@ -41,7 +41,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-       // [Authorize(Roles = UserRole.Manager + " " + UserRole.User)]
+       [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpGet("{id}")]
         public async Task<ActionResult<RestDTO<LocationInformationResponse>>> GetById(Guid id)
         {
@@ -53,7 +53,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = UserRole.Manager)]
+        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpPatch("{id}")]
         public async Task<ActionResult<RestDTO<LocationInformationResponse>>> Update(Guid id, AddLocationRequest request)
         {
@@ -78,7 +78,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = UserRole.Manager)]
+        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpGet]
         public async Task<ActionResult<RestDTO<IQueryable<LocationGeneralResponse>>>> Get()
         {
@@ -95,6 +95,7 @@ namespace FireDetection.Backend.API.Controllers
         [HttpPost("{id}/addstaff")]
         public async Task<ActionResult<RestDTO<LocationInformationResponse>>> AddStaff(Guid id, AddStaffRequest request)
         {
+            
             var result = await _context.AddStaffToLocation(id, request);
             return new RestDTO<LocationInformationResponse>()
             {
