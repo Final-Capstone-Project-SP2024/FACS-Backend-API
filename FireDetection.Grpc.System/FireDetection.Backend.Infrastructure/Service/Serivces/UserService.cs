@@ -246,6 +246,10 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             {
                 usersProjected = usersProjected.Where(_ => _.SecurityCode == request.SecurityCode);
             }
+            if (request.RoleName != null)
+            {
+                usersProjected = usersProjected.Where(_ => _.Role.RoleName == request.RoleName);
+            }
 
             if (request.Name != null)
             {
