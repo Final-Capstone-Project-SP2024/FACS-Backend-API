@@ -47,7 +47,7 @@ namespace FireDetection.Backend.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<RestDTO<List<UserInLocationResponse>>>> GetById(Guid id)
         {
-            var response = await _locationScopeService.GetUserInLocation(id);
+            var response = await _locationScopeService.GetUserLocation(id);
             return new RestDTO<List<UserInLocationResponse>>()
             {
                 Message = "View User In Location Successfully",
