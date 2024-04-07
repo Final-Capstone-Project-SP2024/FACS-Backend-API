@@ -18,10 +18,10 @@
           }
         }
       },
-      "AutoMapper.Extensions.Microsoft.DependencyInjection/12.0.1": {
+      "AutoMapper.Extensions.Microsoft.DependencyInjection/12.0.0": {
         "type": "package",
         "dependencies": {
-          "AutoMapper": "[12.0.1]",
+          "AutoMapper": "12.0.0",
           "Microsoft.Extensions.Options": "6.0.0"
         },
         "compile": {
@@ -205,11 +205,11 @@
           }
         }
       },
-      "GraphQL/7.7.2": {
+      "GraphQL/7.8.0": {
         "type": "package",
         "dependencies": {
           "GraphQL-Parser": "8.4.2",
-          "GraphQL.Analyzers": "7.7.2"
+          "GraphQL.Analyzers": "7.8.0"
         },
         "compile": {
           "lib/net6.0/GraphQL.dll": {
@@ -235,7 +235,7 @@
           }
         }
       },
-      "GraphQL.Analyzers/7.7.2": {
+      "GraphQL.Analyzers/7.8.0": {
         "type": "package"
       },
       "GreenDonut/13.7.0": {
@@ -1109,7 +1109,7 @@
           }
         }
       },
-      "Microsoft.EntityFrameworkCore.Analyzers/7.0.11": {
+      "Microsoft.EntityFrameworkCore.Analyzers/8.0.3": {
         "type": "package",
         "compile": {
           "lib/netstandard2.0/_._": {}
@@ -3808,7 +3808,7 @@
         "framework": ".NETCoreApp,Version=v7.0",
         "dependencies": {
           "AutoMapper": "12.0.1",
-          "AutoMapper.Extensions.Microsoft.DependencyInjection": "12.0.1",
+          "AutoMapper.Extensions.Microsoft.DependencyInjection": "12.0.0",
           "FireSharp": "2.0.4",
           "Firebase.Auth": "1.0.0",
           "FirebaseAdmin": "2.3.0",
@@ -3835,6 +3835,7 @@
         "framework": ".NETCoreApp,Version=v7.0",
         "dependencies": {
           "FireDetection.Backend.Domain": "1.0.0",
+          "Microsoft.EntityFrameworkCore.Analyzers": "8.0.3",
           "Newtonsoft.Json": "13.0.3"
         },
         "compile": {
@@ -3862,15 +3863,15 @@
         "lib/netstandard2.1/AutoMapper.xml"
       ]
     },
-    "AutoMapper.Extensions.Microsoft.DependencyInjection/12.0.1": {
-      "sha512": "+g/K+Vpe3gGMKGzjslMOdqNlkikScDjWfVvmWTayrDHaG/n2pPmFBMa+jKX1r/h6BDGFdkyRjAuhFE3ykW+r1g==",
+    "AutoMapper.Extensions.Microsoft.DependencyInjection/12.0.0": {
+      "sha512": "XCJ4E3oKrbRl1qY9Mr+7uyC0xZj1+bqQjmQRWTiTKiVuuXTny+7YFWHi20tPjwkMukLbicN6yGlDy5PZ4wyi1w==",
       "type": "package",
-      "path": "automapper.extensions.microsoft.dependencyinjection/12.0.1",
+      "path": "automapper.extensions.microsoft.dependencyinjection/12.0.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README.md",
-        "automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
+        "automapper.extensions.microsoft.dependencyinjection.12.0.0.nupkg.sha512",
         "automapper.extensions.microsoft.dependencyinjection.nuspec",
         "icon.png",
         "lib/netstandard2.1/AutoMapper.Extensions.Microsoft.DependencyInjection.dll"
@@ -4061,16 +4062,16 @@
         "lib/netstandard2.0/Google.Apis.Core.xml"
       ]
     },
-    "GraphQL/7.7.2": {
-      "sha512": "DHSRGNsBqJOk9SL+oFnpjTaPxt2/iWBpOitBT3MWLvUMAaQqQusnvwU+orG07wz8MSSrZbApJyqc0qwD7Fk1YQ==",
+    "GraphQL/7.8.0": {
+      "sha512": "pFWHJIst6lL7xHdr9yczZXE1slR4MZqpAgWOD2/9H54Rmrqztmo04YIyBUZAYxDT/omZaX3+4lkIZABKT/W/Zw==",
       "type": "package",
-      "path": "graphql/7.7.2",
+      "path": "graphql/7.8.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE.md",
         "README.md",
-        "graphql.7.7.2.nupkg.sha512",
+        "graphql.7.8.0.nupkg.sha512",
         "graphql.nuspec",
         "lib/net5.0/GraphQL.dll",
         "lib/net5.0/GraphQL.xml",
@@ -4102,10 +4103,10 @@
         "logo.64x64.png"
       ]
     },
-    "GraphQL.Analyzers/7.7.2": {
-      "sha512": "bKUnbn0eIEFNJu1qMATJ4DAF93WGjLq8KuOx0y+/a989tlO/+M0J6JaQaW0Yuc1o6scmVNuDQzM21L333FAwuA==",
+    "GraphQL.Analyzers/7.8.0": {
+      "sha512": "3Se7Tdz2VPukkmXXFIhx/Aaxh1V5qbFbemchYatKDxNoGMLiKrsEAmRsojoPI8Butz69ZRFYN9lwake2PndyqQ==",
       "type": "package",
-      "path": "graphql.analyzers/7.7.2",
+      "path": "graphql.analyzers/7.8.0",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
@@ -4114,7 +4115,7 @@
         "README.md",
         "analyzers/dotnet/cs/GraphQL.Analyzers.CodeFixes.dll",
         "analyzers/dotnet/cs/GraphQL.Analyzers.dll",
-        "graphql.analyzers.7.7.2.nupkg.sha512",
+        "graphql.analyzers.7.8.0.nupkg.sha512",
         "graphql.analyzers.nuspec",
         "logo.64x64.png",
         "tools/install.ps1",
@@ -5261,17 +5262,18 @@
         "microsoft.entityframeworkcore.abstractions.nuspec"
       ]
     },
-    "Microsoft.EntityFrameworkCore.Analyzers/7.0.11": {
-      "sha512": "Qexum5safSSfijx6P1QSq5bVJPPTM/uf7lQmpL/shkiozEC/0FzqNaVUfFpbNN8zsO1jMFYbeDMF4cxJMlTT9w==",
+    "Microsoft.EntityFrameworkCore.Analyzers/8.0.3": {
+      "sha512": "3csRAzz5O5Gn+GQBMyLn26OICtEo2/U2iDDygQhKb3LnC78bAUvutkMqvb0Ek5A6uHrBcZQrKQJfkgfnRT5XZw==",
       "type": "package",
-      "path": "microsoft.entityframeworkcore.analyzers/7.0.11",
+      "path": "microsoft.entityframeworkcore.analyzers/8.0.3",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
         "analyzers/dotnet/cs/Microsoft.EntityFrameworkCore.Analyzers.dll",
+        "docs/PACKAGE.md",
         "lib/netstandard2.0/_._",
-        "microsoft.entityframeworkcore.analyzers.7.0.11.nupkg.sha512",
+        "microsoft.entityframeworkcore.analyzers.8.0.3.nupkg.sha512",
         "microsoft.entityframeworkcore.analyzers.nuspec"
       ]
     },
@@ -11119,7 +11121,7 @@
     "net7.0": [
       "ConnectingApps.SmartInject >= 2.0.2",
       "FireDetection.Backend.Infrastructure >= 1.0.0",
-      "GraphQL >= 7.7.2",
+      "GraphQL >= 7.8.0",
       "HotChocolate.AspNetCore >= 13.7.0",
       "HotChocolate.Data.EntityFramework >= 13.7.0",
       "Microsoft.AspNetCore.OpenApi >= 7.0.14",
@@ -11135,19 +11137,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\manda\\.nuget\\packages\\": {}
+    "C:\\Users\\ducan\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.API\\FireDetection.Backend.API.csproj",
+      "projectUniqueName": "D:\\FACS\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.API\\FireDetection.Backend.API.csproj",
       "projectName": "FireDetection.Backend.API",
-      "projectPath": "C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.API\\FireDetection.Backend.API.csproj",
-      "packagesPath": "C:\\Users\\manda\\.nuget\\packages\\",
-      "outputPath": "C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.API\\obj\\",
+      "projectPath": "D:\\FACS\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.API\\FireDetection.Backend.API.csproj",
+      "packagesPath": "C:\\Users\\ducan\\.nuget\\packages\\",
+      "outputPath": "D:\\FACS\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.API\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\manda\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\ducan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -11155,14 +11162,15 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Infrastructure\\FireDetection.Backend.Infrastructure.csproj": {
-              "projectPath": "C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Infrastructure\\FireDetection.Backend.Infrastructure.csproj"
+            "D:\\FACS\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Infrastructure\\FireDetection.Backend.Infrastructure.csproj": {
+              "projectPath": "D:\\FACS\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Infrastructure\\FireDetection.Backend.Infrastructure.csproj"
             }
           }
         }
@@ -11171,6 +11179,11 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -11183,7 +11196,7 @@
           },
           "GraphQL": {
             "target": "Package",
-            "version": "[7.7.2, )"
+            "version": "[7.8.0, )"
           },
           "HotChocolate.AspNetCore": {
             "target": "Package",
@@ -11249,6 +11262,24 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[7.0.17, 7.0.17]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Host.win-x64",
+            "version": "[7.0.17, 7.0.17]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[7.0.17, 7.0.17]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[7.0.17, 7.0.17]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -11257,7 +11288,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202\\RuntimeIdentifierGraph.json"
       }
     }
   },
