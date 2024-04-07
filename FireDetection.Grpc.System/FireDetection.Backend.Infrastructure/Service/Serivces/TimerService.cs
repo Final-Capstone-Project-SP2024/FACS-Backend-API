@@ -8,6 +8,7 @@ using FireDetection.Backend.Infrastructure.Service.IServices;
 using FireDetection.Backend.Infrastructure.UnitOfWork;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -93,9 +94,21 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                         // Perform actions if the record key is not voted
                         NotficationDetailResponse data = await NotificationHandler.Get(11);
 
-                    /*    await CloudMessagingHandlers.CloudMessaging(
-                            HandleTextUtil.HandleTitle(data.Title, CameraDestination),
-                            HandleTextUtil.HandleContext(data.Context, LocationName, CameraDestination));*/
+                        //? get all token in real-time database
+                        Dictionary<string, string> tokens = JsonConvert.DeserializeObject<Dictionary<string, string>>(await RealtimeDatabaseHandlers.GetFCMToken());
+                        List<string> values = new List<string>(tokens.Values);
+
+                        // Print the values
+                        foreach (var value in values)
+                        {
+                            //? notifi to single fcm token 
+                            await CloudMessagingHandlers.CloudMessaging(
+                                HandleTextUtil.HandleTitle(data.Title, CameraDestination),
+                                HandleTextUtil.HandleContext(data.Context, LocationName, CameraDestination),
+                                value);
+
+                        }
+
 
                         await _memorycachedservice.IncreaseQuantity(recordID, CacheType.FireNotify);
 
@@ -117,7 +130,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                     Console.WriteLine($"Error in phase 1: {ex.Message}");
                 }
 
-             
+
             }
             await Task.Delay(5000); // Delay for 5 seconds before checking again
             Console.WriteLine("End Task");

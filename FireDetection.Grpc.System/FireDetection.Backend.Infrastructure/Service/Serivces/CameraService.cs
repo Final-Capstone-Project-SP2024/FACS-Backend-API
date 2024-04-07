@@ -163,12 +163,12 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         public async Task<DetectResponse> DetectFire(Guid id, TakeAlarmRequest request)
         {
 
+
+            if (await _unitOfWork.CameraRepository.GetById(id) is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "CameraId is invalid");
+
             //TODO: Check camera in system 
             Camera camera = await _unitOfWork.CameraRepository.GetById(id);
             string locationName = _unitOfWork.LocationRepository.GetById(camera.LocationID).Result.LocationName;
-
-            if (camera is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "CameraId is invalid");
-
 
 
             //TODO: save record to database

@@ -40,6 +40,20 @@ namespace FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler
         }
 
 
+        public static async Task AddFCMToken(Guid userId,string token)
+        {
+            _client = new FireSharp.FirebaseClient(config);
+            FirebaseResponse response = await _client.SetAsync($@"FCMToken/{userId}", token);
+            response.Body.ToString();
+        }
+
+        public static async Task<string> GetFCMToken(Guid? userId = default )
+        {
+            _client = new FireSharp.FirebaseClient(config);
+            FirebaseResponse response = await _client.GetAsync($@"FCMToken/{userId}");
+             return response.Body.ToString();
+
+        }
         public static async Task<NotificationListResponse> GetNotifications()
         {
             List<string> notificationListResponse = new();

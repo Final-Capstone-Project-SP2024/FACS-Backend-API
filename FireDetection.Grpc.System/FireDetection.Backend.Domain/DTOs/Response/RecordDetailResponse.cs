@@ -11,6 +11,7 @@ namespace FireDetection.Backend.Domain.DTOs.Response
         public Guid CameraId { get; set; }
 
         public string CameraDestination { get; set; } = string.Empty;
+        public string CameraName { get; set; } = string.Empty;
 
         public int RatingResult { get; set; } = 0;
         public Guid RecordId { get; set; }
@@ -50,12 +51,7 @@ namespace FireDetection.Backend.Domain.DTOs.Response
 
         public int Rating { get; set; }
     }
-
-
-    public class Evidence
-    {
-        public string? EvidenceImage { get; set; }
-    }
+  
     public class UserVoting
     {
         public Guid userId { get; set; }

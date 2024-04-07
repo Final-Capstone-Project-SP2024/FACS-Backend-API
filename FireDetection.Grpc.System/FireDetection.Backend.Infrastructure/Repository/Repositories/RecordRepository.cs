@@ -77,6 +77,7 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
                       CameraDestination = x.Camera.CameraDestination,
                       RecordId = x.Id,
                       PredictedPercent = x.PredictedPercent,
+                      CameraName = x.Camera.CameraName,
                       UserRatingPercent = x.UserRatingPercent,
                       Status = x.Status,
                       RatingResult = 1,
