@@ -102,6 +102,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                         foreach (var value in values)
                         {
                             //? notifi to single fcm token 
+                            Console.WriteLine(value);
                             await CloudMessagingHandlers.CloudMessaging(
                                 HandleTextUtil.HandleTitle(data.Title, CameraDestination),
                                 HandleTextUtil.HandleContext(data.Context, LocationName, CameraDestination),
@@ -147,8 +148,16 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 {
                     if (!await _memorycachedservice.CheckIsAction(recordId))
                     {
-                        //! Send notification to remind manager have some action
-                        await CloudMessagingHandlers.CloudMessaging();
+                        Dictionary<string, string> tokens = JsonConvert.DeserializeObject<Dictionary<string, string>>(await RealtimeDatabaseHandlers.GetFCMToken());
+                        List<string> values = new List<string>(tokens.Values);
+
+                        // Print the values
+                        foreach (var value in values)
+                        {
+
+                            //! Send notification to remind manager have some action
+                            await CloudMessagingHandlers.CloudMessaging(fcm_token : value);
+                        }
                         await _memorycachedservice.IncreaseQuantity(recordId, CacheType.VotingValue);
                         Console.WriteLine("======Action Phase (Phase 2)=======");
                     }
@@ -190,8 +199,17 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
 
                         NotficationDetailResponse data = await NotificationHandler.Get(alarmLevel);
-                        Console.WriteLine(data);
-                        await CloudMessagingHandlers.CloudMessaging(data.Title, data.Context);
+                        Dictionary<string, string> tokens = JsonConvert.DeserializeObject<Dictionary<string, string>>(await RealtimeDatabaseHandlers.GetFCMToken());
+                        List<string> values = new List<string>(tokens.Values);
+
+                        // Print the values
+                        foreach (var value in values)
+                        {
+
+                            Console.WriteLine(data);
+                            await CloudMessagingHandlers.CloudMessaging(data.Title, data.Context,value);
+                        }
+
                         await _memorycachedservice.IncreaseQuantity(recordId, TransferCacheType(alarmLevel));
                         Console.WriteLine("=====Action  Phase 3===========");
                     }
