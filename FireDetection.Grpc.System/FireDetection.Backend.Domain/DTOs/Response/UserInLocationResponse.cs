@@ -9,6 +9,6 @@ namespace FireDetection.Backend.Domain.DTOs.Response
     public class UserInLocationResponse
     {
         public Guid UserID { get; set; }
-        //public string Name { get; set; } = null!;
+        public string Name { get; set; } = null!;
     }
 }

@@ -1,6 +1,8 @@
-﻿using FireDetection.Backend.Domain.Entity;
+﻿using FireDetection.Backend.Domain.DTOs.Response;
+using FireDetection.Backend.Domain.Entity;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using FireDetection.Backend.Infrastructure.UnitOfWork;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -128,6 +130,18 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             return locationId;
         }
 
+        public async Task<List<UserInLocationResponse>> GetUserLocation(Guid locationId)
+        {
+            var usersInLocation = await _unitOfWork.ControlCameraRepository
+                .Where(cc => cc.LocationID == locationId && cc.User != null)
+                .Select(cc => new UserInLocationResponse
+                {
+                    UserID = cc.UserID,
+                    Name = cc.User.Name
+                })
+                .ToListAsync();
 
+            return usersInLocation;
+        }
     }
 }
