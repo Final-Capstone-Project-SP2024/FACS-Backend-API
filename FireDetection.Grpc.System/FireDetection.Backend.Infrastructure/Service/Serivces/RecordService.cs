@@ -266,7 +266,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             var records = await query.ToListAsync();
 
             query = query.Where(x => x.RecordTime.Date >= req.FromDate.Date && x.RecordTime.Date <= req.ToDate.Date);
-
+ 
             var entityProjected = LinqUtils.DynamicFilter<Record>(query, entity).ProjectTo<RecordResponse>(_mapper.ConfigurationProvider);
 
             #region filter query
