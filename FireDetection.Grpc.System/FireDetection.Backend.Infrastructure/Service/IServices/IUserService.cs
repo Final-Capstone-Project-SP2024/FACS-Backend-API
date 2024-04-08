@@ -36,5 +36,7 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
 
         public Task<UserInformationDetailResponse> ChangePasswordByUser(ChangePasswordByUserRequest request);
 
+        public Task<IEnumerable<UserInformationResponse>> UnRegisterLocaiton();
+
     }
 }

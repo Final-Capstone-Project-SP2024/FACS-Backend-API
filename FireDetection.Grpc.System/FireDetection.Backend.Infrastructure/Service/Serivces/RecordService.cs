@@ -61,14 +61,13 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             await _memoryCacheService.UnCheck(recordID, CacheType.Action);
             if (request.ActionId == 6)
             {
-                
+                await _memoryCacheService.UnCheck(recordID,CacheType.IsFinish);
                 List<RecordProcess> idInput = _unitOfWork.RecordProcessRepository.Where(x => x.RecordID == recordID).ToList();
                 List<int> output = new List<int>();
                 foreach (var item in idInput)
                 {
                     output.Add(item.ActionTypeId);
                 }
-                Console.WriteLine(await _memoryCacheService.GetResult(recordID, CacheType.VotingValue));
                 _log.SaveNotificationVotingRequire(recordID, await _memoryCacheService.GetResult(recordID, CacheType.VotingValue));
                 foreach (var item in output)
                 {

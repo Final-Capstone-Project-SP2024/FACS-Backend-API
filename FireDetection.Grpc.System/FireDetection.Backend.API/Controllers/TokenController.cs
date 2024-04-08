@@ -1,5 +1,7 @@
-﻿using FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler;
+﻿using FireDetection.Backend.Domain.DTOs.State;
+using FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler;
 using FireDetection.Backend.Infrastructure.Service.IServices;
+using GraphQL;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -13,6 +15,7 @@ namespace FireDetection.Backend.API.Controllers
             _claimService = claimsService;
         }
 
+        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpPost]
         public async Task<ActionResult> AddToken(string token)
         {
@@ -20,14 +23,14 @@ namespace FireDetection.Backend.API.Controllers
             return Ok("Add Successfully");
         }
 
-
+        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpGet]
         public async Task<ActionResult> GetToken()
         {
                 return Ok(await RealtimeDatabaseHandlers.GetFCMToken(_claimService.GetCurrentUserId));
 
         }
-
+        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpGet("/all")]
         public async Task<ActionResult> GetTokens()
         {

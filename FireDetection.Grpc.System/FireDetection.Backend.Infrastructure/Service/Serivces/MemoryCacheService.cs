@@ -57,7 +57,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         public async Task UnCheck(Guid recordId, CacheType cacheType)
         {
             string Name = NameTransfer(cacheType, recordId);
-            if (Name.Contains(CacheType.Action.GetDisplayName()) || Name.Contains(CacheType.IsVoting.GetDisplayName())) _memoryCache.Set(Name, "Yes");
+            if (Name.Contains(CacheType.IsFinish.GetDisplayName()) ||Name.Contains(CacheType.Action.GetDisplayName()) || Name.Contains(CacheType.IsVoting.GetDisplayName())) _memoryCache.Set(Name, "Yes");
         }
 
         private static string NameTransfer(CacheType? name, Guid recordId) => name switch
