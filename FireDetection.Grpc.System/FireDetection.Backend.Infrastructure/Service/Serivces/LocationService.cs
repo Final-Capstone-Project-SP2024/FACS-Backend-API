@@ -52,7 +52,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<IQueryable<LocationGeneralResponse>> GetLocation()
         {
-            var  data  = await _context.LocationRepository.GetAll();
+            var  data  = await _context.LocationRepository.GetLocations();
             var mapper = data.Select(x => _mapper.Map<LocationGeneralResponse>(x));
             return mapper.AsQueryable();
         }
