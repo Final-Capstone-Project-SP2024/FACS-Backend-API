@@ -10,5 +10,11 @@ namespace FireDetection.Backend.Infrastructure.Repository.IRepositories
 {
     public interface INotificationLogRepository : IGenericRepository<NotificationLog>
     {
+        Task<List<RecordInDay>> GetDayAnalysis();
+
+        Task<List<RecordInMonth>> GetMonthAnalysis();
+
+        Task<List<RecordInYear>> GetYearAnalysis();
+
     }
 }

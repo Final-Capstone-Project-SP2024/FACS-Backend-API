@@ -51,7 +51,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<CameraInformationResponse> Add(AddCameraRequest request)
         {
-           
+
             request.CameraName = await GenerateCameraName();
             if (await _unitOfWork.LocationRepository.GetById(request.LocationId) is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "LocationId not in the system");
 
@@ -62,7 +62,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
 
             _unitOfWork.CameraRepository.InsertAsync(_mapper.Map<Camera>(request));
-            
+
             await _unitOfWork.SaveChangeAsync();
 
             return _mapper.Map<CameraInformationResponse>(await GetCameraByName(request.Destination));
@@ -202,9 +202,11 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             //todo check cameraID in system 
             Camera camera = await _unitOfWork.CameraRepository.GetById(id);
             if (camera is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "CameraId is invalid");
-
+            Location location = await _unitOfWork.LocationRepository.GetById(camera.LocationID);
+            //todo Spam disconnect action
+            _timerService.DisconnectionNotification(id, camera.CameraDestination, location.LocationName);
             //todo Send notification about where have the fire belong to where location
-            NotficationDetailResponse data = await NotificationHandler.Get(4);
+            NotficationDetailResponse data = await NotificationHandler.Get(7);
             await CloudMessagingHandlers.CloudMessaging(
                HandleTextUtil.HandleTitle(data.Title, camera.CameraDestination),
                HandleTextUtil.HandleContext(

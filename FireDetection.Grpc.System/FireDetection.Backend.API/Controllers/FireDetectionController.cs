@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Routing;
 
 namespace FireDetection.Backend.API.Controllers
 {
-    [ApiController]
     public class FireDetectionController : BaseController
     {
         private readonly INotificationLogService _notificationLogService;
@@ -19,7 +18,7 @@ namespace FireDetection.Backend.API.Controllers
             _notificationLogService = notificationLogService;
         }
         //todo get analysis about system to view in dashboard
-        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
+        //[Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpGet]
         public async Task<ActionResult<RestDTO<FireDetectionAnalysis>>> Get()
         {
@@ -28,6 +27,29 @@ namespace FireDetection.Backend.API.Controllers
                 Message = "Get data analysis  Successfully!",
                 Data = await _notificationLogService.Analysis(),
             };
+        }
+
+
+        [HttpGet("/day")]
+        public async Task<ActionResult> GetDay()
+        {
+
+            return Ok( await _notificationLogService.GetInDay());
+        }
+
+        [HttpGet("/month")]
+        public async Task<ActionResult> GetMonth()
+        {
+
+            return Ok(await _notificationLogService.GetInMonth());
+        }
+
+
+        [HttpGet("/year")]
+        public async Task<ActionResult> GetYear()
+        {
+
+            return Ok(await _notificationLogService.GetInYear());
         }
 
 

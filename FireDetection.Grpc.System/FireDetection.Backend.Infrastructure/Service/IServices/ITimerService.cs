@@ -16,5 +16,8 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
 
         public void EndVotePhase(Guid recordId);
 
+        public void DisconnectionNotification(Guid recordId, string cameraDestination, string cameraLocation);
+
+
     }
 }
