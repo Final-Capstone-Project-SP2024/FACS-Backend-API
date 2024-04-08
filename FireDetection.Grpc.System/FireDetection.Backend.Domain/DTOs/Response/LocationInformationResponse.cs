@@ -9,7 +9,7 @@ namespace FireDetection.Backend.Domain.DTOs.Response
 {
     public class LocationInformationResponse
     {
-        public Guid LocationId { get; set; } 
+        public Guid LocationId { get; set; }
         public string LocationName { get; set; } = null!;
 
         public DateTime? CreatedDate { get; set; }

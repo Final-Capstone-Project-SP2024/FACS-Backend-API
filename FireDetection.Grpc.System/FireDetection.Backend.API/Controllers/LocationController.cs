@@ -15,10 +15,12 @@ namespace FireDetection.Backend.API.Controllers
     public class LocationController : BaseController
     {
         private readonly ILocationService _context;
+        private readonly ILocationScopeService _locationScopeService;
 
-        public LocationController(ILocationService context)
+        public LocationController(ILocationService context, ILocationScopeService locationScopeService)
         {
             _context = context;
+            _locationScopeService = locationScopeService;
         }
 
         [Authorize(Roles = UserRole.Manager)]
@@ -41,17 +43,18 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-       [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
+        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpGet("{id}")]
-        public async Task<ActionResult<RestDTO<LocationInformationResponse>>> GetById(Guid id)
+        public async Task<ActionResult<RestDTO<List<UserInLocationResponse>>>> GetById(Guid id)
         {
-            var response = await _context.GetById(id);
-            return new RestDTO<LocationInformationResponse>()
+            var response = await _locationScopeService.GetUserLocation(id);
+            return new RestDTO<List<UserInLocationResponse>>()
             {
-                Message = "View Location Detail Successfully",
+                Message = "View User In Location Successfully",
                 Data = response,
             };
         }
+
 
         [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpPatch("{id}")]
@@ -95,7 +98,7 @@ namespace FireDetection.Backend.API.Controllers
         [HttpPost("{id}/addstaff")]
         public async Task<ActionResult<RestDTO<LocationInformationResponse>>> AddStaff(Guid id, AddStaffRequest request)
         {
-            
+
             var result = await _context.AddStaffToLocation(id, request);
             return new RestDTO<LocationInformationResponse>()
             {

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.Infrastructure\bin\Debug\net7.0\FireDetection.Backend.Infrastructure.deps.json
 D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.Infrastructure\bin\Debug\net7.0\FireDetection.Backend.Infrastructure.dll
 D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.Infrastructure\bin\Debug\net7.0\FireDetection.Backend.Infrastructure.pdb
@@ -14,3 +15,5 @@ D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.Infrast
 D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.Infrastructure\obj\Debug\net7.0\refint\FireDetection.Backend.Infrastructure.dll
 D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.Infrastructure\obj\Debug\net7.0\FireDetection.Backend.Infrastructure.pdb
 D:\FACS\FACS-Backend-API\FireDetection.Grpc.System\FireDetection.Backend.Infrastructure\obj\Debug\net7.0\ref\FireDetection.Backend.Infrastructure.dll
+=======
+>>>>>>> 1c273c22f5891fdd21a85173262a6006887d98de

@@ -15,9 +15,9 @@ namespace FireDetection.Backend.Domain.DTOs.Response
         public string Phone { get; set; } = null!;
         public RoleResponse Role { get; set; } = null!;
         public string? Status { get; set; }
-
+        public string LocationName { get; set; } = null!;
     }
-    
+
     public class UserInformationDetailResponse : UserInformationResponse
     {
         public ContractDetailResponse UserContract { get; set; } = null!;

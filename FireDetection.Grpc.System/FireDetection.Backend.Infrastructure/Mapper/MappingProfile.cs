@@ -22,12 +22,14 @@ namespace FireDetection.Backend.API.Mapper
                 .ReverseMap();
 
             CreateMap<User, UserInformationResponse>()
-                .ForMember(x => x.Id, src => src.MapFrom(x => x.Id))
-                .ForMember(x => x.SecurityCode, src => src.MapFrom(x => x.SecurityCode))
-                .ForMember(x => x.Email, src => src.MapFrom(x => x.Email))
-                .ForMember(x => x.Name, src => src.MapFrom(x => x.Name))
-                .ForMember(x => x.Status, src => src.MapFrom(x => x.Status))
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.SecurityCode, opt => opt.MapFrom(src => src.SecurityCode))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+                .ForMember(dest => dest.LocationName, opt => opt.MapFrom(src => src.ControlCameras.FirstOrDefault().Location.LocationName))
                 .ReverseMap();
+
 
             CreateMap<User, UserRequest>().ReverseMap();
 
@@ -256,6 +258,8 @@ namespace FireDetection.Backend.API.Mapper
                    .ForMember(x => x.Id, src => src.MapFrom(x => x.LocationId))
                    .ForMember(x => x.LocationName, src => src.MapFrom(x => x.LocationName))
                    .ReverseMap();
+
+            //CreateMap<Location, LocationResponse>().ForMember(x => x.LocationName, src => src.MapFrom(x => x.LocationName)).ReverseMap();
 
         }
     }

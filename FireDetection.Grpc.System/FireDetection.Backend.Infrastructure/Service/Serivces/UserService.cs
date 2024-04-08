@@ -23,6 +23,7 @@ using FireDetection.Backend.Domain.DTOs.State;
 using FireDetection.Backend.Domain.Helpers.EmailHandler;
 using Google.Apis.Auth.OAuth2;
 using System.Security;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace FireDetection.Backend.Infrastructure.Service.Serivces
 {
@@ -234,7 +235,10 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             var userEntity = _mapper.Map<User>(request);
 
             var usersQuery = await _unitOfWork.UserRepository.GetAll();
-            usersQuery = usersQuery.Include(x => x.Role);
+            usersQuery = usersQuery
+                .Include(x => x.Role)
+                .Include(x => x.ControlCameras)
+                .ThenInclude(x => x.Location);
 
             var records = await usersQuery.ToListAsync();
 
@@ -271,6 +275,8 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 usersProjected = usersProjected.Where(_ => _.Status == request.Status);
             }
             #endregion
+
+            var test = await usersQuery.ToListAsync();
 
             var sort = PageHelper<UserInformationResponse>.Sorting(pagingRequest.SortType, usersProjected, pagingRequest.ColName).ToList();
             var pagedUsers = PageHelper<UserInformationResponse>.Paging(sort, pagingRequest.Page, pagingRequest.PageSize);

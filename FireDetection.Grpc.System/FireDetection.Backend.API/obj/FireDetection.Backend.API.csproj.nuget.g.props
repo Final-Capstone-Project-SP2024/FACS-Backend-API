@@ -26,6 +26,6 @@
     <PkgMicrosoft_VisualStudio_Azure_Containers_Tools_Targets Condition=" '$(PkgMicrosoft_VisualStudio_Azure_Containers_Tools_Targets)' == '' ">C:\Users\manda\.nuget\packages\microsoft.visualstudio.azure.containers.tools.targets\1.19.5</PkgMicrosoft_VisualStudio_Azure_Containers_Tools_Targets>
     <PkgMicrosoft_Bcl_Build Condition=" '$(PkgMicrosoft_Bcl_Build)' == '' ">C:\Users\manda\.nuget\packages\microsoft.bcl.build\1.0.14</PkgMicrosoft_Bcl_Build>
     <PkgMicrosoft_EntityFrameworkCore_Tools Condition=" '$(PkgMicrosoft_EntityFrameworkCore_Tools)' == '' ">C:\Users\manda\.nuget\packages\microsoft.entityframeworkcore.tools\7.0.11</PkgMicrosoft_EntityFrameworkCore_Tools>
-    <PkgGraphQL_Analyzers Condition=" '$(PkgGraphQL_Analyzers)' == '' ">C:\Users\manda\.nuget\packages\graphql.analyzers\7.7.2</PkgGraphQL_Analyzers>
+    <PkgGraphQL_Analyzers Condition=" '$(PkgGraphQL_Analyzers)' == '' ">C:\Users\manda\.nuget\packages\graphql.analyzers\7.8.0</PkgGraphQL_Analyzers>
   </PropertyGroup>
 </Project>
