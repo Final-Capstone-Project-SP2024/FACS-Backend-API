@@ -191,7 +191,6 @@ namespace FireDetection.Backend.API.Controllers
 
         }
 
-        [Authorize(Roles = UserRole.Manager )]
         [HttpGet("/unregistered")]
         public async Task<ActionResult<RestDTO<IEnumerable<UserInformationResponse>>>> UnRegister(){
 

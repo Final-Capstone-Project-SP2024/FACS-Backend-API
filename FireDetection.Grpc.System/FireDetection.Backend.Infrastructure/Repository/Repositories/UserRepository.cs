@@ -25,8 +25,8 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
         public async Task<IEnumerable<UserInformationResponse>> GetUsersUnRegisterd()
         {
             List<UserInformationResponse> responses = new List<UserInformationResponse>();
-            HashSet<Guid> users = _context.Users.Select(x => x.Id).ToHashSet();
-            HashSet<Guid> usersInRegister = _context.ControlCameras.Select(x => x.Id).ToHashSet();
+            HashSet<Guid> users = _context.Users.Where(x => x.SecurityCode != "XAD_000").Select(x => x.Id).ToHashSet();
+            HashSet<Guid> usersInRegister = _context.ControlCameras.Select(x => x.UserID).ToHashSet();
 
             var nonMatchingRegister = users.Except(usersInRegister).AsEnumerable();
             foreach (var item in nonMatchingRegister)
