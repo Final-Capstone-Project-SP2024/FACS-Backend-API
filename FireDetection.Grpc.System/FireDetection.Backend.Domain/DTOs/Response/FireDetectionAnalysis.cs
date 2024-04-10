@@ -54,5 +54,11 @@ namespace FireDetection.Backend.Domain.DTOs.Response
         public int Count { get; set; }
         public DateTime Year { get; set; }
     }
-    
+
+    public class RecordInWeek
+    {
+        public int Count { get; set; }
+        public DateTime Week { get; set; }
+    }
+
 }

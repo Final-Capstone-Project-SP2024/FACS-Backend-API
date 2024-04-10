@@ -65,7 +65,8 @@ namespace FireDetection.Backend.API.Controllers
                     Message = "Get Notifications Successfully",
                     Data = await _recordService.GetNotificationAlarm()
                 };
-            }else
+            }
+            else
             {
                 return new RestDTO<IEnumerable<NotificationAlarmResponse>>()
                 {
@@ -75,6 +76,18 @@ namespace FireDetection.Backend.API.Controllers
             }
 
 
+        }
+
+
+        [HttpGet("/disconnectedalarms")]
+        public async Task<ActionResult<RestDTO<IEnumerable<NotificationAlarmResponse>>>> GetDisconnectedNotify()
+        {
+
+            return new RestDTO<IEnumerable<NotificationAlarmResponse>>()
+            {
+                Message = "Get Notifications Successfully",
+                Data = await _recordService.GetNotificationAlarm()
+            };
         }
     }
 }

@@ -14,5 +14,7 @@ namespace FireDetection.Backend.Infrastructure.Repository.IRepositories
         public Task<ReadOnlyCollection<Guid>> GetStaffInLocation(Guid locationId);
 
         public Task<IEnumerable<LocationGeneralResponse>> GetLocations();
+
+        public Task<IEnumerable<LocationGeneralResponse>> GetLocationsByUserRole(Guid userId);
     }
 }

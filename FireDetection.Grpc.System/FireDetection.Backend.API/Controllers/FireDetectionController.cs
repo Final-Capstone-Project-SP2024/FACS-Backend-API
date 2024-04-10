@@ -30,14 +30,14 @@ namespace FireDetection.Backend.API.Controllers
         }
 
 
-        [HttpGet("/day")]
+        [HttpGet("day")]
         public async Task<ActionResult> GetDay()
         {
 
-            return Ok( await _notificationLogService.GetInDay());
+            return Ok(await _notificationLogService.GetInDay());
         }
 
-        [HttpGet("/month")]
+        [HttpGet("month")]
         public async Task<ActionResult> GetMonth()
         {
 
@@ -45,14 +45,26 @@ namespace FireDetection.Backend.API.Controllers
         }
 
 
-        [HttpGet("/year")]
+        [HttpGet("year")]
         public async Task<ActionResult> GetYear()
         {
 
             return Ok(await _notificationLogService.GetInYear());
         }
 
+        [HttpGet("week")]
+        public async Task<ActionResult> GetWeek()
+        {
+            return Ok(await _notificationLogService.GetInWeek());
+        }
 
+
+        //todo data for pie chart analysis 
+        [HttpGet("locationAnalysis")]
+        public async Task<ActionResult> GetLocationAnalysis()
+        {
+            return Ok(await _notificationLogService.GetLocationAnalysis());
+        }
 
     }
 }

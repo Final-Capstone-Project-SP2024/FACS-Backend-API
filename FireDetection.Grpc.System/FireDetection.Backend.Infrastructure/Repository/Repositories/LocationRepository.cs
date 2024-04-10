@@ -46,5 +46,19 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
             return result;
         }
 
+        public async Task<IEnumerable<LocationGeneralResponse>> GetLocationsByUserRole(Guid userId)
+        {
+            var result = _context.Locations.Include(x => x.ControlCameras).Include(x => x.Cameras)
+                .Where(x => x.ControlCameras.Select(x =>x.UserID).Contains(userId)) 
+                .Select(x => new LocationGeneralResponse
+                {
+                    LocationId = x.Id,
+                    LocationName = x.LocationName,
+                    NumberOfCamera = x.Cameras.Count,
+                    NumberOfSecurity = x.ControlCameras.Count()
+                }).AsEnumerable();
+
+            return result;
+        }
     }
 }

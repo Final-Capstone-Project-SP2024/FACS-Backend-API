@@ -20,5 +20,9 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
         Task<string> GetInMonth();
 
         Task<string> GetInYear();
+
+        Task<string> GetInWeek();
+
+        Task<string> GetLocationAnalysis();
     }
 }

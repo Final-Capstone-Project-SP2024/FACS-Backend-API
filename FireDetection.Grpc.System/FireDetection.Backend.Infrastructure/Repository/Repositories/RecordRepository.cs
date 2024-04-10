@@ -37,6 +37,26 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
             return GetRecordInAlarm(_context).AsEnumerable();
         }
 
+        public async Task<IEnumerable<NotificationAlarmResponse>> NotificationDisconnected()
+        {
+            return  GetDisconectedRecordInAlarm(_context).AsEnumerable();
+        }
+
+
+        private static readonly Func<FireDetectionDbContext, IEnumerable<NotificationAlarmResponse>> GetDisconectedRecordInAlarm =
+        EF.CompileQuery(
+    (FireDetectionDbContext context) =>
+        context.Records.Include(x => x.Camera).Include(x => x.Camera.Location)
+            .Where(x => x.RecordTypeID == 2)
+            .Select(record => new NotificationAlarmResponse
+            {
+                CameraDestination = record.Camera.CameraDestination,
+                CameraName = record.Camera.CameraName,
+                LocationName = record.Camera.Location.LocationName,
+                RecordId = record.Id,
+                Status = record.Status
+            }));
+
         private static readonly Func<FireDetectionDbContext, IEnumerable<NotificationAlarmResponse>> GetRecordInAlarm =
              EF.CompileQuery(
          (FireDetectionDbContext context) =>

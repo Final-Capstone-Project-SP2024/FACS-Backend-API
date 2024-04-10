@@ -16,5 +16,9 @@ namespace FireDetection.Backend.Infrastructure.Repository.IRepositories
 
         Task<List<RecordInYear>> GetYearAnalysis();
 
+        Task<List<RecordInWeek>> GetWeekAnalysis();
+
+        Task<GetLocationAnalysisData> GetLocationAnalysis();
+
     }
 }

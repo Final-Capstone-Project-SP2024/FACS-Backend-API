@@ -364,9 +364,11 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             }
         }
 
+        public async Task<IEnumerable<NotificationAlarmResponse>> GetDisconnectedNotificationAlarm()
+        {
+            var data = await _unitOfWork.RecordRepository.NotificationDisconnected();
+            return data;
+        }
 
-
-
-        //  private async Task SaveVoteAndAction(Guid recordId, Type )
     }
 }

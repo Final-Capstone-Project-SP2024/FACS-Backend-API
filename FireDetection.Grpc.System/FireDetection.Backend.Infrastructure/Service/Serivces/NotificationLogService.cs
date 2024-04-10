@@ -101,5 +101,15 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         {
             return JsonSerializer.Serialize(await _unitOfWork.NotificationLogRepository.GetYearAnalysis());
         }
+
+        public async Task<string> GetInWeek()
+        {
+            return JsonSerializer.Serialize(await _unitOfWork.NotificationLogRepository.GetWeekAnalysis());
+        }
+
+        public  async Task<string> GetLocationAnalysis()
+        {
+            return JsonSerializer.Serialize(await _unitOfWork.NotificationLogRepository.GetLocationAnalysis());
+        }
     }
 }

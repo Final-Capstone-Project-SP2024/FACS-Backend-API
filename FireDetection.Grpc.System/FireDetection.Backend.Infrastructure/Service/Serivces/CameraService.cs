@@ -26,6 +26,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         private readonly ITimerService _timerService;
         private readonly IMediaRecordService _mediaRecordService;
         private readonly IMemoryCacheService _memoryCacheService;
+        
 
         public CameraService(IUnitOfWork unitOfWork, IMapper mapper, IMediaRecordService mediaRecordService, ITimerService timerService, IMemoryCacheService memoryCacheService)
         {

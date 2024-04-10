@@ -47,7 +47,7 @@ namespace FireDetection.Backend.API.Controllers.Future
 
         [Authorize(Roles = UserRole.Manager)]
         [HttpPost("{contractId}/downgrade")]
-        public async Task<ActionResult<RestDTO<TransactionDetailResponse>>> Downgrade(Guid contractId, AddTransactionRequest request)
+        private async Task<ActionResult<RestDTO<TransactionDetailResponse>>> Downgrade(Guid contractId, AddTransactionRequest request)
         {
             var response = await _trasactionService.Action(contractId, 2, request);
             return new RestDTO<TransactionDetailResponse>()
@@ -58,7 +58,7 @@ namespace FireDetection.Backend.API.Controllers.Future
         }
         [HttpPost("{transactionId}/paid")]
 
-        public async Task<ActionResult<RestDTO<TransactionDetailResponse>>> Paid(Guid transactionId)
+        private async Task<ActionResult<RestDTO<TransactionDetailResponse>>> Paid(Guid transactionId)
         {
             var response = await _trasactionService.Paid(transactionId);
             return new RestDTO<TransactionDetailResponse>()
