@@ -26,7 +26,7 @@ namespace FireDetection.Backend.API.Controllers.Future
 
         [Authorize(Roles = UserRole.Manager)]
         [HttpGet]
-        public async Task<ActionResult<RestDTO<IQueryable<ManualPlanGeneralResponse>>>> GetAll()
+        private async Task<ActionResult<RestDTO<IQueryable<ManualPlanGeneralResponse>>>> GetAll()
         {
             var response = await _manualPlanService.GetAll();
             return new RestDTO<IQueryable<ManualPlanGeneralResponse>>()
@@ -37,7 +37,7 @@ namespace FireDetection.Backend.API.Controllers.Future
         }
         [Authorize(Roles = UserRole.Manager)]
         [HttpGet("{Id}")]
-        public async Task<ActionResult<RestDTO<ManualPlanDetailResponse>>> GetDetail(int Id)
+        private async Task<ActionResult<RestDTO<ManualPlanDetailResponse>>> GetDetail(int Id)
         {
             var response = await _manualPlanService.GetManualPlanDetail(Id);
             return new RestDTO<ManualPlanDetailResponse>()
@@ -50,7 +50,7 @@ namespace FireDetection.Backend.API.Controllers.Future
 
         [Authorize(Roles = UserRole.Manager)]
         [HttpPost("{Id}")]
-        public async Task<ActionResult<RestDTO<ManualPlanDetailResponse>>> Update(int Id, UpdateManualPlanRequest request)
+        private async Task<ActionResult<RestDTO<ManualPlanDetailResponse>>> Update(int Id, UpdateManualPlanRequest request)
         {
             if (!ModelState.IsValid)
             {

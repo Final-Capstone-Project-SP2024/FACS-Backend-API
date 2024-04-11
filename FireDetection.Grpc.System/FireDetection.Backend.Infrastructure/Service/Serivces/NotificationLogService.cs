@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace FireDetection.Backend.Infrastructure.Service.Serivces
@@ -79,8 +80,36 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             analysis.CountFireAlarmLevel4 = _unitOfWork.NotificationLogRepository.Where(x => x.NotificationTypeId == 6).Count();
             analysis.CountFireAlarmLevel5 = _unitOfWork.NotificationLogRepository.Where(x => x.NotificationTypeId == 7).Count();
             analysis.HighRiskFireArea =  await _unitOfWork.CameraRepository.HighRiskFireDetectByCamera();
+           // analysis.RecordInDay = await _unitOfWork.NotificationLogRepository.GetDayAnalysis();
+
+
 
             return analysis;
+        }
+
+        public async Task<string> GetInDay()
+        {
+           return JsonSerializer.Serialize( await _unitOfWork.NotificationLogRepository.GetDayAnalysis());
+        }
+
+        public async Task<string> GetInMonth()
+        {
+            return JsonSerializer.Serialize( await _unitOfWork.NotificationLogRepository.GetMonthAnalysis());
+        }
+
+        public async Task<string> GetInYear()
+        {
+            return JsonSerializer.Serialize(await _unitOfWork.NotificationLogRepository.GetYearAnalysis());
+        }
+
+        public async Task<string> GetInWeek()
+        {
+            return JsonSerializer.Serialize(await _unitOfWork.NotificationLogRepository.GetWeekAnalysis());
+        }
+
+        public  async Task<string> GetLocationAnalysis()
+        {
+            return JsonSerializer.Serialize(await _unitOfWork.NotificationLogRepository.GetLocationAnalysis());
         }
     }
 }

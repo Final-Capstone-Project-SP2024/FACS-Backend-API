@@ -142,7 +142,7 @@ namespace FireDetection.Backend.API.Controllers
 
 
         [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
-        [HttpPost("/forgetpassword")]
+        [HttpPost("forgetpassword")]
         public async Task<ActionResult<RestDTO<UserInformationResponse>>> ForgetPassword(string securityCode)
         {
             await _userService.ForgotPassword(securityCode);
@@ -154,7 +154,7 @@ namespace FireDetection.Backend.API.Controllers
         }
 
         [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
-        [HttpPost("/otpconfirm")]
+        [HttpPost("otpconfirm")]
         public async Task<ActionResult<RestDTO<UserInformationResponse>>> ConfirmOTP(ChangePasswordRequest request)
         {
             bool check = await _userService.ChangePassword(request);
@@ -179,7 +179,7 @@ namespace FireDetection.Backend.API.Controllers
 
 
         [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
-        [HttpPost("/changepassword")]
+        [HttpPost("changepassword")]
         public async Task<ActionResult<RestDTO<UserInformationResponse>>> ChangePassword(ChangePasswordByUserRequest request)
         {
             var response = await _userService.ChangePasswordByUser(request);
@@ -191,6 +191,15 @@ namespace FireDetection.Backend.API.Controllers
 
         }
 
+        [HttpGet("unregistered")]
+        public async Task<ActionResult<RestDTO<IEnumerable<UserInformationResponse>>>> UnRegister(){
+
+            return new RestDTO<IEnumerable<UserInformationResponse>>()
+            {
+                Message = "Change password unsuccessfulyy!",
+                Data = await _userService.UnRegisterLocaiton(),
+            };
+        }
 
     }
 }

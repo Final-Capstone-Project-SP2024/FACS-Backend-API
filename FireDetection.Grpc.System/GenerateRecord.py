@@ -20,36 +20,32 @@ def generate_percentage():
     return round(random.uniform(0, 100), 2)
 
 # Specify the desired date range
-start_date = datetime(2022, 1, 1)
-end_date = datetime(2024, 1, 1)
+start_date = datetime(2023, 10, 1)
+end_date = datetime(2024, 4, 1)
 
 # Generate 10,000 data records
 data = []
-for _ in range(10000):
+for _ in range(200):
     camera_ids = [
-        "3cf118d9-d39b-4784-b343-be7622d69095",
-        "47629cbc-46ca-4131-9677-b183023785a8",
-        "de33572f-311d-45bf-a378-a1798d1ed719",
-        "b7576d81-48c9-4d87-946b-16b80d458e14",
-        "d5e9ffac-920d-4a4b-bc0e-facfb1c484e8",
-        "aac2e7aa-d7d4-4f21-8edb-56299ee53651"
+        "59823098-0d29-4546-8517-88b18b8a7f0a",
+        "9d56c5f4-4662-41dd-b336-4d24baab826c",
     ]
     
     record = {
         'Id': generate_guid(),
         'RecordTime': generate_datetime(start_date, end_date),
-        'Status': random.choice(['Active', 'Inactive']),
+        'Status': random.choice(['InFinish']),
         'UserRatingPercent': generate_percentage(),
         'PredictedPercent': generate_percentage(),
         'CameraID': random.choice(camera_ids),
-        'RecordTypeID': random.randint(1, 2),
+        'RecordTypeID': 1,
         'CreatedDate': generate_datetime(start_date, end_date),
-        'CreatedBy': "fa886056-0e02-4078-b046-66f4f712d07b",
+        'CreatedBy': "00000000-0000-0000-0000-000000000000",
     }
     data.append(record)
 
 # Specify the file path
-filename = 'FireDetection.Grpc.System/recordList.csv'
+filename = 'C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\recordList.csv'
 
 # Write to CSV file
 with open(filename, 'w', newline='') as file:

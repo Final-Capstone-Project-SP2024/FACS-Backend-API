@@ -106,5 +106,18 @@ namespace FireDetection.Backend.API.Controllers
                 Data = result,
             };
         }
+
+
+        [HttpPost("{id}/unregisterStaff")]
+        public async Task<ActionResult<RestDTO<LocationInformationResponse>>> UnRegisterStaff(Guid id, AddStaffRequest request)
+        {
+
+            var response = await _context.RemoveSecurityInLocation(id, request);
+            return new RestDTO<LocationInformationResponse>()
+            {
+                Message = "UnRegister Staff Successfully",
+                Data = response,
+            };
+        }
     }
 }

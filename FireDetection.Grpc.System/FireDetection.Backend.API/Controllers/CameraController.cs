@@ -88,6 +88,8 @@ namespace FireDetection.Backend.API.Controllers
 
         //  [Authorize(Roles = Roles.Manager + "," + Roles.User)]
 
+
+        //? Using in AI
         [ApiKey]
         [HttpPost("{id}/detect")]
         public async Task<ActionResult<RestDTO<DetectResponse>>> DetectFire(Guid id, TakeAlarmRequest request)
@@ -120,10 +122,23 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        //[HttpPost("{id}/record")]
-        //public async Task<ActionResult<RestDTO<DetectResponse>>> Record(Guid id, TakeElectricalIncidentRequest request)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        [HttpPost("{id}/alert")]
+        public async Task<ActionResult<RestDTO<DetectResponse>>> FireAlarmAlert(Guid id,[FromForm] AddAlertByHandResponse request)
+        {
+            await StorageHandlers.UploadFileAsync(request.video,"VideoRecord");
+            await StorageHandlers.UploadFileAsync(request.image, "ImageRecord");
+            TakeAlarmRequest takeAlarm = new TakeAlarmRequest
+            {
+                PictureUrl = request.image.ToString(),
+                PredictedPercent = request.FireDetection,
+                VideoUrl = request.video.ToString()
+            };
+            DetectResponse response = await _cameraService.DetectFire(id, takeAlarm);
+            return new RestDTO<DetectResponse>()
+            {
+                Message = "Detect Fire  Successfully",
+                Data = response,
+            };
+        }
     }
 }

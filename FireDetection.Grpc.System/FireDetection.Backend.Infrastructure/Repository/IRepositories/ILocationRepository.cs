@@ -1,4 +1,5 @@
-﻿using FireDetection.Backend.Domain.Entity;
+﻿using FireDetection.Backend.Domain.DTOs.Response;
+using FireDetection.Backend.Domain.Entity;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,5 +12,9 @@ namespace FireDetection.Backend.Infrastructure.Repository.IRepositories
     public interface ILocationRepository : IGenericRepository<Location>
     {
         public Task<ReadOnlyCollection<Guid>> GetStaffInLocation(Guid locationId);
+
+        public Task<IEnumerable<LocationGeneralResponse>> GetLocations();
+
+        public Task<IEnumerable<LocationGeneralResponse>> GetLocationsByUserRole(Guid userId);
     }
 }

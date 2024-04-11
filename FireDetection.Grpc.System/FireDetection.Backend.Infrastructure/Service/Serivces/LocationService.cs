@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.DTOs.Response;
+using FireDetection.Backend.Domain.DTOs.State;
 using FireDetection.Backend.Domain.Entity;
 using FireDetection.Backend.Infrastructure.Helpers.ErrorHandler;
 using FireDetection.Backend.Infrastructure.Repository.IRepositories;
@@ -22,11 +23,13 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
     {
         private readonly IUnitOfWork _context;
         private readonly IMapper _mapper;
+        private readonly IClaimsService _claimsService;
 
-        public LocationService(IUnitOfWork context, IMapper mapper)
+        public LocationService(IUnitOfWork context, IMapper mapper, IClaimsService claimsService)
         {
             _context = context;
             _mapper = mapper;
+            _claimsService = claimsService;
         }
         public async Task<LocationInformationResponse> AddNewLocation(AddLocationRequest request)
         {
@@ -52,7 +55,20 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<IQueryable<LocationGeneralResponse>> GetLocation()
         {
-            var  data  = await _context.LocationRepository.GetAll();
+            //? view by role 
+            //todo user in manager role 
+            IEnumerable<LocationGeneralResponse> data;
+            if (_claimsService.GetCurrentUserRole == UserRole.User)
+            {
+
+                data = await _context.LocationRepository.GetLocationsByUserRole(_claimsService.GetCurrentUserId);
+
+            }
+            else
+            {
+                 data = await _context.LocationRepository.GetLocations();
+            }
+            //todo user in user role
             var mapper = data.Select(x => _mapper.Map<LocationGeneralResponse>(x));
             return mapper.AsQueryable();
         }
@@ -126,7 +142,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             }
 
             var data = await _context.LocationRepository.GetStaffInLocation(locationId);
-            var cameras =  _context.CameraRepository.Where(x => x.LocationID == locationId).Select(x => x.Id).ToList().AsReadOnly();
+            var cameras = _context.CameraRepository.Where(x => x.LocationID == locationId).Select(x => x.Id).ToList().AsReadOnly();
             return new LocationInformationResponse()
             {
                 CreatedDate = _context.LocationRepository.GetById(locationId).Result.CreatedDate,
@@ -149,10 +165,10 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             return true;
         }
 
-        public  async Task<LocationInformationResponse> GetById(Guid locationId)
+        public async Task<LocationInformationResponse> GetById(Guid locationId)
         {
             var data = await _context.LocationRepository.GetStaffInLocation(locationId);
-            if(data is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Not Found this locationId");
+            if (data is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Not Found this locationId");
             var cameras = _context.CameraRepository.Where(x => x.LocationID == locationId).Select(x => x.Id).ToList().AsReadOnly();
 
             return new LocationInformationResponse()
@@ -163,6 +179,41 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 Users = data,
                 CameraInLocations = cameras
             };
+        }
+
+        public async Task<LocationInformationResponse> RemoveSecurityInLocation(Guid locationId, AddStaffRequest request)
+        {
+            bool checkIsLocation = false;
+            //? Check user in location
+            foreach (var item in request.staff)
+            {
+                if (_context.ControlCameraRepository.Where(x => x.LocationID == locationId && x.UserID == item).FirstOrDefault() is not null)
+                {
+                    _context.ControlCameraRepository.HardDelete(_context.ControlCameraRepository.Where(x => x.LocationID == locationId && x.UserID == item).FirstOrDefault());
+                }
+                else
+                {
+                    checkIsLocation = true;
+                }
+            }
+
+            if (checkIsLocation) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, $"Some user didn't register  in this location ");
+
+
+            var data = await _context.LocationRepository.GetStaffInLocation(locationId);
+            var cameras = _context.CameraRepository.Where(x => x.LocationID == locationId).Select(x => x.Id).ToList().AsReadOnly();
+            return new LocationInformationResponse()
+            {
+                CreatedDate = _context.LocationRepository.GetById(locationId).Result.CreatedDate,
+                LocationName = _context.LocationRepository.GetById(locationId).Result.LocationName,
+                LocationId = locationId,
+                Users = data,
+                CameraInLocations = cameras
+            };
+
+
+
+
         }
     }
 }

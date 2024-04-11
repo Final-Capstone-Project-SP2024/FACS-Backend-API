@@ -352,5 +352,12 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             return _mapper.Map<UserInformationDetailResponse>(_unitOfWork.UserRepository.GetById(user.Id));
 
         }
+
+
+        public async Task<IEnumerable<UserInformationResponse>> UnRegisterLocaiton()
+        {
+            return  await _unitOfWork.UserRepository.GetUsersUnRegisterd();
+
+        }
     }
 }

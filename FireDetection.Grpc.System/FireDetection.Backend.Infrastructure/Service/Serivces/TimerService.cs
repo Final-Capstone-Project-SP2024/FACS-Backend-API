@@ -53,6 +53,29 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             Task.Run(async () => await SpamNotificationAndCheckFinish(recordId, alarmLevel));
         }
 
+        public void DisconnectionNotification(Guid recordId, string cameraDestination, string cameraLocation)
+        {
+            Task.Run(async () => await DisconnectedNotificiationAlert(recordId, cameraDestination, cameraLocation));
+        }
+
+        protected async Task DisconnectedNotificiationAlert(Guid recordId, string cameraDestination, string cameraLocation)
+        {
+            DateTime start = DateTime.Now;
+            while ((DateTime.UtcNow - start).TotalMinutes <= 1)
+            {
+                NotficationDetailResponse data = await NotificationHandler.Get(7);
+                Dictionary<string, string> tokens = JsonConvert.DeserializeObject<Dictionary<string, string>>(await RealtimeDatabaseHandlers.GetFCMToken());
+                List<string> values = new List<string>(tokens.Values);
+
+                // Print the values
+                foreach (var value in values)
+                {
+
+                    Console.WriteLine(data);
+                    await CloudMessagingHandlers.CloudMessaging(data.Title, data.Context, value);
+                }
+            }
+        }
         private async Task EndVotingPhase(Guid recordId)
         {
             DateTime startTime = DateTime.Now;
@@ -156,7 +179,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                         {
 
                             //! Send notification to remind manager have some action
-                            await CloudMessagingHandlers.CloudMessaging(fcm_token : value);
+                            await CloudMessagingHandlers.CloudMessaging(fcm_token: value);
                         }
                         await _memorycachedservice.IncreaseQuantity(recordId, CacheType.VotingValue);
                         Console.WriteLine("======Action Phase (Phase 2)=======");
@@ -207,7 +230,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                         {
 
                             Console.WriteLine(data);
-                            await CloudMessagingHandlers.CloudMessaging(data.Title, data.Context,value);
+                            await CloudMessagingHandlers.CloudMessaging(data.Title, data.Context, value);
                         }
 
                         await _memorycachedservice.IncreaseQuantity(recordId, TransferCacheType(alarmLevel));
@@ -244,5 +267,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             4 => CacheType.AlarmLevel4,
             5 => CacheType.AlarmLevel5,
         };
+
+
     }
 }

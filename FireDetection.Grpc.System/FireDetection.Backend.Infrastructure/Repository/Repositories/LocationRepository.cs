@@ -1,4 +1,5 @@
 ﻿using FireDetection.Backend.Domain;
+using FireDetection.Backend.Domain.DTOs.Response;
 using FireDetection.Backend.Domain.Entity;
 using FireDetection.Backend.Infrastructure.Repository.IRepositories;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +29,34 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
                            .Where(cc => cc.LocationID == locationId)
                            .Select(cc => cc.UserID)
                            .ToList().AsReadOnly();
+
+            return result;
+        }
+
+        public async Task<IEnumerable<LocationGeneralResponse>> GetLocations()
+        {
+            var result = _context.Locations.Include(x => x.ControlCameras).Include(x => x.Cameras).Select(x => new LocationGeneralResponse
+            {
+                LocationId = x.Id,
+                LocationName = x.LocationName,
+                NumberOfCamera = x.Cameras.Count,
+                NumberOfSecurity = x.ControlCameras.Count()
+            }).AsEnumerable();
+
+            return result;
+        }
+
+        public async Task<IEnumerable<LocationGeneralResponse>> GetLocationsByUserRole(Guid userId)
+        {
+            var result = _context.Locations.Include(x => x.ControlCameras).Include(x => x.Cameras)
+                .Where(x => x.ControlCameras.Select(x =>x.UserID).Contains(userId)) 
+                .Select(x => new LocationGeneralResponse
+                {
+                    LocationId = x.Id,
+                    LocationName = x.LocationName,
+                    NumberOfCamera = x.Cameras.Count,
+                    NumberOfSecurity = x.ControlCameras.Count()
+                }).AsEnumerable();
 
             return result;
         }
