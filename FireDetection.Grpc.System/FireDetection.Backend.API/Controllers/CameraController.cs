@@ -123,7 +123,7 @@ namespace FireDetection.Backend.API.Controllers
         }
 
         [HttpPost("{id}/alert")]
-        public async Task<ActionResult<RestDTO<DetectResponse>>> FireAlarmAlert(Guid id, AddAlertByHandResponse request)
+        public async Task<ActionResult<RestDTO<DetectResponse>>> FireAlarmAlert(Guid id,[FromForm] AddAlertByHandResponse request)
         {
             await StorageHandlers.UploadFileAsync(request.video,"VideoRecord");
             await StorageHandlers.UploadFileAsync(request.image, "ImageRecord");
