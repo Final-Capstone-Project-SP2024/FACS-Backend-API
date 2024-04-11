@@ -267,7 +267,6 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
             query = query.Where(x => x.RecordTime.Date >= req.FromDate.Date && x.RecordTime.Date <= req.ToDate.Date);
  
-            var entityProjected = LinqUtils.DynamicFilter<Record>(query, entity).ProjectTo<RecordResponse>(_mapper.ConfigurationProvider);
 
             #region filter query
             if (req.CameraId != Guid.Empty)
@@ -285,6 +284,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 query = query.Where(x => x.Status == req.Status);
             }
             #endregion
+            var entityProjected = LinqUtils.DynamicFilter<Record>(query, entity).ProjectTo<RecordResponse>(_mapper.ConfigurationProvider);
 
             var test = await query.ToListAsync();
 
