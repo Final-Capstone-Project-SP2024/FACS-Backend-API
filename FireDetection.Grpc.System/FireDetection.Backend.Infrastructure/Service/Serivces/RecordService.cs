@@ -31,7 +31,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         private readonly IClaimsService _claimService;
         private readonly ILocationScopeService _locationScopeService;
 
-        public RecordService(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCacheService memoryCacheService, ITimerService timerService, INotificationLogService log, IClaimsService claimService,ILocationScopeService locationScopeService)
+        public RecordService(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCacheService memoryCacheService, ITimerService timerService, INotificationLogService log, IClaimsService claimService, ILocationScopeService locationScopeService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -56,10 +56,10 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 await _memoryCacheService.Create(recordID, CacheType.Voting);
                 await _memoryCacheService.Create(recordID, CacheType.IsFinish);
 
-                List<Guid> user = await _locationScopeService.GetUserInLocation( await _unitOfWork.RecordRepository.GetLocationName(recordID), request.ActionId);
+                List<Guid> user = await _locationScopeService.GetUserInLocation(await _unitOfWork.RecordRepository.GetLocationName(recordID), request.ActionId);
                 user.Add(Guid.Parse("3c9a2a1b-f4dc-4468-a89c-f6be8ca3b541"));
                 Console.WriteLine(user);
-                _timerService.SpamNotification(recordID, request.ActionId,user);
+                _timerService.SpamNotification(recordID, request.ActionId, user);
             }
 
 
@@ -67,7 +67,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             await _memoryCacheService.UnCheck(recordID, CacheType.Action);
             if (request.ActionId == 6)
             {
-                await _memoryCacheService.UnCheck(recordID,CacheType.IsFinish);
+                await _memoryCacheService.UnCheck(recordID, CacheType.IsFinish);
                 List<RecordProcess> idInput = _unitOfWork.RecordProcessRepository.Where(x => x.RecordID == recordID).ToList();
                 List<int> output = new List<int>();
                 foreach (var item in idInput)
@@ -85,7 +85,8 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 await updateRecordToEnd(recordID);
                 return true;
             }
-            if (request.ActionId == 7) {
+            if (request.ActionId == 7)
+            {
                 await _memoryCacheService.UnCheck(recordID, CacheType.IsFinish);
                 await updateRecordToEnd(recordID);
                 RecordProcess recordProcessEnding = _mapper.Map<RecordProcess>(request);
@@ -160,7 +161,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 //? to get the biggest value : set 
                 await _memoryCacheService.SettingCount(recordID, CacheType.VotingLevel, request.LevelRating);
 
-               
+
                 //? to count how many vote in this record 
                 await _memoryCacheService.IncreaseQuantity(recordID, CacheType.VotingCount);
             }
@@ -174,9 +175,9 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             //todo check and create action checking 
             await _memoryCacheService.UnCheck(recordID, CacheType.IsVoting);
             await _memoryCacheService.Create(recordID, CacheType.Action);
-            List<Guid> users = await _locationScopeService.GetUserInLocation( await _unitOfWork.RecordRepository.GetLocationName(recordID),1);
+            List<Guid> users = await _locationScopeService.GetUserInLocation(await _unitOfWork.RecordRepository.GetLocationName(recordID), 1);
             users.Add(Guid.Parse("3c9a2a1b-f4dc-4468-a89c-f6be8ca3b541"));
-            _timerService.CheckIsAction(recordID,users);
+            _timerService.CheckIsAction(recordID, users);
 
 
             //Console.WriteLine(await _memoryCacheService.GetResult(recordID, CacheType.FireNotify));
@@ -264,7 +265,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         private async Task updateRecord(Record record)
         {
             record.Status = RecordState.InFinish;
-            record.FinishAlarmTime =DateTime.Now;
+            record.FinishAlarmTime = DateTime.UtcNow.AddHours(7);
             //record.UserRatingPercent = await _memoryCacheService.GetResult(record.Id,CacheType.VotingLevel);
             _unitOfWork.RecordRepository.Update(record);
             await _unitOfWork.SaveChangeAsync();
@@ -291,7 +292,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             var records = await query.ToListAsync();
 
             query = query.Where(x => x.RecordTime.Date >= req.FromDate.Date && x.RecordTime.Date <= req.ToDate.Date);
- 
+
 
             #region filter query
             if (req.CameraId != Guid.Empty)
@@ -321,9 +322,9 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<RecordDetailResponse> GetDetail(Guid recordID)
         {
-           var response = await _unitOfWork.RecordRepository.RecordDetailResponse(recordID);
+            var response = await _unitOfWork.RecordRepository.RecordDetailResponse(recordID);
             response.evidences = _unitOfWork.MediaRecordRepository.Where(x => x.RecordId == recordID && x.Url.Contains("evidene")).Select(x => x.Url).ToList();
-            if(response.RecordType == 3)
+            if (response.RecordType == 3)
             {
                 var user = _unitOfWork.UserRepository.GetById(_unitOfWork.RecordRepository.GetById(recordID).Result.CreatedBy).Result;
                 UserInLocationResponse response1 = new UserInLocationResponse()

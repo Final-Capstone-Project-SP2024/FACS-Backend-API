@@ -100,7 +100,6 @@ namespace FireDetection.Backend.API.Controllers
 
 
 
-        [Authorize(Roles = UserRole.Manager)]
         [HttpGet]
         public async Task<ActionResult<RestDTO<List<UserInformationResponse>>>> GetAllUsers([FromQuery] PagingRequest pagingRequest, [FromQuery] UserRequest request)
         {
