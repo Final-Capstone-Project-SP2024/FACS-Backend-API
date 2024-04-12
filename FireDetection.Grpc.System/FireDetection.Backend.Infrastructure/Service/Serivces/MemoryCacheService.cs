@@ -63,7 +63,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         private static string NameTransfer(CacheType? name, Guid recordId) => name switch
         {
             CacheType.Action or CacheType.VotingLevel or CacheType.IsVoting or CacheType.IsFinish => $"{recordId}_{name}",
-            CacheType.AlarmLevel1 or CacheType.AlarmLevel2 or CacheType.AlarmLevel4 or CacheType.Voting
+            CacheType.AlarmLevel1 or CacheType.AlarmLevel2 or CacheType.AlarmLevel4 or CacheType.AlarmLevel3 or CacheType.Voting
             or CacheType.AlarmLevel5 or CacheType.FireNotify or CacheType.FakeAlarm or CacheType.DisconnectCamera or CacheType.VotingValue
             or CacheType.VotingCount => $"{recordId}_{name}_Counting",
 
@@ -176,6 +176,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         {
             int result = 0;
             if (type == CacheType.VotingValue) { result = (int)_memoryCache.Get(NameTransfer(CacheType.VotingValue, recordId)); }
+            if (type == CacheType.VotingLevel) { result = (int)_memoryCache.Get(NameTransfer(CacheType.VotingLevel, recordId)); }
             if (type == CacheType.FireNotify) { result = (int)_memoryCache.Get(NameTransfer(CacheType.FireNotify, recordId)); }
             if(type == CacheType.VotingCount) { result = (int)_memoryCache.Get(NameTransfer(CacheType.VotingCount, recordId)); }
             if (type == CacheType.AlarmLevel1) { result = (int)_memoryCache.Get(NameTransfer(CacheType.AlarmLevel1, recordId)); }

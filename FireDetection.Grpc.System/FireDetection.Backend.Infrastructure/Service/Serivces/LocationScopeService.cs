@@ -3,6 +3,7 @@ using FireDetection.Backend.Domain.Entity;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using FireDetection.Backend.Infrastructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,14 +23,16 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         public async Task<List<Guid>> GetUserInLocation(string LocationCode, int fireLevel)
         {
             List<Guid> locationIdLisr = new List<Guid>();
-            Guid locationId = _unitOfWork.LocationRepository.Where(x => x.LocationName == "Location " + LocationCode).FirstOrDefault().Id;
+            
+            Guid locationId = _unitOfWork.LocationRepository.Where(x => x.LocationName ==  LocationCode).FirstOrDefault().Id;
             if (fireLevel == 1)
             {
+                
                 return _unitOfWork.ControlCameraRepository.Where(x => x.LocationID == locationId).Select(x => x.UserID).ToList();
             }
             else
             {
-                await FindUserNearbyInLevel(LocationCode, fireLevel);
+                 return await FindUserNearbyInLevel(LocationCode, fireLevel);
             }
 
 
@@ -37,17 +40,13 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         }
         //? with 2,3,4 level find 1,2,3 index can call be checkpoint
-        internal int NumberOfLocationNeeded(int fireLevel) => fireLevel switch
+      
+        internal async Task<List<Guid>> FindUserNearbyInLevel(string LocationCode, int fireLevel)
         {
-            2 => 1,
-            3 => 2,
-            4 => 3,
-        };
-        internal async Task<List<Guid?>> FindUserNearbyInLevel(string LocationCode, int fireLevel)
-        {
+            string pointIn = LocationCode.Split(' ')[1];
             int checkpoint = 0;
             object countLock = new object();
-            int indexOf = Array.IndexOf(locations, LocationCode);
+            int indexOf = Array.IndexOf(locations,char.Parse(pointIn));
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
             CancellationToken cancellationToken = cancellationTokenSource.Token;
             List<Guid?> locationId = new List<Guid?>();
@@ -57,7 +56,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             Task findUp = Task.Run(() =>
             {
 
-                for (int i = indexOf; i < 26; i++)
+                for (int i = indexOf; i < 25; i++)
                 {
                     Guid? id = _unitOfWork.LocationRepository.Where(x => x.LocationName == "Location " + locations[i]).FirstOrDefault().Id;
                     if (id != null)
@@ -69,7 +68,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
                     lock (countLock)
                     {
-                        if (checkpoint >= NumberOfLocationNeeded(fireLevel))
+                        if (checkpoint >= fireLevel)
                         {
                             cancellationTokenSource.Cancel();
                             break;
@@ -92,7 +91,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
                     lock (countLock)
                     {
-                        if (checkpoint >= NumberOfLocationNeeded(fireLevel))
+                        if (checkpoint >= fireLevel)
                         {
                             cancellationTokenSource.Cancel();
                             break;
@@ -126,8 +125,14 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             // Dispose the cancellation token source
             cancellationTokenSource.Dispose();
 
+            List<Guid> users = new List<Guid>();
+            Console.WriteLine(locationId);
+            foreach (var locate in  locationId)
+            {
+                users.AddRange(_unitOfWork.ControlCameraRepository.Where(x => x.LocationID == locate).Select(x => x.UserID));
+            }
 
-            return locationId;
+            return users;
         }
 
         public async Task<List<UserInLocationResponse>> GetUserLocation(Guid locationId)

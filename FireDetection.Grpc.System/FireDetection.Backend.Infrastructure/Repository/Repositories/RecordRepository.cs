@@ -27,7 +27,7 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
             return null; //result;
         }
 
-        public async  Task<RecordDetailResponse> RecordDetailResponse(Guid recordId)
+        public async Task<RecordDetailResponse> RecordDetailResponse(Guid recordId)
         {
             return GetRecordCompiledQuery(_context, recordId);
         }
@@ -39,9 +39,17 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
 
         public async Task<IEnumerable<NotificationAlarmResponse>> NotificationDisconnected()
         {
-            return  GetDisconectedRecordInAlarm(_context).AsEnumerable();
+            return GetDisconectedRecordInAlarm(_context).AsEnumerable();
         }
 
+        public async Task<string> GetLocationName(Guid recordId)
+        {
+            return GetLocationNameDb(_context, recordId).FirstOrDefault().ToString();
+        }
+
+        private static readonly Func<FireDetectionDbContext, Guid, IEnumerable<string>> GetLocationNameDb = EF.CompileQuery(
+           (FireDetectionDbContext context, Guid recordId) =>
+           context.Records.Include(x => x.Camera).ThenInclude(x => x.Location).Where(x => x.Id == recordId).Select(x => x.Camera.Location.LocationName));
 
         private static readonly Func<FireDetectionDbContext, IEnumerable<NotificationAlarmResponse>> GetDisconectedRecordInAlarm =
         EF.CompileQuery(
@@ -61,7 +69,7 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
              EF.CompileQuery(
          (FireDetectionDbContext context) =>
              context.Records.Include(x => x.Camera).Include(x => x.Camera.Location)
-                 .Where(x => x.Status == RecordState.InAlram || x.Status  == RecordState.EndVote || x.Status == RecordState.InVote || x.Status == RecordState.InAction)
+                 .Where(x => x.Status == RecordState.InAlram || x.Status == RecordState.EndVote || x.Status == RecordState.InVote || x.Status == RecordState.InAction)
                  .Select(record => new NotificationAlarmResponse
                  {
                      CameraDestination = record.Camera.CameraDestination,
@@ -100,14 +108,15 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
                       CameraName = x.Camera.CameraName,
                       UserRatingPercent = x.UserRatingPercent,
                       Status = x.Status,
+                      RecordType = x.RecordTypeID,
                       RatingResult = 1,
                       userRatings = x.AlarmRates
                                       .Where(x => x.RecordID == recordId)
-                                      .Select(m => new UserRating { Rating = m.LevelID, userId = m.UserID })
+                                      .Select(m => new UserRating {SecurityCode = m.User.SecurityCode, Rating = m.LevelID, userId = m.UserID, Name = m.Level.Name })
                                       .ToList(),
                       userVoting = x.RecordProcesses
                                     .Where(x => x.RecordID == recordId)
-                                    .Select(m => new UserVoting { userId = m.UserID, VoteLevel = m.ActionTypeId, VoteType = m.ActionType.ActionName })
+                                    .Select(m => new UserVoting {SecurityCode = m.User.SecurityCode, userId = m.UserID, VoteLevel = m.ActionTypeId, VoteType = m.ActionType.ActionName })
                                     .ToList(),
                       ImageRecord = x.MediaRecords
                           .Where(m => m.MediaTypeId == 2 && m.RecordId == recordId)

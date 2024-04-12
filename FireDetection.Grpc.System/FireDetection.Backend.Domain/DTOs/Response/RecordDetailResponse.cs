@@ -9,7 +9,7 @@ namespace FireDetection.Backend.Domain.DTOs.Response
     public class RecordDetailResponse
     {
         public Guid CameraId { get; set; }
-
+        public int RecordType {  get; set; }
         public string CameraDestination { get; set; } = string.Empty;
         public string CameraName { get; set; } = string.Empty;
 
@@ -31,8 +31,10 @@ namespace FireDetection.Backend.Domain.DTOs.Response
         public List<UserVoting> userVoting { get; set; } = null!;
 
         public List<string> evidences { get; set; } 
+        public UserInLocationResponse AlarmUser { get; set;} = null!;
     }
 
+   
     public class VideoRecord
     {
         public string? VideoUrl { get; set; }
@@ -47,15 +49,18 @@ namespace FireDetection.Backend.Domain.DTOs.Response
 
     public class UserRating
     {
+        public string? SecurityCode { get; set; }
         public Guid userId { get; set; }
 
         public int Rating { get; set; }
+        
+        public string? Name { get; set; }
     }
   
     public class UserVoting
     {
+        public string? SecurityCode { get; set; }
         public Guid userId { get; set; }
-
         public int VoteLevel { get; set; }
 
         public string VoteType { get; set; } = null!;

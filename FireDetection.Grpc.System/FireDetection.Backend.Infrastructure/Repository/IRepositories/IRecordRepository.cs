@@ -16,5 +16,7 @@ namespace FireDetection.Backend.Infrastructure.Repository.IRepositories
         public Task<IEnumerable<NotificationAlarmResponse>> NotificationAlarmResponse();
 
         public Task<IEnumerable<NotificationAlarmResponse>> NotificationDisconnected();
+
+        Task<string> GetLocationName(Guid recordId); 
     }
 }

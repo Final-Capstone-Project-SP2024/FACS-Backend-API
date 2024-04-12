@@ -29,8 +29,9 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         private readonly IMemoryCacheService _memoryCacheService;
         private readonly INotificationLogService _log;
         private readonly IClaimsService _claimService;
+        private readonly ILocationScopeService _locationScopeService;
 
-        public RecordService(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCacheService memoryCacheService, ITimerService timerService, INotificationLogService log, IClaimsService claimService)
+        public RecordService(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCacheService memoryCacheService, ITimerService timerService, INotificationLogService log, IClaimsService claimService,ILocationScopeService locationScopeService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -38,6 +39,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             _timerService = timerService;
             _log = log;
             _claimService = claimService;
+            _locationScopeService = locationScopeService;
         }
         public async Task<bool> ActionInAlarm(Guid recordID, AddRecordActionRequest request)
         {
@@ -53,7 +55,11 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 await _memoryCacheService.Create(recordID, setKey(request.ActionId));
                 await _memoryCacheService.Create(recordID, CacheType.Voting);
                 await _memoryCacheService.Create(recordID, CacheType.IsFinish);
-                _timerService.SpamNotification(recordID, request.ActionId);
+
+                List<Guid> user = await _locationScopeService.GetUserInLocation( await _unitOfWork.RecordRepository.GetLocationName(recordID), request.ActionId);
+                user.Add(Guid.Parse("3c9a2a1b-f4dc-4468-a89c-f6be8ca3b541"));
+                Console.WriteLine(user);
+                _timerService.SpamNotification(recordID, request.ActionId,user);
             }
 
 
@@ -79,7 +85,19 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 await updateRecordToEnd(recordID);
                 return true;
             }
-            if (request.ActionId == 7) await updateRecordToEnd(recordID);
+            if (request.ActionId == 7) {
+                await _memoryCacheService.UnCheck(recordID, CacheType.IsFinish);
+                await updateRecordToEnd(recordID);
+                RecordProcess recordProcessEnding = _mapper.Map<RecordProcess>(request);
+                recordProcessEnding.RecordID = recordID;
+                _unitOfWork.RecordProcessRepository.InsertAsync(recordProcessEnding);
+                await _unitOfWork.SaveChangeAsync();
+
+
+                // updateRecordToEnd(recordID, 1);
+
+                return true;
+            };
 
             await ChangeInActionRecordState(recordID);
 
@@ -98,6 +116,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         internal async Task ChangeInActionRecordState(Guid recordId)
         {
             var record = await _unitOfWork.RecordRepository.GetById(recordId);
+            record.UserRatingPercent = await _memoryCacheService.GetResult(recordId, CacheType.VotingValue);
             record.Status = RecordState.InAction;
             _unitOfWork.RecordRepository.Update(record);
             await _unitOfWork.SaveChangeAsync();
@@ -127,6 +146,8 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             {
 
                 //? to get the biggest value : create
+                await _memoryCacheService.Create(recordID, CacheType.VotingLevel);
+
                 await _memoryCacheService.Create(recordID, CacheType.VotingValue, request.LevelRating);
 
                 //? to count how many vote in this record 
@@ -137,8 +158,9 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             else
             {
                 //? to get the biggest value : set 
-                await _memoryCacheService.SettingCount(recordID, CacheType.VotingValue, request.LevelRating);
+                await _memoryCacheService.SettingCount(recordID, CacheType.VotingLevel, request.LevelRating);
 
+               
                 //? to count how many vote in this record 
                 await _memoryCacheService.IncreaseQuantity(recordID, CacheType.VotingCount);
             }
@@ -152,7 +174,9 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             //todo check and create action checking 
             await _memoryCacheService.UnCheck(recordID, CacheType.IsVoting);
             await _memoryCacheService.Create(recordID, CacheType.Action);
-            _timerService.CheckIsAction(recordID);
+            List<Guid> users = await _locationScopeService.GetUserInLocation( await _unitOfWork.RecordRepository.GetLocationName(recordID),1);
+            users.Add(Guid.Parse("3c9a2a1b-f4dc-4468-a89c-f6be8ca3b541"));
+            _timerService.CheckIsAction(recordID,users);
 
 
             //Console.WriteLine(await _memoryCacheService.GetResult(recordID, CacheType.FireNotify));
@@ -240,6 +264,8 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         private async Task updateRecord(Record record)
         {
             record.Status = RecordState.InFinish;
+            record.FinishAlarmTime =DateTime.Now;
+            //record.UserRatingPercent = await _memoryCacheService.GetResult(record.Id,CacheType.VotingLevel);
             _unitOfWork.RecordRepository.Update(record);
             await _unitOfWork.SaveChangeAsync();
         }
@@ -297,6 +323,17 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         {
            var response = await _unitOfWork.RecordRepository.RecordDetailResponse(recordID);
             response.evidences = _unitOfWork.MediaRecordRepository.Where(x => x.RecordId == recordID && x.Url.Contains("evidene")).Select(x => x.Url).ToList();
+            if(response.RecordType == 3)
+            {
+                var user = _unitOfWork.UserRepository.GetById(_unitOfWork.RecordRepository.GetById(recordID).Result.CreatedBy).Result;
+                UserInLocationResponse response1 = new UserInLocationResponse()
+                {
+                    Name = user.Name,
+                    UserID = user.Id,
+
+                };
+                response.AlarmUser = response1;
+            }
             return response;
         }
 

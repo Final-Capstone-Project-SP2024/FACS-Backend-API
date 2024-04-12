@@ -1,4 +1,5 @@
-﻿using FireDetection.Backend.Domain;
+﻿using Firebase.Auth;
+using FireDetection.Backend.Domain;
 using FireDetection.Backend.Domain.DTOs.Response;
 using FireDetection.Backend.Domain.DTOs.State;
 using FireDetection.Backend.Domain.Entity;
@@ -9,6 +10,7 @@ using FireDetection.Backend.Infrastructure.UnitOfWork;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,10 +29,12 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         private readonly IMemoryCacheService _memorycachedservice;
         private readonly IAPICallService _apiCall;
         private CancellationTokenSource _cancellationTokenSource;
-        public TimerService(IMemoryCacheService memoryCacheService, IAPICallService aPICall)
+        private ILocationScopeService _locationScopeService;
+        public TimerService(IMemoryCacheService memoryCacheService, IAPICallService aPICall, ILocationScopeService locationScopeService)
         {
             _memorycachedservice = memoryCacheService;
             _apiCall = aPICall;
+            _locationScopeService = locationScopeService;
         }
 
 
@@ -38,19 +42,21 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         {
             Task.Run(async () => await EndVotingPhase(recordId));
         }
-        public void CheckIsAction(Guid recordId)
+        public void CheckIsAction(Guid recordId, List<Guid> users)
         {
-            Task.Run(async () => await CheckAndAutoAction(recordId));
+            Task.Run(async () => await CheckAndAutoAction(recordId,users));
         }
 
-        public void CheckIsVoting(Guid recordId, string cameraDestination, string cameraLocation)
+
+        //? using to phase 1: alarm Notify to user in this camera and Manager
+        public  void CheckIsVoting(Guid recordId, string cameraDestination, string cameraLocation,List<Guid> users)
         {
-            Task.Run(async () => await CheckAndSendNotification(recordId, cameraDestination, cameraLocation));
+            Task.Run(async () => await CheckAndSendNotification(recordId, cameraDestination, cameraLocation,users));
         }
 
-        public void SpamNotification(Guid recordId, int alarmLevel)
+        public void SpamNotification(Guid recordId, int alarmLevel, List<Guid> users)
         {
-            Task.Run(async () => await SpamNotificationAndCheckFinish(recordId, alarmLevel));
+            Task.Run(async () => await SpamNotificationAndCheckFinish(recordId, alarmLevel,users));
         }
 
         public void DisconnectionNotification(Guid recordId, string cameraDestination, string cameraLocation)
@@ -74,8 +80,11 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                     Console.WriteLine(data);
                     await CloudMessagingHandlers.CloudMessaging(data.Title, data.Context, value);
                 }
+               await  Task.Delay(5000);
+            
             }
         }
+
         private async Task EndVotingPhase(Guid recordId)
         {
             DateTime startTime = DateTime.Now;
@@ -102,12 +111,11 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             }
 
         }
-        protected async Task CheckAndSendNotification(Guid recordID, string CameraDestination, string LocationName)
+        protected async Task CheckAndSendNotification(Guid recordID, string CameraDestination, string LocationName, List<Guid> users)
         {
             int countAlarmTime = 0;
             bool check = true;
             var startTime = DateTime.UtcNow;
-
             while (check && (DateTime.UtcNow - startTime).TotalMinutes <= 30)
             {
                 try
@@ -118,21 +126,19 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                         NotficationDetailResponse data = await NotificationHandler.Get(11);
 
                         //? get all token in real-time database
-                        Dictionary<string, string> tokens = JsonConvert.DeserializeObject<Dictionary<string, string>>(await RealtimeDatabaseHandlers.GetFCMToken());
-                        List<string> values = new List<string>(tokens.Values);
-
-                        // Print the values
-                        foreach (var value in values)
+                        foreach (var item in users)
                         {
-                            //? notifi to single fcm token 
-                            Console.WriteLine(value);
+                            Console.WriteLine(item);
+                            Console.WriteLine(HandleTextUtil.HandleTitle(data.Title, CameraDestination));
+                            Console.WriteLine(HandleTextUtil.HandleContext(data.Context, LocationName, CameraDestination));
+                            string token = await RealtimeDatabaseHandlers.GetFCMTokenByUserID(item);
+                           
+                            
                             await CloudMessagingHandlers.CloudMessaging(
                                 HandleTextUtil.HandleTitle(data.Title, CameraDestination),
                                 HandleTextUtil.HandleContext(data.Context, LocationName, CameraDestination),
-                                value);
-
+                               token);
                         }
-
 
                         await _memorycachedservice.IncreaseQuantity(recordID, CacheType.FireNotify);
 
@@ -157,11 +163,11 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
             }
             await Task.Delay(5000); // Delay for 5 seconds before checking again
-            Console.WriteLine("End Task");
+            Console.WriteLine("+++++++++++++++++++++++++++++++++");
 
         }
 
-        protected async Task CheckAndAutoAction(Guid recordId)
+        protected async Task CheckAndAutoAction(Guid recordId,List<Guid> users)
         {
             var startTime = DateTime.UtcNow;
             bool check = true;
@@ -171,17 +177,18 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 {
                     if (!await _memorycachedservice.CheckIsAction(recordId))
                     {
-                        Dictionary<string, string> tokens = JsonConvert.DeserializeObject<Dictionary<string, string>>(await RealtimeDatabaseHandlers.GetFCMToken());
-                        List<string> values = new List<string>(tokens.Values);
-
-                        // Print the values
-                        foreach (var value in values)
+                        NotficationDetailResponse data = await NotificationHandler.Get(9);
+                        foreach (var user in users)
                         {
-
-                            //! Send notification to remind manager have some action
-                            await CloudMessagingHandlers.CloudMessaging(fcm_token: value);
+                            Console.WriteLine(user);
+                            Console.WriteLine(data.Context);
+                            Console.WriteLine(data.Title);
+                            string token = await RealtimeDatabaseHandlers.GetFCMTokenByUserID(user);
+                            await CloudMessagingHandlers.CloudMessaging(data.Title,data.Context,fcm_token: token);
+                            
                         }
-                        await _memorycachedservice.IncreaseQuantity(recordId, CacheType.VotingValue);
+                        
+                       // await _memorycachedservice.IncreaseQuantity(recordId, CacheType.VotingValue);
                         Console.WriteLine("======Action Phase (Phase 2)=======");
                     }
                     else
@@ -202,7 +209,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         }
 
 
-        protected async Task SpamNotificationAndCheckFinish(Guid recordId, int alarmLevel)
+        protected async Task SpamNotificationAndCheckFinish(Guid recordId, int alarmLevel, List<Guid> users)
         {
             /*
              Variable have been create before 
@@ -219,18 +226,14 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 {
                     if (!await _memorycachedservice.CheckIsFinish(recordId))
                     {
-
-
-                        NotficationDetailResponse data = await NotificationHandler.Get(alarmLevel);
-                        Dictionary<string, string> tokens = JsonConvert.DeserializeObject<Dictionary<string, string>>(await RealtimeDatabaseHandlers.GetFCMToken());
-                        List<string> values = new List<string>(tokens.Values);
-
-                        // Print the values
-                        foreach (var value in values)
+                        foreach (var item in users)
                         {
-
-                            Console.WriteLine(data);
-                            await CloudMessagingHandlers.CloudMessaging(data.Title, data.Context, value);
+                            NotficationDetailResponse data = await NotificationHandler.Get(alarmLevel);
+                            Console.WriteLine(item);
+                            Console.WriteLine(data.Context);
+                            Console.WriteLine(data.Title);
+                            string token = await RealtimeDatabaseHandlers.GetFCMTokenByUserID(item);
+                            await CloudMessagingHandlers.CloudMessaging(data.Title, data.Context, token);
                         }
 
                         await _memorycachedservice.IncreaseQuantity(recordId, TransferCacheType(alarmLevel));

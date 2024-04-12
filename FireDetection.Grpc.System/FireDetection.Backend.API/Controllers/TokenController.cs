@@ -30,8 +30,9 @@ namespace FireDetection.Backend.API.Controllers
                 return Ok(await RealtimeDatabaseHandlers.GetFCMToken(_claimService.GetCurrentUserId));
 
         }
-        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
-        [HttpGet("/all")]
+
+
+        [HttpGet("/testAlarm")]
         public async Task<ActionResult> GetTokens()
         {
             Dictionary<string, string> data =  JsonConvert.DeserializeObject<Dictionary<string, string>>(await RealtimeDatabaseHandlers.GetFCMToken());
@@ -40,10 +41,12 @@ namespace FireDetection.Backend.API.Controllers
             // Print the values
             foreach (var value in values)
             {
-                Console.WriteLine(value);
+                await CloudMessagingHandlers.CloudMessaging("Test Alarm", "Test alarm", fcm_token: value);
             }
             return Ok(await RealtimeDatabaseHandlers.GetFCMToken());
 
         }
+
+        
     }
 }

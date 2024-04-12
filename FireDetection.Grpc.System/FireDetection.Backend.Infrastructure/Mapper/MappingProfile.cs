@@ -10,6 +10,11 @@ namespace FireDetection.Backend.API.Mapper
     {
         public MappingProfile()
         {
+            CreateMap<CameraInLocation, Camera>()
+                .ForMember(x => x.Id, src => src.MapFrom(x => x.CameraId))
+                .ForMember(x => x.CameraName, src => src.MapFrom(x => x.CameraName))
+                .ForMember(x => x.CameraDestination, src => src.MapFrom(x => x.CameraDestination))
+                .ReverseMap();
 
             CreateMap<CreateUserRequest, User>()
                 .ForMember(x => x.Email, src => src.MapFrom(x => x.Email))
@@ -26,6 +31,7 @@ namespace FireDetection.Backend.API.Mapper
                 .ForMember(dest => dest.SecurityCode, opt => opt.MapFrom(src => src.SecurityCode))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForPath(dest => dest.Role.RoleName,opt => opt.MapFrom(src => src.Role.RoleName))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
                 .ForMember(dest => dest.LocationName, opt => opt.MapFrom(src => src.ControlCameras.FirstOrDefault().Location.LocationName))
                 .ReverseMap();

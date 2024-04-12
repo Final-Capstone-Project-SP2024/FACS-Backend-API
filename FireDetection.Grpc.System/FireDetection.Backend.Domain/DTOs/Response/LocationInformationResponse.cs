@@ -16,6 +16,16 @@ namespace FireDetection.Backend.Domain.DTOs.Response
 
         public  ReadOnlyCollection<Guid> Users { get; set; } = null!;
 
-        public ReadOnlyCollection<Guid> CameraInLocations { get; set; } = null!;
+        public List<CameraInLocation> CameraInLocations { get; set; } = null!;
     }
+
+    public class CameraInLocation
+    {
+        public Guid CameraId { get; set; }
+
+        public string CameraName { get; set; }  
+
+        public string CameraDestination { get; set; }
+    }
+
 }

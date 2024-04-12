@@ -29,6 +29,10 @@ namespace FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler
         {
             _client = new FireSharp.FirebaseClient(config);
             FirebaseResponse response = await _client.GetAsync($@"Users/{userId}");
+            if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                return "NotUserloginInthis Account";
+            }
             return response.Body.ToString();
         }
 

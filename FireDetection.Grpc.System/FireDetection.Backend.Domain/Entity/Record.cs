@@ -24,6 +24,7 @@ namespace FireDetection.Backend.Domain.Entity
 
         public RecordType RecordType { get; set; } 
 
+        public DateTime FinishAlarmTime { get; set; }
         public int RecordTypeID { get; set; }
         public ICollection<AlarmRate> AlarmRates { get; set; }
         public ICollection<MediaRecord> MediaRecords { get; set; }

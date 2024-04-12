@@ -14,7 +14,6 @@ namespace FireDetection.Backend.Domain.Entity
         public string Email { get; set; } = null!;
         public string Phone { get; set; } = null!;
         public string Status { get; set; } = null!;
-        public bool isActive { get; set; } = true;
         public string Name { get; set; } = null!;
         public string Password { get; set; } = null!;
         public DateTime CreatedDate { get; set; }
