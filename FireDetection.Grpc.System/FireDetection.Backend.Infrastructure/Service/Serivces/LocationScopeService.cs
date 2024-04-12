@@ -23,16 +23,16 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         public async Task<List<Guid>> GetUserInLocation(string LocationCode, int fireLevel)
         {
             List<Guid> locationIdLisr = new List<Guid>();
-            
-            Guid locationId = _unitOfWork.LocationRepository.Where(x => x.LocationName ==  LocationCode).FirstOrDefault().Id;
+
+            Guid locationId = _unitOfWork.LocationRepository.Where(x => x.LocationName == LocationCode).FirstOrDefault().Id;
             if (fireLevel == 1)
             {
-                
+
                 return _unitOfWork.ControlCameraRepository.Where(x => x.LocationID == locationId).Select(x => x.UserID).ToList();
             }
             else
             {
-                 return await FindUserNearbyInLevel(LocationCode, fireLevel);
+                return await FindUserNearbyInLevel(LocationCode, fireLevel);
             }
 
 
@@ -40,34 +40,30 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         }
         //? with 2,3,4 level find 1,2,3 index can call be checkpoint
-      
+
         internal async Task<List<Guid>> FindUserNearbyInLevel(string LocationCode, int fireLevel)
         {
             string pointIn = LocationCode.Split(' ')[1];
             int checkpoint = 0;
             object countLock = new object();
-            int indexOf = Array.IndexOf(locations,char.Parse(pointIn));
+            int indexOf = Array.IndexOf(locations, char.Parse(pointIn));
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
             CancellationToken cancellationToken = cancellationTokenSource.Token;
             List<Guid?> locationId = new List<Guid?>();
 
 
-
-            Task findUp = Task.Run(() =>
+            for (int i = indexOf; i > 0; i--)
             {
+                var location = await _unitOfWork.LocationRepository
+                    .Where(x => x.LocationName == "Location " + locations[i]).FirstOrDefaultAsync();
 
-                for (int i = indexOf; i < 25; i++)
+                if (location != null)
                 {
-                    Guid? id = _unitOfWork.LocationRepository.Where(x => x.LocationName == "Location " + locations[i]).FirstOrDefault().Id;
-                    if (id != null)
-                    {
-                        checkpoint++;
-                        locationId.Add(id);
-
-                    }
-
                     lock (countLock)
                     {
+                        checkpoint++;
+                        locationId.Add(location.Id);
+
                         if (checkpoint >= fireLevel)
                         {
                             cancellationTokenSource.Cancel();
@@ -75,22 +71,19 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                         }
                     }
                 }
-            });
-
-            Task findDown = Task.Run(() =>
+            }
+            for (int i = indexOf; i < 25; i++)
             {
-                for (int i = indexOf; i > 0; i--)
+                var location = await _unitOfWork.LocationRepository
+                    .Where(x => x.LocationName == "Location " + locations[i]).FirstOrDefaultAsync();
+
+                if (location != null)
                 {
-                    Guid? id = _unitOfWork.LocationRepository.Where(x => x.LocationName == "Location " + locations[i]).FirstOrDefault().Id;
-                    if (id != null)
-                    {
-                        checkpoint++;
-                        locationId.Add(id);
-
-                    }
-
                     lock (countLock)
                     {
+                        checkpoint++;
+                        locationId.Add(location.Id);
+
                         if (checkpoint >= fireLevel)
                         {
                             cancellationTokenSource.Cancel();
@@ -98,36 +91,17 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                         }
                     }
                 }
-            });
+            }
 
-            try
-            {
-                // Wait for both tasks to complete or for cancellation
-                Task.WaitAll(findUp, findDown);
-            }
-            catch (AggregateException ex)
-            {
-                foreach (var innerException in ex.InnerExceptions)
-                {
-                    if (innerException is TaskCanceledException)
-                    {
-                        // Handle cancellation
-                        Console.WriteLine("Task was canceled.");
-                    }
-                    else
-                    {
-                        // Handle other exceptions
-                        Console.WriteLine($"An error occurred: {innerException.Message}");
-                    }
-                }
-            }
+
+
 
             // Dispose the cancellation token source
             cancellationTokenSource.Dispose();
 
             List<Guid> users = new List<Guid>();
             Console.WriteLine(locationId);
-            foreach (var locate in  locationId)
+            foreach (var locate in locationId)
             {
                 users.AddRange(_unitOfWork.ControlCameraRepository.Where(x => x.LocationID == locate).Select(x => x.UserID));
             }

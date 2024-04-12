@@ -59,7 +59,8 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 List<Guid> user = await _locationScopeService.GetUserInLocation(await _unitOfWork.RecordRepository.GetLocationName(recordID), request.ActionId);
                 user.Add(Guid.Parse("3c9a2a1b-f4dc-4468-a89c-f6be8ca3b541"));
                 Console.WriteLine(user);
-                _timerService.SpamNotification(recordID, request.ActionId, user);
+                string cameraDestination =   _unitOfWork.CameraRepository.GetById(_unitOfWork.RecordRepository.GetById(recordID).Result.CameraID).Result.CameraDestination;
+                _timerService.SpamNotification(recordID, request.ActionId, user,cameraDestination);
             }
 
 
@@ -147,7 +148,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             {
 
                 //? to get the biggest value : create
-                await _memoryCacheService.Create(recordID, CacheType.VotingLevel);
+                //wait _memoryCacheService.Create(recordID, CacheType.VotingLevel);
 
                 await _memoryCacheService.Create(recordID, CacheType.VotingValue, request.LevelRating);
 
@@ -169,7 +170,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             //todo after 5 vote or 2 minutes it will auto user can not voting for this userId
             //? set voteCount
             //? start 2 minutes to end 
-            _timerService.EndVotePhase(recordID);
+            //_timerService.EndVotePhase(recordID);
 
 
             //todo check and create action checking 

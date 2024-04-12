@@ -7,6 +7,7 @@ using FireDetection.Backend.Domain.Utils;
 using FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using FireDetection.Backend.Infrastructure.UnitOfWork;
+using Google.Api.Gax.ResourceNames;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -14,6 +15,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core.Tokenizer;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -54,9 +56,9 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             Task.Run(async () => await CheckAndSendNotification(recordId, cameraDestination, cameraLocation,users));
         }
 
-        public void SpamNotification(Guid recordId, int alarmLevel, List<Guid> users)
+        public void SpamNotification(Guid recordId, int alarmLevel, List<Guid> users, string cameraDestination)
         {
-            Task.Run(async () => await SpamNotificationAndCheckFinish(recordId, alarmLevel,users));
+            Task.Run(async () => await SpamNotificationAndCheckFinish(recordId, alarmLevel,users,cameraDestination));
         }
 
         public void DisconnectionNotification(Guid recordId, string cameraDestination, string cameraLocation)
@@ -77,8 +79,15 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 foreach (var value in values)
                 {
 
-                    Console.WriteLine(data);
-                    await CloudMessagingHandlers.CloudMessaging(data.Title, data.Context, value);
+                    Console.WriteLine(value);
+                    Console.WriteLine(HandleTextUtil.HandleTitle(data.Title, cameraDestination));
+                    Console.WriteLine(HandleTextUtil.HandleContext(data.Context, cameraLocation, cameraDestination));
+
+                    await CloudMessagingHandlers.CloudMessaging(
+                             HandleTextUtil.HandleTitle(data.Title, cameraDestination),
+                             HandleTextUtil.HandleContext(data.Context, cameraLocation, cameraDestination),
+                            value.Replace("\"", ""));
+                    //await CloudMessagingHandlers.CloudMessaging(data.Title, data.Context, value);
                 }
                await  Task.Delay(5000);
             
@@ -209,7 +218,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         }
 
 
-        protected async Task SpamNotificationAndCheckFinish(Guid recordId, int alarmLevel, List<Guid> users)
+        protected async Task SpamNotificationAndCheckFinish(Guid recordId, int alarmLevel, List<Guid> users, string cameraDestination)
         {
             /*
              Variable have been create before 
@@ -233,7 +242,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                             Console.WriteLine(data.Context);
                             Console.WriteLine(data.Title);
                             string token = await RealtimeDatabaseHandlers.GetFCMTokenByUserID(item);
-                            await CloudMessagingHandlers.CloudMessaging(data.Title, data.Context, token.Replace("\"", ""));
+                            await CloudMessagingHandlers.CloudMessaging(data.Title + cameraDestination, data.Context, token.Replace("\"", ""));
                         }
 
                         await _memorycachedservice.IncreaseQuantity(recordId, TransferCacheType(alarmLevel));

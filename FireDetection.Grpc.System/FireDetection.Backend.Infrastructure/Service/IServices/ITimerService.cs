@@ -12,7 +12,7 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
 
         public void CheckIsAction(Guid recordId,List<Guid> users);
 
-        public void SpamNotification(Guid recordId, int alarmLevel,List<Guid> users);
+        public void SpamNotification(Guid recordId, int alarmLevel,List<Guid> users,string cameraDestination);
 
         public void EndVotePhase(Guid recordId);
 
