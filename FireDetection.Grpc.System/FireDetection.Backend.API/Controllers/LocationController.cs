@@ -44,16 +44,28 @@ namespace FireDetection.Backend.API.Controllers
         }
 
         [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
-        [HttpGet("{id}")]
-        public async Task<ActionResult<RestDTO<List<UserInLocationResponse>>>> GetById(Guid id)
+        [HttpGet("{id}/getUser")]
+        public async Task<ActionResult<RestDTO<List<UserInLocationResponse>>>> getUser(Guid id)
         {
             var response = await _locationScopeService.GetUserLocation(id);
             return new RestDTO<List<UserInLocationResponse>>()
             {
-                Message = "View User In Location Successfully",
+                Message = "View Location Detail Successfully",
                 Data = response,
             };
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<RestDTO<LocationInformationResponse>>> GetDetails(Guid id)
+        {
+            var response = await _context.GetById(id);
+            return new RestDTO<LocationInformationResponse>()
+            {
+                Message = "View Location Detail Successfully",
+                Data = response,
+            };
+        }
+
 
 
         [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]

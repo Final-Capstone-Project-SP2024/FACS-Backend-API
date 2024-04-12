@@ -102,7 +102,7 @@ namespace FireDetection.Backend.API.Controllers
                 details.Status = StatusCodes.Status400BadRequest;
                 return new BadRequestObjectResult(details);
             }
-            DetectResponse response = await _cameraService.DetectFire(id, request);
+            DetectResponse response = await _cameraService.DetectFire(id, request,1);
             return new RestDTO<DetectResponse>()
             {
                 Message = "Detect Fire  Successfully",
@@ -122,6 +122,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
+        [Authorize(Roles = Roles.Manager + "," + Roles.User)]
         [HttpPost("{id}/alert")]
         public async Task<ActionResult<RestDTO<DetectResponse>>> FireAlarmAlert(Guid id,[FromForm] AddAlertByHandResponse request)
         {
@@ -129,11 +130,11 @@ namespace FireDetection.Backend.API.Controllers
             await StorageHandlers.UploadFileAsync(request.image, "ImageRecord");
             TakeAlarmRequest takeAlarm = new TakeAlarmRequest
             {
-                PictureUrl = request.image.ToString(),
+                PictureUrl = request.image.FileName.ToString(),
                 PredictedPercent = request.FireDetection,
-                VideoUrl = request.video.ToString()
+                VideoUrl = request.video.FileName.ToString()
             };
-            DetectResponse response = await _cameraService.DetectFire(id, takeAlarm);
+            DetectResponse response = await _cameraService.DetectFire(id, takeAlarm,3);
             return new RestDTO<DetectResponse>()
             {
                 Message = "Detect Fire  Successfully",

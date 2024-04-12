@@ -31,6 +31,16 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             _mapper = mapper;
             _claimsService = claimsService;
         }
+
+        protected async Task<bool> ChecLocationId(Guid locationId)
+        {
+            var location = await _context.LocationRepository.GetById(locationId);
+            if(location == null)
+            {
+                return false;
+            }
+            return true;
+        }
         public async Task<LocationInformationResponse> AddNewLocation(AddLocationRequest request)
         {
 
@@ -47,6 +57,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<bool> DeleteLocation(Guid id)
         {
+            if(! await ChecLocationId(id)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Not Found this LocationId in system");
             Location location = await _context.LocationRepository.GetById(id);
             location.IsDeleted = true;
             await _context.SaveChangeAsync();
@@ -75,8 +86,10 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<LocationInformationResponse> UpdateLocation(Guid locationId, AddLocationRequest request)
         {
+            if (!await ChecLocationId(locationId)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Not Found this LocationId in system");
+
+            if(! await checkDuplicateLocationName(request.LocationName)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "This name is exist in system");
             Location location = await GetLocationByID(locationId);
-            if (location is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, " Not found this locations");
             location.LocationName = request.LocationName;
             location.LastModified = DateTime.UtcNow;
 
@@ -112,6 +125,9 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<LocationInformationResponse> AddStaffToLocation(Guid locationId, AddStaffRequest request)
         {
+            int cameraCount =  _context.CameraRepository.Where(x => x.LocationID == locationId).Count();
+            if(cameraCount == 0) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Add Camera to this Location ");
+            if (!await ChecLocationId(locationId)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Not Found this LocationId in system");
             int check = 0;
             List<Guid> duplicateGuid = new List<Guid>();
             foreach (var staff in request.staff)
@@ -142,14 +158,15 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             }
 
             var data = await _context.LocationRepository.GetStaffInLocation(locationId);
-            var cameras = _context.CameraRepository.Where(x => x.LocationID == locationId).Select(x => x.Id).ToList().AsReadOnly();
+            List<Camera> cameras = _context.CameraRepository.Where(x => x.LocationID == locationId).ToList();
+            var dataCheck = cameras.Select(x => _mapper.Map<CameraInLocation>(x)).ToList();
             return new LocationInformationResponse()
             {
                 CreatedDate = _context.LocationRepository.GetById(locationId).Result.CreatedDate,
                 LocationName = _context.LocationRepository.GetById(locationId).Result.LocationName,
                 LocationId = locationId,
                 Users = data,
-                CameraInLocations = cameras
+                CameraInLocations = dataCheck
             };
         }
 
@@ -169,7 +186,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         {
             var data = await _context.LocationRepository.GetStaffInLocation(locationId);
             if (data is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Not Found this locationId");
-            var cameras = _context.CameraRepository.Where(x => x.LocationID == locationId).Select(x => x.Id).ToList().AsReadOnly();
+            List<Camera> cameras = _context.CameraRepository.Where(x => x.LocationID == locationId).ToList();
 
             return new LocationInformationResponse()
             {
@@ -177,12 +194,13 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 LocationName = _context.LocationRepository.GetById(locationId).Result.LocationName,
                 LocationId = locationId,
                 Users = data,
-                CameraInLocations = cameras
+                CameraInLocations = cameras.Select(camera => _mapper.Map<CameraInLocation>(camera)).ToList()
             };
         }
 
         public async Task<LocationInformationResponse> RemoveSecurityInLocation(Guid locationId, AddStaffRequest request)
         {
+            if (!await ChecLocationId(locationId)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Not Found this LocationId in system");
             bool checkIsLocation = false;
             //? Check user in location
             foreach (var item in request.staff)
@@ -208,7 +226,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 LocationName = _context.LocationRepository.GetById(locationId).Result.LocationName,
                 LocationId = locationId,
                 Users = data,
-                CameraInLocations = cameras
+                CameraInLocations = cameras.Select(camera => _mapper.Map<CameraInLocation>(camera)).ToList()
             };
 
 

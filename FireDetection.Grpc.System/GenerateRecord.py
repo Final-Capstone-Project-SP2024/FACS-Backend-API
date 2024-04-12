@@ -18,6 +18,8 @@ def generate_datetime(start_date, end_date):
 # Function to generate a random percentage
 def generate_percentage():
     return round(random.uniform(0, 100), 2)
+def generate_vote():
+    return round(random.uniform(0, 5), 2)
 
 # Specify the desired date range
 start_date = datetime(2023, 10, 1)
@@ -35,12 +37,13 @@ for _ in range(200):
         'Id': generate_guid(),
         'RecordTime': generate_datetime(start_date, end_date),
         'Status': random.choice(['InFinish']),
-        'UserRatingPercent': generate_percentage(),
+        'UserRatingPercent': generate_vote(),
         'PredictedPercent': generate_percentage(),
         'CameraID': random.choice(camera_ids),
         'RecordTypeID': 1,
         'CreatedDate': generate_datetime(start_date, end_date),
         'CreatedBy': "00000000-0000-0000-0000-000000000000",
+        'FinishAlarmTime' : generate_datetime(start_date, end_date)
     }
     data.append(record)
 

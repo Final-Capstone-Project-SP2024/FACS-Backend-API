@@ -22,6 +22,11 @@ namespace FireDetection.Backend.Domain.FluentAPIs
              {
                  RecordTypeId = 2,
                  Name = "ElectricalIncident"
+             },
+             new RecordType
+             {
+                 RecordTypeId = 3,
+                 Name = "AlarmByUser"
              });
             builder.HasMany(x => x.Records).WithOne(x => x.RecordType).HasForeignKey(x => x.RecordTypeID);
         }

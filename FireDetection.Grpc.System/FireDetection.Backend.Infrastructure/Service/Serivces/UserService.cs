@@ -24,6 +24,8 @@ using FireDetection.Backend.Domain.Helpers.EmailHandler;
 using Google.Apis.Auth.OAuth2;
 using System.Security;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Firebase.Auth;
+using User = FireDetection.Backend.Domain.Entity.User;
 
 namespace FireDetection.Backend.Infrastructure.Service.Serivces
 {
@@ -44,8 +46,19 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             _memoryCacheService = memoryCacheService;
         }
 
+        protected async Task<bool> CheckUserInSystem(Guid userId)
+        {
+            var user = await _unitOfWork.UserRepository.GetById(userId);
+            if (user == null)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public async Task<bool> ActiveUser(Guid userId)
         {
+            if(! await CheckUserInSystem(userId) ) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Not have UserId in system");
             if (!await CheckUserStatus(userId, UserState.Active)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Have already actived in system");
             User user = await GetUserById(userId);
             user.LastModified = DateTime.UtcNow;
@@ -60,15 +73,15 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<UserInformationResponse> CreateUser(CreateUserRequest request)
         {
-
             if (!await CheckDuplicateEmail(request.Email)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Have already this email in system");
-
 
             if (!await CheckDuplicatePhone(request.Phone)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Have already this phone number   in system");
 
             request.UserRole = 2;
             User user = _mapper.Map<User>(request);
             user.SecurityCode = await GenerateSecurityCode();
+            user.Password = await HashPassword(request.Password);
+            user.Status = UserState.Active;
             _unitOfWork.UserRepository.InsertAsync(user);
             await _unitOfWork.SaveChangeAsync();
 
@@ -76,8 +89,44 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             return _mapper.Map<UserInformationResponse>(data.FirstOrDefault(x => x.Email == request.Email));
         }
 
+        protected async Task<string> HashPassword(string PasswordInput)
+        {
+            byte[] salt;
+            new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
+
+            var pbkdf2 = new Rfc2898DeriveBytes(PasswordInput, salt, 10000);
+            byte[] hash = pbkdf2.GetBytes(20);
+
+            byte[] hashBytes = new byte[36];
+            Array.Copy(salt, 0, hashBytes, 0, 16);
+            Array.Copy(hash, 0, hashBytes, 16, 20);
+
+            return Convert.ToBase64String(hashBytes);
+
+        }
+
+        protected async Task<bool> CheckPassword(string PasswordInput,Guid UserId)
+        {
+            string savedPasswordHash =  _unitOfWork.UserRepository.GetById(UserId).Result.Password;
+            /* Extract the bytes */
+            byte[] hashBytes = Convert.FromBase64String(savedPasswordHash);
+            /* Get the salt */
+            byte[] salt = new byte[16];
+            Array.Copy(hashBytes, 0, salt, 0, 16);
+            /* Compute the hash on the password the user entered */
+            var pbkdf2 = new Rfc2898DeriveBytes(PasswordInput, salt, 10000);
+            byte[] hash = pbkdf2.GetBytes(20);
+            /* Compare the results */
+            for (int i = 0; i < 20; i++)
+                if (hashBytes[i + 16] != hash[i])
+                    return false;
+
+            return true;
+        }    
+        
         public async Task<bool> InactiveUser(Guid userId)
         {
+            if (!await CheckUserInSystem(userId)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Not have UserId in system");
             if (!await CheckUserStatus(userId, UserState.Inactive)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Have already banned in system");
             User user = await GetUserById(userId);
             user.LastModified = DateTime.UtcNow;
@@ -91,11 +140,15 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<UserLoginResponse> Login(UserLoginRequest req)
         {
-            var user = _unitOfWork.UserRepository.Include(u => u.Role).Where(u => u.SecurityCode == req.SecurityCode && u.Password == req.Password).FirstOrDefault();
-            if (user is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Check your security code and password again");
+            var user = _unitOfWork.UserRepository.Include(u => u.Role).Where(u => u.SecurityCode == req.SecurityCode).FirstOrDefault();
+            if (user is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Check your security code  again");
             if (user.Status == UserState.Inactive)
             {
                 throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "User have already banned in system");
+            }
+            if (! await CheckPassword(req.Password,user.Id))
+            {
+                throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Check your password again");
             }
             string secretKeyConfig = _configuration["JWTSecretKey:SecretKey"];
             DateTime secretKeyDatetime = DateTime.UtcNow;
@@ -116,8 +169,6 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 RefreshToken = refreshToken,
             };
         }
-
-
 
         private string GetRefreshToken()
         {
@@ -149,15 +200,14 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-
-
         public async Task<UserInformationResponse> UpdateUser( UpdateUserRequest req)
         {
             User user = await GetUserById(_claimsService.GetCurrentUserId);
-            if (user == null)
-            {
-                throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Not find this user");
-            }
+            if (user == null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Not find this user");
+
+            if (!await CheckDuplicateEmail(req.Email)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Have already this email in system");
+
+            if (!await CheckDuplicatePhone(req.Phone)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Have already this phone number   in system");
             _mapper.Map(req, user);
             _unitOfWork.UserRepository.Update(user);
             await _unitOfWork.SaveChangeAsync();
@@ -212,7 +262,6 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             }
             return false;
         }
-
 
         public async Task<bool> CheckUserStatus(Guid id, string status)
         {
@@ -288,7 +337,8 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         {
             SendMailHandler sendMail = new SendMailHandler(_configuration);
             var user = await _unitOfWork.UserRepository.Where(x => x.Email == email).FirstOrDefaultAsync();
-
+            if(user is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Not find this Email in system");
+            
             await sendMail.SendMail("Account to access to System", email, user.SecurityCode, user.Password, user.Name);
             return true;
 
@@ -296,6 +346,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<UserInformationDetailResponse> GetDetail(Guid userId)
         {
+            if (!await CheckUserInSystem(userId)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Not have UserId in system");
             UserInformationDetailResponse userDetail = new UserInformationDetailResponse();
             var user = await _unitOfWork.UserRepository.GetById(userId);
             var userContract = await _unitOfWork.ContractRepository.Where(x => x.UserID == userId).FirstOrDefaultAsync();
@@ -311,8 +362,8 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         {
             SendMailHandler SendMail = new SendMailHandler(_configuration);
             var user = await _unitOfWork.UserRepository.Where(x => x.SecurityCode == SecurityCode).FirstOrDefaultAsync();
+            if (user is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Not find this SecurityCode in system");
             int otp = await RandomNumber();
-            if (user is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "User have already banned in system");
 
             await _memoryCacheService.SaveOTP(otp, user.Email);
             await SendMail.SendOTP(user.Email, otp);
@@ -322,6 +373,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         public async Task<bool> ChangePassword(ChangePasswordRequest request)
         {
             var user = await _unitOfWork.UserRepository.Where(x => x.SecurityCode == request.SecurityCode).FirstOrDefaultAsync();
+            if (user is null)  throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Not find this SecurityCode in system");
             int otpCheck = await _memoryCacheService.GetOTP(user.Email);
             if (request.OTPSending == otpCheck) return true;
 
@@ -341,7 +393,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         public async Task<UserInformationDetailResponse> ChangePasswordByUser(ChangePasswordByUserRequest request)
         {
             var user = await _unitOfWork.UserRepository.GetById(_claimsService.GetCurrentUserId);
-            if (user is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "User have already banned in system");
+            if (user is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Not found this UserId in system");
 
             if (user.Password != request.OldPassword) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Your old password is wrong ");
 

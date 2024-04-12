@@ -26,11 +26,10 @@ namespace FireDetection.Backend.Domain.FluentAPIs
             builder.HasData(new User
             {
                 Name = "Admin",
-                Password = "12345",
+                Password = "NJt3DCzVWSRDN7SigMcj+v/M8v+OWeZPBW/lApGrc+thCg3X",
                 Email ="Admin@gmail.com",
                 Id = Guid.Parse("3c9a2a1b-f4dc-4468-a89c-f6be8ca3b541"),
                 Phone = "0902311453",
-                isActive = true,
                 RoleId = 1,
                 SecurityCode = "XAD_000",
                 IsDeleted = false,

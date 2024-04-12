@@ -9,5 +9,6 @@ namespace FireDetection.Backend.Infrastructure.Repository.IRepositories
 {
     public interface IControlCameraRepository : IGenericRepository<ControlCamera>
     {
+
     }
 }

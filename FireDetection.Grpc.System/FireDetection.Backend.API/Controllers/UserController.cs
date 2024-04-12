@@ -53,7 +53,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = UserRole.User + "," + UserRole.Manager)]
+        [Authorize(Roles =  UserRole.Manager)]
         [HttpPost("{id}/active")]
         public async Task<ActionResult<RestDTO<UserInformationResponse>>> Active(Guid id)
         {
@@ -120,7 +120,7 @@ namespace FireDetection.Backend.API.Controllers
             await _userService.SendEmail(emai);
             return new RestDTO<UserInformationResponse>()
             {
-                Message = "Inactive Account Successfully!",
+                Message = "Send Account Successfully!",
                 Data = null,
             };
         }
@@ -185,7 +185,7 @@ namespace FireDetection.Backend.API.Controllers
             var response = await _userService.ChangePasswordByUser(request);
             return new RestDTO<UserInformationResponse>()
             {
-                Message = "Change password unsuccessfulyy!",
+                Message = "Change password successfulyy!",
                 Data = response,
             };
 
@@ -196,7 +196,7 @@ namespace FireDetection.Backend.API.Controllers
 
             return new RestDTO<IEnumerable<UserInformationResponse>>()
             {
-                Message = "Change password unsuccessfulyy!",
+                Message = "Get list unregistered User to Location successfully!",
                 Data = await _userService.UnRegisterLocaiton(),
             };
         }

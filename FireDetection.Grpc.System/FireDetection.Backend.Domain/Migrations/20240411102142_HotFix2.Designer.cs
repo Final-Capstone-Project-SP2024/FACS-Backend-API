@@ -3,6 +3,7 @@ using System;
 using FireDetection.Backend.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FireDetection.Backend.Domain.Migrations
 {
     [DbContext(typeof(FireDetectionDbContext))]
-    partial class FireDetectionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240411102142_HotFix2")]
+    partial class HotFix2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -504,7 +507,7 @@ namespace FireDetection.Backend.Domain.Migrations
                             ManualPlanId = 1,
                             CameraLimited = 4,
                             CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            CreatedDate = new DateTime(2024, 4, 11, 14, 37, 29, 181, DateTimeKind.Utc).AddTicks(3986),
+                            CreatedDate = new DateTime(2024, 4, 11, 10, 21, 42, 583, DateTimeKind.Utc).AddTicks(3629),
                             IsDeleted = false,
                             LastModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LocationLimited = 5,
@@ -518,7 +521,7 @@ namespace FireDetection.Backend.Domain.Migrations
                             ManualPlanId = 2,
                             CameraLimited = 8,
                             CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            CreatedDate = new DateTime(2024, 4, 11, 14, 37, 29, 181, DateTimeKind.Utc).AddTicks(3989),
+                            CreatedDate = new DateTime(2024, 4, 11, 10, 21, 42, 583, DateTimeKind.Utc).AddTicks(3634),
                             IsDeleted = false,
                             LastModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LocationLimited = 10,
@@ -532,7 +535,7 @@ namespace FireDetection.Backend.Domain.Migrations
                             ManualPlanId = 3,
                             CameraLimited = 20,
                             CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            CreatedDate = new DateTime(2024, 4, 11, 14, 37, 29, 181, DateTimeKind.Utc).AddTicks(3991),
+                            CreatedDate = new DateTime(2024, 4, 11, 10, 21, 42, 583, DateTimeKind.Utc).AddTicks(3715),
                             IsDeleted = false,
                             LastModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LocationLimited = 20,
@@ -745,9 +748,6 @@ namespace FireDetection.Backend.Domain.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime>("FinishAlarmTime")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal>("PredictedPercent")
@@ -976,6 +976,9 @@ namespace FireDetection.Backend.Domain.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<bool>("isActive")
+                        .HasColumnType("boolean");
+
                     b.HasKey("Id");
 
                     b.HasIndex("RoleId");
@@ -997,7 +1000,8 @@ namespace FireDetection.Backend.Domain.Migrations
                             Phone = "0902311453",
                             RoleId = 1,
                             SecurityCode = "XAD_000",
-                            Status = "Active"
+                            Status = "Active",
+                            isActive = true
                         });
                 });
 

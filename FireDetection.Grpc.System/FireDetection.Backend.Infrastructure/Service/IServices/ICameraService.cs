@@ -22,7 +22,7 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
 
         Task<IQueryable<CameraInformationResponse>> Get();
 
-        Task<DetectResponse> DetectFire(Guid id, TakeAlarmRequest request);
+        Task<DetectResponse> DetectFire(Guid id, TakeAlarmRequest request,int alarmType);
 
 
        Task<DetectResponse> DetectElectricalIncident(Guid id);
