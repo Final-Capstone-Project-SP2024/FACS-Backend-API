@@ -126,8 +126,8 @@ namespace FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler
                 case 1: return await RealtimeDatabaseHandlers.GetDetail(AlarmType.Level1);
                 case 2: return await RealtimeDatabaseHandlers.GetDetail(AlarmType.Level2);
                 case 3: return await RealtimeDatabaseHandlers.GetDetail(AlarmType.Level3);
-                case 5: return await RealtimeDatabaseHandlers.GetDetail(AlarmType.Level4);
-                case 6: return await RealtimeDatabaseHandlers.GetDetail(AlarmType.Level5);
+                case 4: return await RealtimeDatabaseHandlers.GetDetail(AlarmType.Level4);
+                case 5: return await RealtimeDatabaseHandlers.GetDetail(AlarmType.Level5);
                 case 7: return await RealtimeDatabaseHandlers.GetDetail(AlarmType.DisconnectCamera);
                 case 8: return await RealtimeDatabaseHandlers.GetDetail(AlarmType.FakeAlarm);
                 case 9: return await RealtimeDatabaseHandlers.GetDetail(AlarmType.Voting);

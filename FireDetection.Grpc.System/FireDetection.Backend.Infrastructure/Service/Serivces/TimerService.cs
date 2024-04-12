@@ -242,7 +242,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                             Console.WriteLine(data.Context);
                             Console.WriteLine(data.Title);
                             string token = await RealtimeDatabaseHandlers.GetFCMTokenByUserID(item);
-                            await CloudMessagingHandlers.CloudMessaging(data.Title + cameraDestination, data.Context, token.Replace("\"", ""));
+                            await CloudMessagingHandlers.CloudMessaging(data.Title +" " + cameraDestination, data.Context, token.Replace("\"", ""));
                         }
 
                         await _memorycachedservice.IncreaseQuantity(recordId, TransferCacheType(alarmLevel));
@@ -258,8 +258,8 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
                     Console.WriteLine($"Error: {ex.Message}");
                 }
-                // await Task.Delay(timeAwait);
-                await Task.Delay(5000);
+                 await Task.Delay(timeAwait);
+               // await Task.Delay(5000);
             }
         }
         private static int AwaitTime(int alarmLevel) => alarmLevel switch

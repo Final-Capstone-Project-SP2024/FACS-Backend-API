@@ -138,7 +138,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<bool> VoteAlarmLevel(Guid recordID, RateAlarmRequest request)
         {
-            var userId = _claimService.GetCurrentUserId;
+            var userId =   _claimService.GetCurrentUserId;
             if (_unitOfWork.AlarmRateRepository.Where(x => x.RecordID == recordID && x.UserID == userId).FirstOrDefault() is not null)
             {
                 throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "You have voted before");
