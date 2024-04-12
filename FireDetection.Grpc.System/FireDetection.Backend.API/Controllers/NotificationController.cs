@@ -23,7 +23,7 @@ namespace FireDetection.Backend.API.Controllers
             _recordService = recordService;
         }
 
-        [Authorize(Roles = UserRole.Manager)]
+       
         [HttpPost]
         public async Task<IActionResult> Add(AddNotificationRequest request)
         {
