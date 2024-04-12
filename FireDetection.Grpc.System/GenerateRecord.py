@@ -19,7 +19,7 @@ def generate_datetime(start_date, end_date):
 def generate_percentage():
     return round(random.uniform(0, 100), 2)
 def generate_vote():
-    return round(random.uniform(0, 5), 2)
+    return round(random.uniform(1, 5))
 
 # Specify the desired date range
 start_date = datetime(2023, 10, 1)
@@ -29,8 +29,10 @@ end_date = datetime(2024, 4, 1)
 data = []
 for _ in range(200):
     camera_ids = [
-        "59823098-0d29-4546-8517-88b18b8a7f0a",
-        "9d56c5f4-4662-41dd-b336-4d24baab826c",
+        "6f88f3aa-209f-4dc0-9f9c-af425b482a88",
+        "19b5d49c-4230-4a6f-8cc8-bbcc16d82554",
+        "036d2831-dd20-4bf0-9637-22de96cb9785",
+        "f5d26584-58cf-46b1-9097-82a6e966dd55"
     ]
     
     record = {

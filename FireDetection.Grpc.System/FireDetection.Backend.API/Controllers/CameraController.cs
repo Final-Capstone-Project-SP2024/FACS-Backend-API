@@ -122,7 +122,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = Roles.Manager + "," + Roles.User)]
+        //[Authorize(Roles = Roles.Manager + "," + Roles.User)]
         [HttpPost("{id}/alert")]
         public async Task<ActionResult<RestDTO<DetectResponse>>> FireAlarmAlert(Guid id,[FromForm] AddAlertByHandResponse request)
         {

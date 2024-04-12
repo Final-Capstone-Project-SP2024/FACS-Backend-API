@@ -132,12 +132,12 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                             Console.WriteLine(HandleTextUtil.HandleTitle(data.Title, CameraDestination));
                             Console.WriteLine(HandleTextUtil.HandleContext(data.Context, LocationName, CameraDestination));
                             string token = await RealtimeDatabaseHandlers.GetFCMTokenByUserID(item);
-                           
-                            
+
+                            Console.Write(token);
                             await CloudMessagingHandlers.CloudMessaging(
                                 HandleTextUtil.HandleTitle(data.Title, CameraDestination),
                                 HandleTextUtil.HandleContext(data.Context, LocationName, CameraDestination),
-                               token);
+                               token.Replace("\"", ""));
                         }
 
                         await _memorycachedservice.IncreaseQuantity(recordID, CacheType.FireNotify);
@@ -184,7 +184,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                             Console.WriteLine(data.Context);
                             Console.WriteLine(data.Title);
                             string token = await RealtimeDatabaseHandlers.GetFCMTokenByUserID(user);
-                            await CloudMessagingHandlers.CloudMessaging(data.Title,data.Context,fcm_token: token);
+                            await CloudMessagingHandlers.CloudMessaging(data.Title,data.Context,fcm_token: token.Replace("\"", ""));
                             
                         }
                         
@@ -233,7 +233,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                             Console.WriteLine(data.Context);
                             Console.WriteLine(data.Title);
                             string token = await RealtimeDatabaseHandlers.GetFCMTokenByUserID(item);
-                            await CloudMessagingHandlers.CloudMessaging(data.Title, data.Context, token);
+                            await CloudMessagingHandlers.CloudMessaging(data.Title, data.Context, token.Replace("\"", ""));
                         }
 
                         await _memorycachedservice.IncreaseQuantity(recordId, TransferCacheType(alarmLevel));

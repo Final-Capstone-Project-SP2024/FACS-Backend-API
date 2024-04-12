@@ -28,7 +28,7 @@ namespace FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler
         public static async Task<string> GetFCMTokenByUserID(Guid userId = new Guid())
         {
             _client = new FireSharp.FirebaseClient(config);
-            FirebaseResponse response = await _client.GetAsync($@"Users/{userId}");
+            FirebaseResponse response = await _client.GetAsync($@"FCMToken/{userId}");
             if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
                 return "NotUserloginInthis Account";
