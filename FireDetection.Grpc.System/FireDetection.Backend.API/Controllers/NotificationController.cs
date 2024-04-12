@@ -54,7 +54,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [HttpGet("/firealarms")]
+        [HttpGet("firealarms")]
         public async Task<ActionResult<RestDTO<IEnumerable<NotificationAlarmResponse>>>> GetNotify()
         {
             var response = await _recordService.GetNotificationAlarm();
@@ -79,7 +79,7 @@ namespace FireDetection.Backend.API.Controllers
         }
 
 
-        [HttpGet("/disconnectedalarms")]
+        [HttpGet("disconnectedalarms")]
         public async Task<ActionResult<RestDTO<IEnumerable<NotificationAlarmResponse>>>> GetDisconnectedNotify()
         {
 

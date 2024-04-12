@@ -10,6 +10,8 @@ namespace FireDetection.Backend.Domain.DTOs.State
     {
         public static string Active = "Active";
 
-        public static string Ban = "Ban";
+        public static string Inactive = "Inactive";
+
+        public static string Disconnect = "Disconnect";
     }
 }

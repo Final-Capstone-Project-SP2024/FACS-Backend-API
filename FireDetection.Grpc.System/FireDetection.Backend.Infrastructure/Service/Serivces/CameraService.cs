@@ -84,7 +84,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             Camera camera = await _unitOfWork.CameraRepository.GetById(id);
             if (camera is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Camera is not in system");
 
-            camera.Status = CameraType.Ban;
+            camera.Status = CameraType.Inactive;
             camera.LastModified = DateTime.UtcNow;
 
             _unitOfWork.CameraRepository.Update(camera);
@@ -214,19 +214,23 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             Camera camera = await _unitOfWork.CameraRepository.GetById(id);
             if (camera is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "CameraId is invalid");
             Location location = await _unitOfWork.LocationRepository.GetById(camera.LocationID);
+
+            
             //todo Spam disconnect action
             //? after 1 minutes end the action return to finish
             _timerService.DisconnectionNotification(id, camera.CameraDestination, location.LocationName);
             //todo Send notification about where have the fire belong to where location
-       /*     NotficationDetailResponse data = await NotificationHandler.Get(7);
-            await CloudMessagingHandlers.CloudMessaging(
-               HandleTextUtil.HandleTitle(data.Title, camera.CameraDestination),
-               HandleTextUtil.HandleContext(
-                   data.Context,
-                   _unitOfWork.LocationRepository.GetById(camera.LocationID).Result.LocationName,
-                   camera.CameraDestination)
-               );*/
+            /*     NotficationDetailResponse data = await NotificationHandler.Get(7);
+                 await CloudMessagingHandlers.CloudMessaging(
+                    HandleTextUtil.HandleTitle(data.Title, camera.CameraDestination),
+                    HandleTextUtil.HandleContext(
+                        data.Context,
+                        _unitOfWork.LocationRepository.GetById(camera.LocationID).Result.LocationName,
+                        camera.CameraDestination)
+                    );*/
 
+            camera.Status = CameraType.Disconnect;
+            _unitOfWork.CameraRepository.Update(camera);
 
             //todo save record to the database 
             Record record = new();
@@ -243,10 +247,19 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         }
 
 
+
         private async Task SaveRecord(Record record)
         {
             _unitOfWork.RecordRepository.InsertAsync(record);
             await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task<CameraInformationResponse> FixCamera(Guid cameraId)
+        {
+            Camera camera = await _unitOfWork.CameraRepository.GetById(cameraId);
+            camera.Status = CameraType.Active;
+           await  _unitOfWork.SaveChangeAsync();
+            return _mapper.Map<CameraInformationResponse>(camera);
         }
     }
 }

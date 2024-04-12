@@ -122,7 +122,7 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        //[Authorize(Roles = Roles.Manager + "," + Roles.User)]
+        [Authorize(Roles = Roles.Manager + "," + Roles.User)]
         [HttpPost("{id}/alert")]
         public async Task<ActionResult<RestDTO<DetectResponse>>> FireAlarmAlert(Guid id,[FromForm] AddAlertByHandResponse request)
         {
@@ -138,6 +138,19 @@ namespace FireDetection.Backend.API.Controllers
             return new RestDTO<DetectResponse>()
             {
                 Message = "Detect Fire  Successfully",
+                Data = response,
+            };
+        }
+
+
+        [Authorize(Roles = Roles.Manager + "," + Roles.User)]
+        [HttpPost("{cameraId}/fix")]
+        public async Task<ActionResult<RestDTO<CameraInformationResponse>>> FixCamera(Guid cameraId)
+        {
+            var response = await _cameraService.FixCamera(cameraId);
+            return new RestDTO<CameraInformationResponse>()
+            {
+                Message = "Fix Camera  Successfully",
                 Data = response,
             };
         }
