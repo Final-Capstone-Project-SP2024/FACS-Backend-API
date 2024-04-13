@@ -98,7 +98,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         {
             DateTime startTime = DateTime.Now;
             bool check = true;
-            while (check && (DateTime.UtcNow - startTime).TotalMinutes <= 30)
+            while (check && (DateTime.UtcNow - startTime).TotalMinutes <= 1)
             {
                 Console.WriteLine("========End Voting Phase=====");
                 await Task.Delay(5000);
@@ -125,7 +125,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             int countAlarmTime = 0;
             bool check = true;
             var startTime = DateTime.UtcNow;
-            while (check && (DateTime.UtcNow - startTime).TotalMinutes <= 30)
+            while (check && (DateTime.UtcNow - startTime).TotalMinutes <= 1)
             {
                 try
                 {
@@ -180,7 +180,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         {
             var startTime = DateTime.UtcNow;
             bool check = true;
-            while (check && (DateTime.UtcNow - startTime).TotalMinutes <= 30)
+            while (check && (DateTime.UtcNow - startTime).TotalMinutes <= 1)
             {
                 try
                 {
@@ -229,7 +229,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             bool check = true;
             // NotficationDetailResponse data = await NotificationHandler.Get(alarmLevel);
 
-            while (check && (DateTime.UtcNow - startTime).TotalMinutes <= 30)
+            while (check && (DateTime.UtcNow - startTime).TotalMinutes <= 1)
             {
                 try
                 {
