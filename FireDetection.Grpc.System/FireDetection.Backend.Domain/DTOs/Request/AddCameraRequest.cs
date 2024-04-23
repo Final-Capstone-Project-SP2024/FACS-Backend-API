@@ -12,7 +12,7 @@ namespace FireDetection.Backend.Domain.DTOs.Request
     public class AddCameraRequest
     {
 
-        [RegularExpression(@"(Active|Inactive)$", ErrorMessage = "Active or Inactive ")]
+        [RegularExpression(@"(Connected|Disconnected)$", ErrorMessage = "Connected or Disconnected ")]
         public string Status { get; set; } = null!;
         [JsonIgnore]
         public string CameraName { get; set; } = "allow";

@@ -49,7 +49,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             Camera camera = await _unitOfWork.CameraRepository.GetById(id);
             if (camera is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "This CameraId not  in system");
 
-            camera.Status = CameraType.Active;
+            camera.Status = CameraType.Connect;
             camera.LastModified = DateTime.UtcNow;
 
             _unitOfWork.CameraRepository.Update(camera);
@@ -87,7 +87,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             Camera camera = await _unitOfWork.CameraRepository.GetById(id);
             if (camera is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Camera is not in system");
 
-            camera.Status = CameraType.Inactive;
+            camera.Status = CameraType.Disconnect;
             camera.LastModified = DateTime.UtcNow;
 
             _unitOfWork.CameraRepository.Update(camera);
@@ -274,8 +274,10 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             record.Id = new Guid();
             record.Status = RecordState.InAlram;
             record.RecordTypeID = 2;
-            record.RecordTime = DateTime.UtcNow;
-            record.CreatedDate = DateTime.UtcNow;
+            record.AlarmConfigurationId = 1;
+            record.RecommendAlarmLevel = "No Recommend";
+            record.RecordTime = DateTime.UtcNow.AddHours(7);
+            record.CreatedDate = DateTime.UtcNow.AddHours(7);
             _unitOfWork.RecordRepository.InsertAsync(record);
             await _unitOfWork.SaveChangeAsync();
 
@@ -300,7 +302,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         public async Task<CameraInformationResponse> FixCamera(Guid cameraId)
         {
             Camera camera = await _unitOfWork.CameraRepository.GetById(cameraId);
-            camera.Status = CameraType.Active;
+            camera.Status = CameraType.Connect;
             await _unitOfWork.SaveChangeAsync();
             return _mapper.Map<CameraInformationResponse>(camera);
         }

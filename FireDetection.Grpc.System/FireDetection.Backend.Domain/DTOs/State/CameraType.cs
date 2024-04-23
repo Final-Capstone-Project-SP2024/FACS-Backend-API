@@ -8,9 +8,7 @@ namespace FireDetection.Backend.Domain.DTOs.State
 {
     public class CameraType
     {
-        public static string Active = "Active";
-
-        public static string Inactive = "Inactive";
+        public static string Connect = "Connected";
 
         public static string Disconnect = "Disconnected";
     }
