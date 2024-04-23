@@ -330,10 +330,10 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             {
                 throw new Exception();
             }
-            if (_unitOfWork.MediaRecordRepository.Where(x => x.RecordId == recordID && x.Url.Contains("evidence")).FirstOrDefault() is not null)
-            {
-                response.evidences = await _unitOfWork.MediaRecordRepository.Where(x => x.RecordId == recordID && x.Url.Contains("evidence"))?.Select(x => x.Url)?.ToListAsync() ?? null;
-            }
+            //if ( _unitOfWork.MediaRecordRepository.Where(x => x.RecordId == recordID && x.Url.Contains("evidence")).Count() != 0)
+            //{
+            //    response.evidences = await _unitOfWork.MediaRecordRepository.Where(x => x.RecordId == recordID && x.Url.Contains("evidence"))?.Select(x => x.Url)?.ToListAsync() ?? null;
+            //}
             if (response.RecordType == 3)
             {
                 var user = _unitOfWork.UserRepository.GetById(_unitOfWork.RecordRepository.GetById(recordID).Result.CreatedBy).Result;

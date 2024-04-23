@@ -4,15 +4,15 @@ from psycopg2 import sql
 
 # Replace these values with your PostgreSQL database details
 db_params = {
-    'host': 'localhost',
+    'host': 'dpg-cncaqtuct0pc73fq4n5g-a.singapore-postgres.render.com',
     'port': '5432',
-    'database': 'FireDetectionDatabase',
-    'user': 'postgres',
-    'password': '12345'
+    'database': 'facs_database',
+    'user': 'ducanhnt22',
+    'password': 'qn6QrBJznvfq8AdlEEY7qMrWNqbFqjOf'
 }
 
 # File path to the CSV file
-csv_file_path = 'FireDetection.Grpc.System/recordList.csv'
+csv_file_path = 'C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\recordList.csv'
 
 # PostgreSQL table name
 table_name = 'Records'
