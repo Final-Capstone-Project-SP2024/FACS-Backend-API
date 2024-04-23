@@ -12,25 +12,17 @@ namespace FireDetection.Backend.Domain.DTOs.Response
         public int RecordType {  get; set; }
         public string CameraDestination { get; set; } = string.Empty;
         public string CameraName { get; set; } = string.Empty;
-
-        public int RatingResult { get; set; } = 0;
+        public string RecommendAlarmLevel { get; set; } = string.Empty;
+        public string RecordTime { get; set; } = string.Empty;
+        public string FinishTime { get; set; } = string.Empty;
         public Guid RecordId { get; set; }
-
-        public decimal UserRatingPercent { get; set; }
-
         public decimal PredictedPercent { get; set; }
-
         public string Status { get; set; }
-
         public VideoRecord VideoRecord { get; set; } = null!;
-
         public ImageRecord ImageRecord { get; set; } = null!;
-
         public List<UserRating> userRatings { get; set; } = null!;
-
         public List<UserVoting> userVoting { get; set; } = null!;
-
-        public List<string> evidences { get; set; } 
+        public List<string> evidences { get; set; } = null!;
         public UserInLocationResponse AlarmUser { get; set;} = null!;
     }
 

@@ -9,13 +9,16 @@ using FireDetection.Backend.Infrastructure.Helpers.ErrorHandler;
 using FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using FireDetection.Backend.Infrastructure.UnitOfWork;
+using Google.Api.Gax.ResourceNames;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Linq.Dynamic.Core.Tokenizer;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace FireDetection.Backend.Infrastructure.Service.Serivces
 {
@@ -28,9 +31,9 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         private readonly IMemoryCacheService _memoryCacheService;
         private readonly ILocationScopeService _locationScopeService;
         private readonly IClaimsService _claimService;
-        
 
-        public CameraService(IUnitOfWork unitOfWork, IMapper mapper, IMediaRecordService mediaRecordService, ITimerService timerService, IMemoryCacheService memoryCacheService,ILocationScopeService locationScopeService,IClaimsService claims)
+
+        public CameraService(IUnitOfWork unitOfWork, IMapper mapper, IMediaRecordService mediaRecordService, ITimerService timerService, IMemoryCacheService memoryCacheService, ILocationScopeService locationScopeService, IClaimsService claims)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
@@ -39,7 +42,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             _memoryCacheService = memoryCacheService;
             _locationScopeService = locationScopeService;
             _claimService = claims;
-        
+
         }
         public async Task<CameraInformationResponse> Active(Guid id)
         {
@@ -166,11 +169,12 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             }
             return true;
         }
-        public async Task<DetectResponse> DetectFire(Guid id, TakeAlarmRequest request,int alarmType)
-        {
-          
-            if (await _unitOfWork.CameraRepository.GetById(id) is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "CameraId is invalid");
 
+        public async Task<DetectResponse> DetectFire(Guid id, TakeAlarmRequest request, int alarmType)
+        {
+
+            if (await _unitOfWork.CameraRepository.GetById(id) is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "CameraId is invalid");
+            int DangerRecord = await IsDangerRecord(request.PredictedPercent);
             //TODO: Check camera in system 
             Camera camera = await _unitOfWork.CameraRepository.GetById(id);
             string locationName = _unitOfWork.LocationRepository.GetById(camera.LocationID).Result.LocationName;
@@ -178,6 +182,8 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
             //TODO: save record to database
             Record record = _mapper.Map<Record>(request);
+            record.RecommendAlarmLevel = recommentActionAlarm(request.PredictedPercent);
+            record.AlarmConfigurationId = DangerRecord;
             record.CameraID = id;
             record.Id = Guid.NewGuid();
             if (alarmType == 3)
@@ -190,10 +196,32 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             await _memoryCacheService.Create(record.Id, CacheType.FireNotify);
             await _memoryCacheService.Create(record.Id, CacheType.IsVoting);
 
-            List<Guid> users=  await _locationScopeService.GetUserInLocation(locationName, 1);
-            users.Add(Guid.Parse("3c9a2a1b-f4dc-4468-a89c-f6be8ca3b541"));
-            //todo  create checking user do the next task ( vote task) and sending notification 
-            _timerService.CheckIsVoting(record.Id, camera.CameraDestination, locationName, users);
+            if (DangerRecord != 1)
+            {
+                List<Guid> users = await _locationScopeService.GetUserInLocation(locationName, 1);
+                users.Add(Guid.Parse("3c9a2a1b-f4dc-4468-a89c-f6be8ca3b541"));
+                //todo  create checking user do the next task ( vote task) and sending notification 
+                _timerService.CheckIsVoting(record.Id, camera.CameraDestination, locationName, users);
+
+            }
+            else
+            {
+                List<Guid> users = await _locationScopeService.GetUserInLocation(locationName, 1);
+                NotficationDetailResponse data = await NotificationHandler.Get(11);
+                //? notification one time
+                foreach (var item in users)
+                {
+                    Console.WriteLine(item);
+                    Console.WriteLine(HandleTextUtil.HandleTitle(data.Title, camera.CameraDestination));
+                    Console.WriteLine(HandleTextUtil.HandleContext(data.Context, locationName, camera.CameraDestination));
+                    string token = await RealtimeDatabaseHandlers.GetFCMTokenByUserID(item);
+
+                    await CloudMessagingHandlers.CloudMessaging(
+                               HandleTextUtil.HandleTitle(data.Title, camera.CameraDestination),
+                               HandleTextUtil.HandleContext(data.Context, locationName, camera.CameraDestination),
+                              token.Replace("\"", ""));
+                }
+            }
 
 
             _unitOfWork.RecordRepository.InsertAsync(record);
@@ -206,7 +234,15 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
             return _mapper.Map<DetectResponse>(record);
         }
-
+        protected async Task<int> IsDangerRecord(decimal predictedAI)
+        {
+            AlarmConfiguration alarm = await _unitOfWork.AlarmConfigurationRepository.GetAlarmConfigurationDetail(1);
+            if (predictedAI >= alarm.Start && predictedAI < alarm.End)
+            {
+                return 1;
+            }
+            return 2;
+        }
         public async Task<DetectResponse> DetectElectricalIncident(Guid id)
         {
 
@@ -215,7 +251,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             if (camera is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "CameraId is invalid");
             Location location = await _unitOfWork.LocationRepository.GetById(camera.LocationID);
 
-            
+
             //todo Spam disconnect action
             //? after 1 minutes end the action return to finish
             _timerService.DisconnectionNotification(id, camera.CameraDestination, location.LocationName);
@@ -245,7 +281,14 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
             return _mapper.Map<DetectResponse>(record);
         }
-
+        private static string recommentActionAlarm(decimal predictedNumber) => predictedNumber switch
+        {
+            var num when (num >= 0 && num < 20) => "Alarm Level 1",
+            var num when (num >= 20 && num < 40) => "Alarm Level 2",
+            var num when (num >= 40 && num < 60) => "Alarm Level 3",
+            var num when (num >= 60 && num < 80) => "Alarm Level 4",
+            var num when (num >= 80 && num < 100) => "Alarm Level 5",
+        };
 
 
         private async Task SaveRecord(Record record)
@@ -258,8 +301,28 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         {
             Camera camera = await _unitOfWork.CameraRepository.GetById(cameraId);
             camera.Status = CameraType.Active;
-           await  _unitOfWork.SaveChangeAsync();
+            await _unitOfWork.SaveChangeAsync();
             return _mapper.Map<CameraInformationResponse>(camera);
+        }
+
+        public async Task<CameraInformationDetailResponse> GetCameraDetail(Guid cameraId)
+        {
+            
+            Camera camera =  await _unitOfWork.CameraRepository.GetById(cameraId);
+            if(camera is null)
+            {
+                throw new Exception();
+            }
+            return new CameraInformationDetailResponse
+            {
+                CameraDestination = camera.CameraDestination,
+                CameraId = cameraId,
+                CameraImage = camera.CameraImage,
+                CameraName = camera.CameraName,
+                RecordCount = _unitOfWork.RecordRepository.Where(x => x.CameraID == cameraId).Count(),
+                Status = camera.Status
+            };
+
         }
     }
 }

@@ -62,6 +62,7 @@ namespace FireDetection.Backend.API.Mapper
                 .ForMember(x => x.Status, src => src.MapFrom(x => x.Status))
                 .ForMember(x => x.LocationID, src => src.MapFrom(x => x.LocationId))
                 .ForMember(x => x.CreatedDate, src => src.MapFrom(x => DateTime.UtcNow))
+                 .ForMember(x => x.CameraImage, src => src.MapFrom(x => x.CameraImage.FileName.ToString()))
                 .ReverseMap();
 
             CreateMap<CameraInformationResponse, Camera>()
@@ -70,6 +71,7 @@ namespace FireDetection.Backend.API.Mapper
                 .ForMember(x => x.Id, src => src.MapFrom(x => x.CameraId))
                 .ForMember(x => x.Status, src => src.MapFrom(x => x.Status))
                 .ForMember(x => x.CreatedDate, src => src.MapFrom(x => DateTime.UtcNow))
+                .ForMember(x => x.CameraImage, src => src.MapFrom(x => x.CameraImage))
                 .ReverseMap();
 
             CreateMap<Location, LocationInformationResponse>()
@@ -81,14 +83,15 @@ namespace FireDetection.Backend.API.Mapper
             CreateMap<AddLocationRequest, Location>()
                 .ForMember(x => x.LocationName, src => src.MapFrom(x => x.LocationName))
                  .ForMember(x => x.CreatedDate, src => src.MapFrom(x => DateTime.UtcNow))
+                  .ForMember(x => x.LocationImage, src => src.MapFrom(x => x.LocationImage.FileName.ToString()))
                 .ReverseMap();
 
 
             CreateMap<TakeAlarmRequest, Record>()
                 .ForMember(x => x.Status, src => src.MapFrom(x => "InAlarm"))
                 .ForMember(x => x.PredictedPercent, src => src.MapFrom(x => x.PredictedPercent))
-                .ForMember(x => x.CreatedDate, src => src.MapFrom(x => DateTime.UtcNow))
-                .ForMember(x => x.RecordTime, src => src.MapFrom(x => DateTime.UtcNow))
+                .ForMember(x => x.CreatedDate, src => src.MapFrom(x => DateTime.UtcNow.AddHours(7)))
+                .ForMember(x => x.RecordTime, src => src.MapFrom(x => DateTime.UtcNow.AddHours(7)))
                  .ForMember(x => x.RecordTypeID, src => src.MapFrom(x => 1))
                 .ReverseMap();
 
@@ -264,7 +267,15 @@ namespace FireDetection.Backend.API.Mapper
             CreateMap<LocationGeneralResponse, Location>()
                    .ForMember(x => x.Id, src => src.MapFrom(x => x.LocationId))
                    .ForMember(x => x.LocationName, src => src.MapFrom(x => x.LocationName))
+                    .ForMember(x => x.LocationImage, src => src.MapFrom(x => x.LocationImage))
                    .ReverseMap();
+
+
+            CreateMap<AddAlarmConfigurationRequest, AlarmConfiguration>()
+                 .ForMember(x => x.NumberOfNotification, src => src.MapFrom(x => x.Count))
+                 .ForMember(x => x.Start, src => src.MapFrom(x => x.Start))
+                  .ForMember(x => x.End, src => src.MapFrom(x => x.End))
+                .ReverseMap();
 
             //CreateMap<Location, LocationResponse>().ForMember(x => x.LocationName, src => src.MapFrom(x => x.LocationName)).ReverseMap();
 

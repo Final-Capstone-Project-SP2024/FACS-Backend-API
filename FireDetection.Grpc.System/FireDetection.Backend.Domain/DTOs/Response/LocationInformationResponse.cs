@@ -14,7 +14,7 @@ namespace FireDetection.Backend.Domain.DTOs.Response
 
         public DateTime? CreatedDate { get; set; }
 
-        public  ReadOnlyCollection<Guid> Users { get; set; } = null!;
+        public   List<UserInLocation> Users { get; set; } = null!;
 
         public List<CameraInLocation> CameraInLocations { get; set; } = null!;
     }
@@ -26,6 +26,12 @@ namespace FireDetection.Backend.Domain.DTOs.Response
         public string CameraName { get; set; }  
 
         public string CameraDestination { get; set; }
+    }
+
+    public class UserInLocation
+    {
+        public Guid UserId { get; set;}
+        public string UserName { get; set; }
     }
 
 }

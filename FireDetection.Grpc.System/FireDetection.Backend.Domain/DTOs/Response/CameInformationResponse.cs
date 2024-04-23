@@ -12,5 +12,12 @@ namespace FireDetection.Backend.Domain.DTOs.Response
         public string Status { get; set; } = null!;
         public string CameraName { get; set; } = null!;
         public string CameraDestination { get; set; } = null!;
+        public string CameraImage { get;set; } = null!;
+    }
+
+    public class CameraInformationDetailResponse : CameraInformationResponse
+    {
+        public int RecordCount { get; set; }
+
     }
 }

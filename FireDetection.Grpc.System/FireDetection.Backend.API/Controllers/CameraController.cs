@@ -40,9 +40,10 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
+
         [Authorize(Roles = UserRole.Manager)]
         [HttpPost]
-        public async Task<ActionResult<RestDTO<CameraInformationResponse>>> Add(AddCameraRequest request)
+        public async Task<ActionResult<RestDTO<CameraInformationResponse>>> Add([FromForm]AddCameraRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -52,6 +53,7 @@ namespace FireDetection.Backend.API.Controllers
                 details.Status = StatusCodes.Status400BadRequest;
                 return new BadRequestObjectResult(details);
             }
+            await StorageHandlers.UploadFileAsync(request.CameraImage, request.CameraImage.Name.ToString());
             CameraInformationResponse response = await _cameraService.Add(request);
             return new RestDTO<CameraInformationResponse>()
             {
@@ -123,15 +125,15 @@ namespace FireDetection.Backend.API.Controllers
 
         [Authorize(Roles = Roles.Manager + "," + Roles.User)]
         [HttpPost("{id}/alert")]
-        public async Task<ActionResult<RestDTO<DetectResponse>>> FireAlarmAlert(Guid id,[FromForm] AddAlertByHandResponse request)
+        public async Task<ActionResult<RestDTO<DetectResponse>>> FireAlarmAlert(Guid id)
         {
-            await StorageHandlers.UploadFileAsync(request.video,"VideoRecord");
-            await StorageHandlers.UploadFileAsync(request.image, "ImageRecord");
+           //await StorageHandlers.UploadFileAsync(request.video,"VideoRecord");
+            //await StorageHandlers.UploadFileAsync(request.image, "ImageRecord");
             TakeAlarmRequest takeAlarm = new TakeAlarmRequest
             {
-                PictureUrl = request.image.FileName.ToString(),
-                PredictedPercent = request.FireDetection,
-                VideoUrl = request.video.FileName.ToString()
+                PictureUrl = "alarmByUserImage.png",
+                PredictedPercent = 20,
+                VideoUrl = "alarmByUserVideo.mp4"
             };
             DetectResponse response = await _cameraService.DetectFire(id, takeAlarm,3);
             return new RestDTO<DetectResponse>()
@@ -151,6 +153,16 @@ namespace FireDetection.Backend.API.Controllers
             {
                 Message = "Fix Camera  Successfully",
                 Data = response,
+            };
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<RestDTO<CameraInformationDetailResponse>>> GetCameraDetail(Guid id)
+        {
+            return new RestDTO<CameraInformationDetailResponse>()
+            {
+                Message = "Get Camera Detail Successfully",
+                Data = await _cameraService.GetCameraDetail(id),
             };
         }
     }

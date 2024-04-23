@@ -13,17 +13,14 @@ namespace FireDetection.Backend.Domain.Entity
 
         public string Status { get; set; } = null!;
 
-        public decimal UserRatingPercent { get; set; } = 0;
+   //     public decimal UserRatingPercent { get; set; } = 0;
 
         public decimal PredictedPercent { get; set; } = 0;
 
-
+        public string RecommendAlarmLevel { get; set; } = "Not";
         public Camera Camera { get; set; }  
-
         public Guid CameraID { get; set; }
-
         public RecordType RecordType { get; set; } 
-
         public DateTime FinishAlarmTime { get; set; }
         public int RecordTypeID { get; set; }
         public ICollection<AlarmRate> AlarmRates { get; set; }
@@ -32,5 +29,9 @@ namespace FireDetection.Backend.Domain.Entity
         public ICollection<NotificationLog> NotificationLogs { get; set; }
         public DateTime CreatedDate { get ; set; }
         public Guid CreatedBy { get ; set ; }
+
+        public int AlarmConfigurationId { get; set; }
+
+        public  AlarmConfiguration AlarmConfiguration { get; set; }
     }
 }

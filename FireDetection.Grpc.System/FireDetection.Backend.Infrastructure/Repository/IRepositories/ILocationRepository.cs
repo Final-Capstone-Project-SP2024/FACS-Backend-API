@@ -11,7 +11,7 @@ namespace FireDetection.Backend.Infrastructure.Repository.IRepositories
 {
     public interface ILocationRepository : IGenericRepository<Location>
     {
-        public Task<ReadOnlyCollection<Guid>> GetStaffInLocation(Guid locationId);
+        public Task<List<UserInLocation>> GetStaffInLocation(Guid locationId);
 
         public Task<IEnumerable<LocationGeneralResponse>> GetLocations();
 

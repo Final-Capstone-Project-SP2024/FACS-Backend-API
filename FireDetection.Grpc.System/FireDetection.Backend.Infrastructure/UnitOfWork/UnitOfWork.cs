@@ -10,6 +10,7 @@ namespace FireDetection.Backend.Infrastructure.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
+
         private readonly FireDetectionDbContext _context;
         private readonly IUserRepository _userRepository;
         private readonly IFeedbackRepository _feedbackRepository;
@@ -26,6 +27,7 @@ namespace FireDetection.Backend.Infrastructure.UnitOfWork
         private readonly IContractRepository _contractRepository;
         private readonly IManualPlanRepository _manualPlanRepository;
         private readonly ITransactionRepository _transactionRepository;
+        private readonly IAlarmConfigurationRepository _alarmConfigurationRepository;
 
         public UnitOfWork(FireDetectionDbContext context,
             IUserRepository userRepository,
@@ -42,7 +44,8 @@ namespace FireDetection.Backend.Infrastructure.UnitOfWork
             IBugsReportRepository bugsReportRepository,
             IContractRepository contractRepository,
             IManualPlanRepository manualPlanRepository,
-            ITransactionRepository transactionRepository)
+            ITransactionRepository transactionRepository,
+            IAlarmConfigurationRepository alarmConfigurationRepository)
         {
             _context = context;
             _userRepository = userRepository;
@@ -60,6 +63,7 @@ namespace FireDetection.Backend.Infrastructure.UnitOfWork
             _contractRepository = contractRepository;
             _manualPlanRepository = manualPlanRepository;
             _transactionRepository = transactionRepository;
+            _alarmConfigurationRepository = alarmConfigurationRepository;
         }
         public IUserRepository UserRepository => _userRepository;
 
@@ -86,6 +90,7 @@ namespace FireDetection.Backend.Infrastructure.UnitOfWork
 
         public ITransactionRepository TransactionRepository => _transactionRepository;
 
+        public IAlarmConfigurationRepository AlarmConfigurationRepository => _alarmConfigurationRepository;
         public async Task<int> SaveChangeAsync()
         {
             return await _context.SaveChangesAsync();

@@ -30,5 +30,7 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
         Task<CameraInformationResponse> FixCamera(Guid cameraId);
 
         public Task<Camera> GetCameraByName(string cameraName);
+
+        public Task<CameraInformationDetailResponse> GetCameraDetail(Guid cameraId);
     }
 }

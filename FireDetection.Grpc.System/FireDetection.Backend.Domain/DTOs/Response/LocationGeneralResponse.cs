@@ -13,5 +13,6 @@ namespace FireDetection.Backend.Domain.DTOs.Response
         public int? NumberOfCamera { get; set; } = 0;
 
         public int? NumberOfSecurity { get; set; } = 0;
+        public string LocationImage { get; set; } = null!;
     }
 }

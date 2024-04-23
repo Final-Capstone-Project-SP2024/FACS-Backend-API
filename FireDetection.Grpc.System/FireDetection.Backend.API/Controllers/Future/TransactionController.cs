@@ -69,7 +69,7 @@ namespace FireDetection.Backend.API.Controllers.Future
         }
 
         [HttpGet("{contractId}")]
-        public async Task<ActionResult<RestDTO<IQueryable<TransactionGeneralResponse>>>> GetAll(Guid contractId)
+        private async Task<ActionResult<RestDTO<IQueryable<TransactionGeneralResponse>>>> GetAll(Guid contractId)
         {
             var response = await _trasactionService.GetTransactions(contractId);
             return new RestDTO<IQueryable<TransactionGeneralResponse>>()

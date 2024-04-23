@@ -22,6 +22,7 @@ namespace FireDetection.Backend.Domain.Entity
         public Guid ModifiedBy { get; set; }
         public Guid? DeleteBy { get; set; }
         public bool IsDeleted { get; set; }
+        public string? RefreshToken { get; set; } = string.Empty!;
         public int RoleId { get; set; }
         public Role Role { get; set; }
 

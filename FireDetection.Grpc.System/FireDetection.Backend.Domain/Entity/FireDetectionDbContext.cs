@@ -45,6 +45,7 @@ namespace FireDetection.Backend.Domain
 
         public DbSet<Transaction> Transactions { get; set; }
 
+        public DbSet<AlarmConfiguration> AlarmConfigurations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

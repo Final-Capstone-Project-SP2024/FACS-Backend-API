@@ -10,6 +10,7 @@ namespace FireDetection.Backend.Domain.Entity
     public class Location : BaseEntity, IBaseModified, IBaseCreated
     {
         public string LocationName { get; set; } 
+        public string LocationImage { get; set; }
         public DateTime LastModified { get ; set ; }
         public Guid ModifiedBy { get; set ; }
         public Guid? DeleteBy { get; set; }

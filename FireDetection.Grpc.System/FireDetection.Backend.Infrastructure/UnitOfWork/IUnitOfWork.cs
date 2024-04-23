@@ -9,7 +9,7 @@ namespace FireDetection.Backend.Infrastructure.UnitOfWork
 {
     public interface IUnitOfWork
     {
-
+        public IAlarmConfigurationRepository AlarmConfigurationRepository { get; }
         public IAlarmRateRepository AlarmRateRepository { get; }
         public IRecordProcessRepository RecordProcessRepository { get; }
         public IUserRepository UserRepository { get; }

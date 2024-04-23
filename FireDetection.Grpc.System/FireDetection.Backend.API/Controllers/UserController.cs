@@ -78,8 +78,8 @@ namespace FireDetection.Backend.API.Controllers
         }
 
         [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
-        [HttpPatch]
-        public async Task<ActionResult<RestDTO<UserInformationResponse>>> Update(UpdateUserRequest request)
+        [HttpPatch("{id}")]
+        public async Task<ActionResult<RestDTO<UserInformationResponse>>> Update(Guid id,UpdateUserRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -90,7 +90,7 @@ namespace FireDetection.Backend.API.Controllers
                 return new BadRequestObjectResult(details);
             }
 
-            UserInformationResponse response = await _userService.UpdateUser(request);
+            UserInformationResponse response = await _userService.UpdateUserByManager(id,request);
             return new RestDTO<UserInformationResponse>()
             {
                 Message = "Update Successfully!",
@@ -98,8 +98,28 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
+        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
+        [HttpPatch("updateProfile")]
+        public async Task<ActionResult<RestDTO<UserInformationResponse>>> UpdateUserProfile( UpdateUserRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                var details = new ValidationProblemDetails(ModelState);
+                details.Extensions["traceId"] = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+                details.Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1";
+                details.Status = StatusCodes.Status400BadRequest;
+                return new BadRequestObjectResult(details);
+            }
 
+            UserInformationResponse response = await _userService.UpdateUser( request);
+            return new RestDTO<UserInformationResponse>()
+            {
+                Message = "Update Profile Successfully!",
+                Data = response,
+            };
+        }
 
+        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpGet]
         public async Task<ActionResult<RestDTO<List<UserInformationResponse>>>> GetAllUsers([FromQuery] PagingRequest pagingRequest, [FromQuery] UserRequest request)
         {
@@ -200,5 +220,15 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
+        [HttpPost("refreshToken")]
+        public async Task<ActionResult<RestDTO<RefreshTokenResponse>>> GetToken(string tokenRefresh)
+        {
+            return new RestDTO<RefreshTokenResponse>()
+            {
+                Message = "Get Token Successfully",
+                Data = await _userService.GetAccessTokenByRefreshToken(tokenRefresh),
+             };
+        }
+        
     }
 }

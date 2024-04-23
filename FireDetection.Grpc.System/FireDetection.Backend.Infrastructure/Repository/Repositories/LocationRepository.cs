@@ -21,14 +21,18 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
             _context = context;
         }
 
-        public async Task<ReadOnlyCollection<Guid>> GetStaffInLocation(Guid locationId)
+        public async Task<List<UserInLocation>> GetStaffInLocation(Guid locationId)
         {
 
             var result = _context.ControlCameras
                            .Include(x => x.User)
                            .Where(cc => cc.LocationID == locationId)
-                           .Select(cc => cc.UserID)
-                           .ToList().AsReadOnly();
+                           .Select(cc => new UserInLocation
+                           {
+                               UserId = cc.UserID,
+                               UserName = cc.User.Name,
+                           })
+                           .ToList();
 
             return result;
         }
@@ -40,7 +44,8 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
                 LocationId = x.Id,
                 LocationName = x.LocationName,
                 NumberOfCamera = x.Cameras.Count,
-                NumberOfSecurity = x.ControlCameras.Count()
+                NumberOfSecurity = x.ControlCameras.Count(),
+                LocationImage = x.LocationImage
             }).AsEnumerable();
 
             return result;
@@ -55,7 +60,8 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
                     LocationId = x.Id,
                     LocationName = x.LocationName,
                     NumberOfCamera = x.Cameras.Count,
-                    NumberOfSecurity = x.ControlCameras.Count()
+                    NumberOfSecurity = x.ControlCameras.Count(),
+                    LocationImage = x.LocationImage,
                 }).AsEnumerable();
 
             return result;

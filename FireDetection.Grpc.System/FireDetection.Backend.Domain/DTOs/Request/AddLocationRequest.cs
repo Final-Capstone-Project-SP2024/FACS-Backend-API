@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace FireDetection.Backend.Domain.DTOs.Request
         [Required]
         [RegularExpression(@"^Location [A-Z]$",ErrorMessage = "Must be Location .....")]
         public string LocationName { get; set; } = null!;
+        public IFormFile LocationImage { get; set; }
 
         
     }

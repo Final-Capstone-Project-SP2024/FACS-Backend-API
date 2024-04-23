@@ -3,6 +3,7 @@ using System;
 using FireDetection.Backend.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FireDetection.Backend.Domain.Migrations
 {
     [DbContext(typeof(FireDetectionDbContext))]
-    partial class FireDetectionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240421102928_migrate40")]
+    partial class migrate40
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -134,14 +137,14 @@ namespace FireDetection.Backend.Domain.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("AlarmConfigurationId"));
 
-                    b.Property<decimal>("End")
-                        .HasColumnType("numeric");
+                    b.Property<double?>("End")
+                        .HasColumnType("double precision");
 
                     b.Property<int?>("NumberOfNotification")
                         .HasColumnType("integer");
 
-                    b.Property<decimal>("Start")
-                        .HasColumnType("numeric");
+                    b.Property<double?>("Start")
+                        .HasColumnType("double precision");
 
                     b.HasKey("AlarmConfigurationId");
 
@@ -151,16 +154,16 @@ namespace FireDetection.Backend.Domain.Migrations
                         new
                         {
                             AlarmConfigurationId = 1,
-                            End = 0.45m,
+                            End = 0.45000000000000001,
                             NumberOfNotification = 1,
-                            Start = 0m
+                            Start = 0.0
                         },
                         new
                         {
                             AlarmConfigurationId = 2,
-                            End = 1m,
+                            End = 1.0,
                             NumberOfNotification = 99,
-                            Start = 0.45m
+                            Start = 0.45000000000000001
                         });
                 });
 
@@ -550,7 +553,7 @@ namespace FireDetection.Backend.Domain.Migrations
                             ManualPlanId = 1,
                             CameraLimited = 4,
                             CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            CreatedDate = new DateTime(2024, 4, 22, 7, 43, 16, 98, DateTimeKind.Utc).AddTicks(794),
+                            CreatedDate = new DateTime(2024, 4, 21, 10, 29, 28, 544, DateTimeKind.Utc).AddTicks(5475),
                             IsDeleted = false,
                             LastModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LocationLimited = 5,
@@ -564,7 +567,7 @@ namespace FireDetection.Backend.Domain.Migrations
                             ManualPlanId = 2,
                             CameraLimited = 8,
                             CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            CreatedDate = new DateTime(2024, 4, 22, 7, 43, 16, 98, DateTimeKind.Utc).AddTicks(798),
+                            CreatedDate = new DateTime(2024, 4, 21, 10, 29, 28, 544, DateTimeKind.Utc).AddTicks(5478),
                             IsDeleted = false,
                             LastModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LocationLimited = 10,
@@ -578,7 +581,7 @@ namespace FireDetection.Backend.Domain.Migrations
                             ManualPlanId = 3,
                             CameraLimited = 20,
                             CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            CreatedDate = new DateTime(2024, 4, 22, 7, 43, 16, 98, DateTimeKind.Utc).AddTicks(800),
+                            CreatedDate = new DateTime(2024, 4, 21, 10, 29, 28, 544, DateTimeKind.Utc).AddTicks(5479),
                             IsDeleted = false,
                             LastModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LocationLimited = 20,
@@ -794,6 +797,9 @@ namespace FireDetection.Backend.Domain.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("FinishAlarm")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("FinishAlarmTime")
@@ -1017,9 +1023,6 @@ namespace FireDetection.Backend.Domain.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("RefreshToken")
-                        .HasColumnType("text");
-
                     b.Property<int>("RoleId")
                         .HasColumnType("integer");
 
@@ -1050,7 +1053,6 @@ namespace FireDetection.Backend.Domain.Migrations
                             Name = "Admin",
                             Password = "NJt3DCzVWSRDN7SigMcj+v/M8v+OWeZPBW/lApGrc+thCg3X",
                             Phone = "0902311453",
-                            RefreshToken = "",
                             RoleId = 1,
                             SecurityCode = "XAD_000",
                             Status = "Active"

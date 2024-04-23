@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -17,5 +18,7 @@ namespace FireDetection.Backend.Domain.DTOs.Request
         public string CameraName { get; set; } = "allow";
         public string Destination { get; set; } = null!;
         public Guid LocationId { get; set; }
+
+        public IFormFile CameraImage { get; set; } 
     }
 }

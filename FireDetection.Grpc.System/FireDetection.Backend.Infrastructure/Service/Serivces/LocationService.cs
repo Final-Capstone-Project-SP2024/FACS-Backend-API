@@ -208,18 +208,20 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 if (_context.ControlCameraRepository.Where(x => x.LocationID == locationId && x.UserID == item).FirstOrDefault() is not null)
                 {
                     _context.ControlCameraRepository.HardDelete(_context.ControlCameraRepository.Where(x => x.LocationID == locationId && x.UserID == item).FirstOrDefault());
+                    await _context.SaveChangeAsync();
                 }
                 else
                 {
                     checkIsLocation = true;
                 }
             }
+//        if (checkIsLocation) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, $"Some user didn't register  in this location ");
 
-            if (checkIsLocation) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, $"Some user didn't register  in this location ");
 
 
             var data = await _context.LocationRepository.GetStaffInLocation(locationId);
-            var cameras = _context.CameraRepository.Where(x => x.LocationID == locationId).Select(x => x.Id).ToList().AsReadOnly();
+            var cameras = _context.CameraRepository.Where(x => x.LocationID == locationId).ToList();
+
             return new LocationInformationResponse()
             {
                 CreatedDate = _context.LocationRepository.GetById(locationId).Result.CreatedDate,

@@ -34,7 +34,6 @@ namespace FireDetection.Backend.API
 
             //Record 
             services.AddScoped<IRecordRepository, RecordRepository>();
-            services.AddScoped<IAPICallService, APICallService>();
             //Alarm 
             services.AddScoped<IAlarmService, AlarmService>();
             services.AddScoped<IAlarmRepository, AlarmRepository>();
@@ -79,7 +78,8 @@ namespace FireDetection.Backend.API
             services.AddScoped<IContractRepository, ContractRepository>();
             services.AddScoped<IContractService, ContractService>();
 
-
+            services.AddScoped<IAlarmConfigurationRepository, AlarmConfigurationRepository>();
+            services.AddScoped<IAlarmConfigurationService, AlarmConfigurationService>();
 
             services.AddGraphQLServer()
                     .AddQueryType<Query>()

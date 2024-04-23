@@ -29,13 +29,11 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
     {
 
         private readonly IMemoryCacheService _memorycachedservice;
-        private readonly IAPICallService _apiCall;
         private CancellationTokenSource _cancellationTokenSource;
         private ILocationScopeService _locationScopeService;
-        public TimerService(IMemoryCacheService memoryCacheService, IAPICallService aPICall, ILocationScopeService locationScopeService)
+        public TimerService(IMemoryCacheService memoryCacheService,   ILocationScopeService locationScopeService)
         {
             _memorycachedservice = memoryCacheService;
-            _apiCall = aPICall;
             _locationScopeService = locationScopeService;
         }
 
@@ -113,12 +111,6 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                     check = false;
                 }
             }
-
-            if (!check)
-            {
-                await _apiCall.AutoCompleteVoting(recordId);
-            }
-
         }
         protected async Task CheckAndSendNotification(Guid recordID, string CameraDestination, string LocationName, List<Guid> users)
         {

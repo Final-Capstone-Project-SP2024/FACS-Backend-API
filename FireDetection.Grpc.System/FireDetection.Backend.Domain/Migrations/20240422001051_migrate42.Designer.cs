@@ -3,6 +3,7 @@ using System;
 using FireDetection.Backend.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FireDetection.Backend.Domain.Migrations
 {
     [DbContext(typeof(FireDetectionDbContext))]
-    partial class FireDetectionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240422001051_migrate42")]
+    partial class migrate42
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -550,7 +553,7 @@ namespace FireDetection.Backend.Domain.Migrations
                             ManualPlanId = 1,
                             CameraLimited = 4,
                             CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            CreatedDate = new DateTime(2024, 4, 22, 7, 43, 16, 98, DateTimeKind.Utc).AddTicks(794),
+                            CreatedDate = new DateTime(2024, 4, 22, 0, 10, 50, 918, DateTimeKind.Utc).AddTicks(4291),
                             IsDeleted = false,
                             LastModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LocationLimited = 5,
@@ -564,7 +567,7 @@ namespace FireDetection.Backend.Domain.Migrations
                             ManualPlanId = 2,
                             CameraLimited = 8,
                             CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            CreatedDate = new DateTime(2024, 4, 22, 7, 43, 16, 98, DateTimeKind.Utc).AddTicks(798),
+                            CreatedDate = new DateTime(2024, 4, 22, 0, 10, 50, 918, DateTimeKind.Utc).AddTicks(4378),
                             IsDeleted = false,
                             LastModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LocationLimited = 10,
@@ -578,7 +581,7 @@ namespace FireDetection.Backend.Domain.Migrations
                             ManualPlanId = 3,
                             CameraLimited = 20,
                             CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
-                            CreatedDate = new DateTime(2024, 4, 22, 7, 43, 16, 98, DateTimeKind.Utc).AddTicks(800),
+                            CreatedDate = new DateTime(2024, 4, 22, 0, 10, 50, 918, DateTimeKind.Utc).AddTicks(4381),
                             IsDeleted = false,
                             LastModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LocationLimited = 20,
@@ -1017,9 +1020,6 @@ namespace FireDetection.Backend.Domain.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("RefreshToken")
-                        .HasColumnType("text");
-
                     b.Property<int>("RoleId")
                         .HasColumnType("integer");
 
@@ -1050,7 +1050,6 @@ namespace FireDetection.Backend.Domain.Migrations
                             Name = "Admin",
                             Password = "NJt3DCzVWSRDN7SigMcj+v/M8v+OWeZPBW/lApGrc+thCg3X",
                             Phone = "0902311453",
-                            RefreshToken = "",
                             RoleId = 1,
                             SecurityCode = "XAD_000",
                             Status = "Active"

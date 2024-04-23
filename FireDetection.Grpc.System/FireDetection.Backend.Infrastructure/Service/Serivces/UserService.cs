@@ -88,7 +88,13 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             IQueryable<User> data = await _unitOfWork.UserRepository.GetAll();
             return _mapper.Map<UserInformationResponse>(data.FirstOrDefault(x => x.Email == request.Email));
         }
-
+        protected async Task SaveRefreshToken(string refreshToken,Guid userId)
+        {
+            User user =  await _unitOfWork.UserRepository.GetById(userId);
+            user.RefreshToken = refreshToken;
+            _unitOfWork.UserRepository.Update(user);
+            await _unitOfWork.SaveChangeAsync();
+        }
         protected async Task<string> HashPassword(string PasswordInput)
         {
             byte[] salt;
@@ -153,6 +159,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             string secretKeyConfig = _configuration["JWTSecretKey:SecretKey"];
             DateTime secretKeyDatetime = DateTime.UtcNow;
             string refreshToken = GetRefreshToken();
+            await SaveRefreshToken(refreshToken, user.Id);
 
             string accessToken = GenerateJWT(user, secretKeyConfig, secretKeyDatetime);
             return new UserLoginResponse
@@ -177,6 +184,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             rng.GetBytes(randomCharacter);
             return Convert.ToBase64String(randomCharacter);
         }
+
 
         private string GenerateJWT(User user, string secretKey, DateTime now)
         {
@@ -410,6 +418,38 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         {
             return  await _unitOfWork.UserRepository.GetUsersUnRegisterd();
 
+        }
+
+        public async Task<RefreshTokenResponse> GetAccessTokenByRefreshToken(string Refreshtoken)
+        {
+            User user = _unitOfWork.UserRepository.Include(x => x.Role).Where(x => x.RefreshToken == Refreshtoken).FirstOrDefault();
+            if(user is null)
+            {
+                throw new Exception();
+            }
+            string secretKeyConfig = _configuration["JWTSecretKey:SecretKey"];
+            DateTime secretKeyDatetime = DateTime.UtcNow;
+            string accessToken = GenerateJWT(user, secretKeyConfig, secretKeyDatetime);
+
+            string refreshToken = GetRefreshToken();
+            return new RefreshTokenResponse
+            {
+                AccessToken = accessToken,
+                RefreshToken = refreshToken,
+            };
+        }
+
+        public async Task<UserInformationResponse> UpdateUserByManager(Guid userId, UpdateUserRequest request)
+        {
+            User user = await _unitOfWork.UserRepository.GetById(userId);
+            if(user is null)
+            {
+                throw new Exception();
+            }
+            _mapper.Map(user, request);
+            _unitOfWork.UserRepository.Update(user);
+            await _unitOfWork.SaveChangeAsync();
+            return _mapper.Map<UserInformationResponse>(_unitOfWork.UserRepository.GetById(userId));
         }
     }
 }

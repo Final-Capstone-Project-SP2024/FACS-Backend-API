@@ -38,5 +38,8 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
 
         public Task<IEnumerable<UserInformationResponse>> UnRegisterLocaiton();
 
+        Task<RefreshTokenResponse> GetAccessTokenByRefreshToken(string Refreshtoken);
+
+        Task<UserInformationResponse> UpdateUserByManager(Guid userId, UpdateUserRequest request);
     }
 }

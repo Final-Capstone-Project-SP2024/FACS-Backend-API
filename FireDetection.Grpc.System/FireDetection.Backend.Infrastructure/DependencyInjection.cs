@@ -28,10 +28,9 @@ namespace FireDetection.Backend.Infrastructure
             services.AddScoped<IAlarmRepository , AlarmRepository>();
             services.AddScoped<INotificationLogRepository , NotificationLogRepository>();   
             services.AddScoped<ILocationScopeService, LocationScopeService>();
-
+            services.AddScoped<IAlarmConfigurationRepository,AlarmConfigurationRepository>();
 
             services.AddScoped<INotificationLogService , NotificationLogService>();
-            services.AddScoped<IAPICallService, APICallService>();
             services.AddScoped<IAlarmService, AlarmService>();
             services.AddScoped<ICameraService, CameraService>();
             services.AddScoped<ILocationService, LocationService>();
@@ -40,6 +39,7 @@ namespace FireDetection.Backend.Infrastructure
             services.AddScoped<ITimerService , TimerService>();
             services.AddScoped<IUserService , UserService>();
             services.AddScoped<IClaimsService, ClaimsService>();
+            services.AddScoped<IAlarmConfigurationService, AlarmConfigurationService>();
 
             services.AddQuartz(opt =>
             {

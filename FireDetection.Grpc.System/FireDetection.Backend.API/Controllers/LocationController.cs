@@ -8,6 +8,7 @@ using GreenDonut;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Location = FireDetection.Backend.Domain.Entity.Location;
+using FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler;
 
 namespace FireDetection.Backend.API.Controllers
 {
@@ -23,9 +24,9 @@ namespace FireDetection.Backend.API.Controllers
             _locationScopeService = locationScopeService;
         }
 
-        [Authorize(Roles = UserRole.Manager)]
+        [Authorize(Roles = UserRole.Manager )]
         [HttpPost]
-        public async Task<ActionResult<RestDTO<LocationInformationResponse>>> Add(AddLocationRequest request)
+        public async Task<ActionResult<RestDTO<LocationInformationResponse>>> Add([FromForm]AddLocationRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -35,6 +36,7 @@ namespace FireDetection.Backend.API.Controllers
                 details.Status = StatusCodes.Status400BadRequest;
                 return new BadRequestObjectResult(details);
             }
+            await StorageHandlers.UploadFileAsync(request.LocationImage, request.LocationImage.Name.ToString());
             LocationInformationResponse response = await _context.AddNewLocation(request);
             return new RestDTO<LocationInformationResponse>()
             {

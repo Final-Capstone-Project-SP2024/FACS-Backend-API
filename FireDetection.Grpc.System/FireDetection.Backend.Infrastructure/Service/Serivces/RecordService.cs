@@ -44,6 +44,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         public async Task<bool> ActionInAlarm(Guid recordID, AddRecordActionRequest request)
         {
             request.UserID = _claimService.GetCurrentUserId;
+            await _memoryCacheService.UnCheck(recordID, CacheType.IsVoting);
             //? check input can action type 
             if (!await CheckActionInSystem(recordID, request.ActionId)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Can not action smaller than the action before");
 
@@ -59,8 +60,8 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 List<Guid> user = await _locationScopeService.GetUserInLocation(await _unitOfWork.RecordRepository.GetLocationName(recordID), request.ActionId);
                 user.Add(Guid.Parse("3c9a2a1b-f4dc-4468-a89c-f6be8ca3b541"));
                 Console.WriteLine(user);
-                string cameraDestination =   _unitOfWork.CameraRepository.GetById(_unitOfWork.RecordRepository.GetById(recordID).Result.CameraID).Result.CameraDestination;
-                _timerService.SpamNotification(recordID, request.ActionId, user,cameraDestination);
+                string cameraDestination = _unitOfWork.CameraRepository.GetById(_unitOfWork.RecordRepository.GetById(recordID).Result.CameraID).Result.CameraDestination;
+                _timerService.SpamNotification(recordID, request.ActionId, user, cameraDestination);
             }
 
 
@@ -75,7 +76,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 {
                     output.Add(item.ActionTypeId);
                 }
-                _log.SaveNotificationVotingRequire(recordID, await _memoryCacheService.GetResult(recordID, CacheType.VotingValue));
+                //_log.SaveNotificationVotingRequire(recordID, await _memoryCacheService.GetResult(recordID, CacheType.VotingValue));
                 foreach (var item in output)
                 {
                     _log.SaveNotificationActionRequire(recordID, await _memoryCacheService.GetResult(recordID, setKey(item)), setKey(item));
@@ -118,7 +119,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         internal async Task ChangeInActionRecordState(Guid recordId)
         {
             var record = await _unitOfWork.RecordRepository.GetById(recordId);
-            record.UserRatingPercent = await _memoryCacheService.GetResult(recordId, CacheType.VotingValue);
+            //record.UserRatingPercent = await _memoryCacheService.GetResult(recordId, CacheType.VotingValue);
             record.Status = RecordState.InAction;
             _unitOfWork.RecordRepository.Update(record);
             await _unitOfWork.SaveChangeAsync();
@@ -138,7 +139,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<bool> VoteAlarmLevel(Guid recordID, RateAlarmRequest request)
         {
-            var userId =   _claimService.GetCurrentUserId;
+            var userId = _claimService.GetCurrentUserId;
             if (_unitOfWork.AlarmRateRepository.Where(x => x.RecordID == recordID && x.UserID == userId).FirstOrDefault() is not null)
             {
                 throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "You have voted before");
@@ -324,7 +325,15 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         public async Task<RecordDetailResponse> GetDetail(Guid recordID)
         {
             var response = await _unitOfWork.RecordRepository.RecordDetailResponse(recordID);
-            response.evidences = _unitOfWork.MediaRecordRepository.Where(x => x.RecordId == recordID && x.Url.Contains("evidene")).Select(x => x.Url).ToList();
+            //? check this Id in system
+            if(_unitOfWork.RecordRepository.GetById(recordID) == null)
+            {
+                throw new Exception();
+            }
+            if (_unitOfWork.MediaRecordRepository.Where(x => x.RecordId == recordID && x.Url.Contains("evidence")).FirstOrDefault() is not null)
+            {
+                response.evidences = await _unitOfWork.MediaRecordRepository.Where(x => x.RecordId == recordID && x.Url.Contains("evidence"))?.Select(x => x.Url)?.ToListAsync() ?? null;
+            }
             if (response.RecordType == 3)
             {
                 var user = _unitOfWork.UserRepository.GetById(_unitOfWork.RecordRepository.GetById(recordID).Result.CreatedBy).Result;

@@ -55,7 +55,7 @@ namespace FireDetection.Backend.API.Controllers
             return Ok(response);
         }
 
-        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
+        //[Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpGet("{recordId}")]
         public async Task<ActionResult<RestDTO<RecordDetailResponse>>> GetDetail(Guid recordId)
         {
