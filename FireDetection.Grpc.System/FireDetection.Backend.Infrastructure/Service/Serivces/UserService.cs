@@ -446,10 +446,10 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             {
                 throw new Exception();
             }
-            _mapper.Map(user, request);
+            _mapper.Map(request, user);
             _unitOfWork.UserRepository.Update(user);
             await _unitOfWork.SaveChangeAsync();
-            return _mapper.Map<UserInformationResponse>(_unitOfWork.UserRepository.GetById(userId));
+            return _mapper.Map<UserInformationResponse>(_unitOfWork.UserRepository.Where(x => x.Id == userId).Include(x => x.Role).FirstOrDefault());
         }
     }
 }
