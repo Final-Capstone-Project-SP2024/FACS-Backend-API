@@ -1,4 +1,7 @@
-﻿using FireDetection.Backend.Domain.DTOs.Request;
+﻿using FireDetection.Backend.Domain.DTOs.Core;
+using FireDetection.Backend.Domain.DTOs.Request;
+//using FireDetection.Backend.Domain.Entity;
+using FireDetection.Backend.Domain.Entity;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,23 +17,35 @@ namespace FireDetection.Backend.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetAlarmConfiguration()
+        public async Task<ActionResult<RestDTO<IEnumerable<AlarmConfiguration>>>> GetAlarmConfiguration()
         {
-            return Ok(_alarmConfigurationService.GetAlarmConfigurations());
+            return new RestDTO<IEnumerable<AlarmConfiguration>>()
+            {
+                Message = "Alarm Configuration Setting",
+                Data = await _alarmConfigurationService.GetAlarmConfigurations(),
+            };
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddAlarmConfiguration(AddAlarmConfigurationRequest request)
+        public async Task<ActionResult<RestDTO<AlarmConfiguration>>> AddAlarmConfiguration(AddAlarmConfigurationRequest request)
         {
             await _alarmConfigurationService.AddNewConfiguration(request);
-            return Ok("Create Sucessfully");
+            return new RestDTO<AlarmConfiguration>()
+            {
+                Message = "Add Alarm Coonfiguration Sucessfully",
+                Data = null,
+            };
         }
 
         [HttpPatch]
-        public async Task<ActionResult> UpdateAlarmConfiguration(int id,AddAlarmConfigurationRequest request)
+        public async Task<ActionResult<RestDTO<AlarmConfiguration>>> UpdateAlarmConfiguration(int id,AddAlarmConfigurationRequest request)
         {
             await _alarmConfigurationService.UpdateAlarmConfiguration(id, request);
-            return Ok("Update Sucessfully");
+            return new RestDTO<AlarmConfiguration>()
+            {
+                Message = "Update Alarm Coonfiguration Sucessfully",
+                Data = null,
+            };
         }
     }
 }
