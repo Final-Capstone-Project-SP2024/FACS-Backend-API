@@ -14,7 +14,7 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
         Task<LocationInformationResponse> AddNewLocation(AddLocationRequest request);
 
         Task<LocationInformationResponse> RemoveSecurityInLocation(Guid locationId, AddStaffRequest request);
-        Task<LocationInformationResponse> UpdateLocation(Guid locationId, AddLocationRequest request);
+        Task<LocationInformationResponse> UpdateLocation(Guid locationId, UpdateLocationRequest request);
         Task<bool> DeleteLocation(Guid id);
         public  Task<IQueryable<LocationGeneralResponse>> GetLocation();
         Task<LocationInformationResponse> AddStaffToLocation(Guid locationId, AddStaffRequest request);

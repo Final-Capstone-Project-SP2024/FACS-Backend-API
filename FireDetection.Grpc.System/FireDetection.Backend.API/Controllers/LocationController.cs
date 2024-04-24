@@ -72,7 +72,7 @@ namespace FireDetection.Backend.API.Controllers
 
         [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpPatch("{id}")]
-        public async Task<ActionResult<RestDTO<LocationInformationResponse>>> Update(Guid id, AddLocationRequest request)
+        public async Task<ActionResult<RestDTO<LocationInformationResponse>>> Update(Guid id, UpdateLocationRequest request)
         {
             LocationInformationResponse response = await _context.UpdateLocation(id, request);
 

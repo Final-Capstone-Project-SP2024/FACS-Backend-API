@@ -112,7 +112,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             }
         }
 
-        public async Task<CameraInformationResponse> Update(Guid id, AddCameraRequest request)
+        public async Task<CameraInformationResponse> Update(Guid id, UpdateCameraRequest request)
         {
             Camera camera = await _unitOfWork.CameraRepository.GetById(id);
             if (camera is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "CameraId not in system");

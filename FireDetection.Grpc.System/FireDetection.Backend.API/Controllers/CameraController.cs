@@ -64,7 +64,7 @@ namespace FireDetection.Backend.API.Controllers
 
         [Authorize(Roles = UserRole.Manager)]
         [HttpPatch("{id}")]
-        public async Task<ActionResult<RestDTO<CameraInformationResponse>>> Update(Guid id, AddCameraRequest request)
+        public async Task<ActionResult<RestDTO<CameraInformationResponse>>> Update(Guid id, UpdateCameraRequest request)
         {
             CameraInformationResponse response = await _cameraService.Update(id, request);
             return new RestDTO<CameraInformationResponse>()

@@ -13,7 +13,7 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
     {
         Task<CameraInformationResponse> Add(AddCameraRequest request);
 
-        Task<CameraInformationResponse> Update(Guid id ,AddCameraRequest request);
+        Task<CameraInformationResponse> Update(Guid id ,UpdateCameraRequest request);
 
         Task<CameraInformationResponse> Active(Guid id);
 

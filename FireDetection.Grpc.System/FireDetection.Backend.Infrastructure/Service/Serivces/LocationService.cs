@@ -84,7 +84,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             return mapper.AsQueryable();
         }
 
-        public async Task<LocationInformationResponse> UpdateLocation(Guid locationId, AddLocationRequest request)
+        public async Task<LocationInformationResponse> UpdateLocation(Guid locationId, UpdateLocationRequest request)
         {
             if (!await ChecLocationId(locationId)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Not Found this LocationId in system");
 

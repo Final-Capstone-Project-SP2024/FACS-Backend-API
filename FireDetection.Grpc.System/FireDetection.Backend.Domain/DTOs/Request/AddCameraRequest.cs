@@ -21,4 +21,15 @@ namespace FireDetection.Backend.Domain.DTOs.Request
 
         public IFormFile CameraImage { get; set; } 
     }
+
+    public class UpdateCameraRequest
+    {
+        [RegularExpression(@"(Connected|Disconnected)$", ErrorMessage = "Connected or Disconnected ")]
+        public string Status { get; set; } = null!;
+        [JsonIgnore]
+        public string CameraName { get; set; } = "allow";
+        public string Destination { get; set; } = null!;
+        public Guid LocationId { get; set; }
+        
+    }
 }
