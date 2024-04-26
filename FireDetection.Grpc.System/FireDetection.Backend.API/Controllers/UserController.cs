@@ -160,7 +160,6 @@ namespace FireDetection.Backend.API.Controllers
 
 
 
-        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpPost("forgetpassword")]
         public async Task<ActionResult<RestDTO<UserInformationResponse>>> ForgetPassword(string securityCode)
         {

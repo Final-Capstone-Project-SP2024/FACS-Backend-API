@@ -26,7 +26,7 @@ namespace FireDetection.Backend.Domain.Helpers.EmailHandler
             mail.From = new MailAddress(_config["SendMailAccount:UserName"].ToString(), "From FireDetection_FPT", Encoding.UTF8);
             mail.Subject = subject;
             mail.SubjectEncoding = Encoding.UTF8;
-            using (StreamReader reader = new StreamReader("../FireDetection.Backend.API/Template/HTMLPage1.html"))
+            using (StreamReader reader = new StreamReader("../FireDetection.Backend.API/HTMLPage1.html"))
             {
                 mail.Body = reader.ReadToEnd();
 
@@ -54,7 +54,7 @@ namespace FireDetection.Backend.Domain.Helpers.EmailHandler
             mail.From = new MailAddress(_config["SendMailAccount:UserName"].ToString(), "From FireDetection_FPT", Encoding.UTF8);
             mail.Subject = "Reset Password";
             mail.SubjectEncoding = Encoding.UTF8;
-            using (StreamReader reader = new StreamReader("../FireDetection.Backend.API/Template/sendotp.html"))
+            using (StreamReader reader = new StreamReader("../FireDetection.Backend.API/sendotp.html"))
             {
                 mail.Body = reader.ReadToEnd();
 
