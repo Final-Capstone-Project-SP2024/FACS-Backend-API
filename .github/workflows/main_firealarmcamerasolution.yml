@@ -25,10 +25,10 @@ jobs:
       - name: Direct to the solution folder and show contents
         run: |
           cd "FireDetection.Grpc.System/FireDetection.Backend.API"
-          Get-ChildItem -Path .
           
       - name: Copy Template folder to site root
         run: |
+          Get-ChildItem -Path .
           cp -r FACS-Backend-API/FireDetection.Grpc.System/FireDetection.Backend.API/Template/* ${{env.DOTNET_ROOT}}/myapp
 
       - name: Build with dotnet
