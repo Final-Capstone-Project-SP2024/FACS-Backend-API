@@ -28,9 +28,9 @@ jobs:
           
       - name: Copy Template folder to site root
         run: |
-          cd FireDetection.Grpc.System/FireDetection.Backend.API
+          cd FireDetection.Grpc.System/FireDetection.Backend.API/Template
           Get-ChildItem -Path .
-          cp -r FireDetection.Grpc.System/FireDetection.Backend.API/Template/* ${{env.DOTNET_ROOT}}/myapp
+          cp -r * ${{env.DOTNET_ROOT}}/myapp
 
       - name: Build with dotnet
         run: |
