@@ -32,5 +32,12 @@ namespace FireDetection.Backend.Infrastructure.Service.IServices
         public Task<Camera> GetCameraByName(string cameraName);
 
         public Task<CameraInformationDetailResponse> GetCameraDetail(Guid cameraId);
+
+
+        public Task EnableReconnect();
+
+        public Task<bool> CheckIsEnable();
+
+        public Task<bool> ReconnectCamera(Guid cameraId);
     }
 }

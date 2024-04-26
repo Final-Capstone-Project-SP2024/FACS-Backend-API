@@ -26,6 +26,24 @@ namespace FireDetection.Backend.API.Controllers
             _logger = logger;
         }
 
+        [HttpPost("{cameraId}/reconnect")]
+        public async Task<ActionResult<RestDTO<string>>> ReconnectCamera(Guid cameraId)
+        {
+            if (! await _cameraService.CheckIsEnable())
+            {
+                return BadRequest(new
+                {
+                    message =  "Api Not Enable"
+                });
+            }
+         await _cameraService.ReconnectCamera(cameraId);
+            return new RestDTO<string>()
+            {
+                Message = "Reconnect CameraSucessfully",
+                Data = "",
+            };
+        }
+ 
         [HttpGet]
         public async Task<ActionResult<RestDTO<IQueryable<CameraInformationResponse>>>> Get()
         {
@@ -115,12 +133,18 @@ namespace FireDetection.Backend.API.Controllers
         [HttpPost("{id}/disconnect")]
         public async Task<ActionResult<RestDTO<DetectResponse>>> ElectricalIncident(Guid id)
         {
+            await _cameraService.EnableReconnect();
             DetectResponse response = await _cameraService.DetectElectricalIncident(id);
             return new RestDTO<DetectResponse>()
             {
                 Message = "Get Alarm Electrical Incident Successfully",
                 Data = response,
             };
+            //return new RestDTO<DetectResponse>()
+            //{
+            //    Message = "Get Alarm Electrical Incident Successfully",
+            //    Data = null,
+            //};
         }
 
         [Authorize(Roles = Roles.Manager + "," + Roles.User)]

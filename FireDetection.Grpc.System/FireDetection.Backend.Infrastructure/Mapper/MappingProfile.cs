@@ -14,6 +14,7 @@ namespace FireDetection.Backend.API.Mapper
                 .ForMember(x => x.Id, src => src.MapFrom(x => x.CameraId))
                 .ForMember(x => x.CameraName, src => src.MapFrom(x => x.CameraName))
                 .ForMember(x => x.CameraDestination, src => src.MapFrom(x => x.CameraDestination))
+                .ForMember(x => x.CameraImage, src => src.MapFrom(x => x.CameraImage))
                 .ReverseMap();
 
             CreateMap<CreateUserRequest, User>()

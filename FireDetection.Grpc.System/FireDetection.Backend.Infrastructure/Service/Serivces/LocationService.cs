@@ -194,7 +194,10 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 LocationName = _context.LocationRepository.GetById(locationId).Result.LocationName,
                 LocationId = locationId,
                 Users = data,
-                CameraInLocations = cameras.Select(camera => _mapper.Map<CameraInLocation>(camera)).ToList()
+                CameraInLocations = cameras.Select(camera => _mapper.Map<CameraInLocation>(camera)).ToList(),
+                CameraQuantity = _context.CameraRepository.Where(x => x.LocationID == locationId).Count(),
+                UserQuantity = _context.ControlCameraRepository.Where(x => x.LocationID == locationId).Count()
+                
             };
         }
 

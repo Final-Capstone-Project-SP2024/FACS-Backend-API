@@ -17,6 +17,7 @@ using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Linq.Dynamic.Core.Tokenizer;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -31,7 +32,8 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         private readonly IMemoryCacheService _memoryCacheService;
         private readonly ILocationScopeService _locationScopeService;
         private readonly IClaimsService _claimService;
-
+        private static Timer timer;
+        private static bool apiEnabled = false;
 
         public CameraService(IUnitOfWork unitOfWork, IMapper mapper, IMediaRecordService mediaRecordService, ITimerService timerService, IMemoryCacheService memoryCacheService, ILocationScopeService locationScopeService, IClaimsService claims)
         {
@@ -54,7 +56,6 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
             _unitOfWork.CameraRepository.Update(camera);
             await _unitOfWork.SaveChangeAsync();
-
             return _mapper.Map<CameraInformationResponse>(camera);
         }
 
@@ -325,6 +326,78 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 Status = camera.Status
             };
 
+        }
+
+        public async Task EnableReconnect()
+        {
+            apiEnabled = true;
+            timer = new Timer(DisableAPI, null, 60000, Timeout.Infinite);
+            ///900000
+        }
+
+
+        protected static void DisableAPI(object state)
+        {
+            apiEnabled = false;
+            Console.WriteLine("API access disabled.");
+        }
+        public async Task<bool> CheckIsEnable()
+        {
+            return apiEnabled;
+
+        }
+
+        public async Task<bool> ReconnectCamera(Guid cameraId)
+        {
+            
+            //? 0
+            var camera = await _unitOfWork.CameraRepository.GetById(cameraId);
+            if(camera.Status == CameraType.Disconnect)
+            {
+                DisableAPI(camera);
+                camera.Status = CameraType.Connect;
+                return true;
+            }
+            
+            //? +1
+            var cameraNext = await _unitOfWork.CameraRepository.Where(x => x.CameraName == IncrementCameraName(camera.CameraName)).FirstOrDefaultAsync();
+            if (cameraNext.Status == CameraType.Disconnect)
+            {
+                DisableAPI(camera);
+                cameraNext.Status = CameraType.Connect;
+                return true;
+            }
+
+            //? -1 
+            var cameraUnder = await _unitOfWork.CameraRepository.Where(x => x.CameraName == DecrementCameraName(camera.CameraName)).FirstOrDefaultAsync();
+            if (cameraUnder.Status == CameraType.Disconnect)
+            {
+                DisableAPI(camera);
+                cameraUnder.Status = CameraType.Connect;
+                return true;
+            }
+
+
+            return false;
+
+        }
+
+
+        private string IncrementCameraName(string cameraName)
+        {
+            // Extract the number from the camera name
+            string prefix = cameraName.Substring(0, cameraName.Length - 3);
+            int number = int.Parse(cameraName.Substring(cameraName.Length - 3)) + 1;
+            return $"{prefix}{number:D3}";
+        }
+
+
+        private string DecrementCameraName(string cameraName)
+        {
+            // Extract the number from the camera name
+            string prefix = cameraName.Substring(0, cameraName.Length - 3);
+            int number = int.Parse(cameraName.Substring(cameraName.Length - 3)) - 1;
+            return $"{prefix}{number:D3}";
         }
     }
 }

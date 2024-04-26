@@ -326,7 +326,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         {
             var response = await _unitOfWork.RecordRepository.RecordDetailResponse(recordID);
             //? check this Id in system
-            if(_unitOfWork.RecordRepository.GetById(recordID) == null)
+            if( await _unitOfWork.RecordRepository.GetById(recordID) == null)
             {
                 throw new Exception();
             }
@@ -336,7 +336,8 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             //}
             if (response.RecordType == 3)
             {
-                var user = _unitOfWork.UserRepository.GetById(_unitOfWork.RecordRepository.GetById(recordID).Result.CreatedBy).Result;
+                var record = await _unitOfWork.RecordRepository.GetById(recordID);
+                var user =  await _unitOfWork.UserRepository.GetById(record.CreatedBy);
                 UserInLocationResponse response1 = new UserInLocationResponse()
                 {
                     Name = user.Name,
