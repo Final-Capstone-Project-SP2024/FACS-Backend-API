@@ -356,6 +356,8 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             {
                 DisableAPI(camera);
                 camera.Status = CameraType.Connect;
+                _unitOfWork.CameraRepository.Update(camera);
+                await _unitOfWork.SaveChangeAsync();
                 return true;
             }
             

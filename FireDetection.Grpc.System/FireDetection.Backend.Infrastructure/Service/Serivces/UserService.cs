@@ -383,12 +383,14 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             var user = await _unitOfWork.UserRepository.Where(x => x.SecurityCode == request.SecurityCode).FirstOrDefaultAsync();
             if (user is null)  throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Not find this SecurityCode in system");
             int otpCheck = await _memoryCacheService.GetOTP(user.Email);
-            if (request.OTPSending == otpCheck) return true;
-
-
-            user.Password = request.newPassword;
-            _unitOfWork.UserRepository.Update(user);
-            await _unitOfWork.SaveChangeAsync();
+            if (request.OTPSending == otpCheck)
+            {
+                //user.Password = request.newPassword;
+                user.Password = await HashPassword(request.newPassword);
+                _unitOfWork.UserRepository.Update(user);
+                await _unitOfWork.SaveChangeAsync();
+                return true;
+            }
             return false;
         }
 
@@ -405,7 +407,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
             if (user.Password != request.OldPassword) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Your old password is wrong ");
 
-            user.Password = request.NewPassword;
+            user.Password = await HashPassword(request.NewPassword);
             _unitOfWork.UserRepository.Update(user);
             await _unitOfWork.SaveChangeAsync();
 
