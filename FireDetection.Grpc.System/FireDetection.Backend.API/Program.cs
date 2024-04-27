@@ -85,7 +85,7 @@ builder.Services.AddSwaggerGen(opt =>
 
 var conn = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<FireDetectionDbContext>(options =>
-    options.UseNpgsql(conn),ServiceLifetime.Transient);
+    options.UseNpgsql(conn));
 
 builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
