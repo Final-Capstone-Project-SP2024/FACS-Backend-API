@@ -171,7 +171,6 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpPost("otpconfirm")]
         public async Task<ActionResult<RestDTO<UserInformationResponse>>> ConfirmOTP(ChangePasswordRequest request)
         {
