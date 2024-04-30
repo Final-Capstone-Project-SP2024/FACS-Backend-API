@@ -30,6 +30,7 @@ namespace FireDetection.Backend.Domain.DTOs.Response
         public string CameraDestination { get; set; }
 
         public string CameraImage { get; set; }
+        public string CameraStatus { get; set; }
     }
 
     public class UserInLocation

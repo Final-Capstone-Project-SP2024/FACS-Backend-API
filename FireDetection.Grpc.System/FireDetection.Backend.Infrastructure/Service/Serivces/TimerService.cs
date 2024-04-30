@@ -67,7 +67,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         protected async Task DisconnectedNotificiationAlert(Guid recordId, string cameraDestination, string cameraLocation)
         {
             DateTime start = DateTime.Now;
-            while ((DateTime.UtcNow - start).TotalMinutes <= 1)
+            while ((DateTime.UtcNow - start).TotalMinutes <= 0.30)
             {
                 NotficationDetailResponse data = await NotificationHandler.Get(7);
                 Dictionary<string, string> tokens = JsonConvert.DeserializeObject<Dictionary<string, string>>(await RealtimeDatabaseHandlers.GetFCMToken());
