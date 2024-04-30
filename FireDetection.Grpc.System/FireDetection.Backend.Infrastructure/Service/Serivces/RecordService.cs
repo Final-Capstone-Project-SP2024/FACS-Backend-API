@@ -5,11 +5,13 @@ using FireDetection.Backend.Domain.DTOs.Response;
 using FireDetection.Backend.Domain.DTOs.State;
 using FireDetection.Backend.Domain.Entity;
 using FireDetection.Backend.Domain.Helpers.GetHandler;
+using FireDetection.Backend.Domain.Utils;
 using FireDetection.Backend.Infrastructure.Helpers.ErrorHandler;
 using FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler;
 using FireDetection.Backend.Infrastructure.Helpers.GetHandler;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using FireDetection.Backend.Infrastructure.UnitOfWork;
+using Google.Api.Gax.ResourceNames;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -89,6 +91,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             }
             if (request.ActionId == 7)
             {
+                await NotificationFakeAlarm(await _unitOfWork.RecordRepository.GetLocationName(recordID));
                 await _memoryCacheService.UnCheck(recordID, CacheType.IsFinish);
                 await updateRecordToEnd(recordID);
                 RecordProcess recordProcessEnding = _mapper.Map<RecordProcess>(request);
@@ -377,7 +380,20 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             var data = await _unitOfWork.RecordRepository.NotificationAlarmResponse();
             return data;
         }
+        public async Task NotificationFakeAlarm(string locationName)
+        {
+            List<Guid> users = await _locationScopeService.GetUserInLocation(locationName, 1);
+            NotficationDetailResponse data = await NotificationHandler.Get(8);
+            //? notification one time
+            foreach (var item in users)
+            {
+                Console.WriteLine(item);
+                string token = await RealtimeDatabaseHandlers.GetFCMTokenByUserID(item);
 
+                await CloudMessagingHandlers.CloudMessaging(data.Title,data.Context,
+                          token.Replace("\"", ""));
+            }
+        }
         public async Task AddEvidence(IFormFile file, Guid RecordId)
         {
             var record = await _unitOfWork.RecordRepository.GetById(RecordId);

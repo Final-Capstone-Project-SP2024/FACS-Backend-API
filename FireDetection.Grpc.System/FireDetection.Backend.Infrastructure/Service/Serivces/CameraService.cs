@@ -321,6 +321,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             Camera camera = await _unitOfWork.CameraRepository.GetById(cameraId);
             camera.Status = CameraType.Connect;
             await _unitOfWork.SaveChangeAsync();
+            await SetFinishRecord(cameraId);
             return _mapper.Map<CameraInformationResponse>(camera);
         }
 
@@ -371,6 +372,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             if(camera.Status == CameraType.Disconnect)
             {
                 DisableAPI(camera);
+                await SetFinishRecord(cameraId);
                 camera.Status = CameraType.Connect;
                 _unitOfWork.CameraRepository.Update(camera);
                 await _unitOfWork.SaveChangeAsync();
@@ -382,6 +384,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             if (cameraNext.Status == CameraType.Disconnect)
             {
                 DisableAPI(camera);
+                await SetFinishRecord(cameraId);
                 cameraNext.Status = CameraType.Connect;
                 _unitOfWork.CameraRepository.Update(camera);
                 await _unitOfWork.SaveChangeAsync();
@@ -394,6 +397,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             if (cameraUnder.Status == CameraType.Disconnect)
             {
                 DisableAPI(camera);
+                await SetFinishRecord(cameraId);
                 cameraUnder.Status = CameraType.Connect;
                 _unitOfWork.CameraRepository.Update(camera);
                 await _unitOfWork.SaveChangeAsync();
@@ -403,6 +407,15 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
             return false;
 
+        }
+
+        private async Task SetFinishRecord(Guid cameraId)
+        {
+            Record record =  await _unitOfWork.RecordRepository.Where(x => x.Status == RecordState.InAlram && x.CameraID == cameraId).FirstOrDefaultAsync();
+            record.Status = RecordState.InFinish;
+            record.FinishAlarmTime = DateTime.UtcNow.AddHours(7);
+            _unitOfWork.RecordRepository.Update(record);
+            await _unitOfWork.SaveChangeAsync();
         }
 
 

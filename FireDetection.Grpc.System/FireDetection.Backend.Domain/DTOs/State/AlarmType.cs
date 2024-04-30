@@ -20,5 +20,6 @@ namespace FireDetection.Backend.Domain.DTOs.State
         public static string DisconnectCamera = "Disconnect camera";
         public static string Remind = "Action Remind";
 
+
     }
 }
