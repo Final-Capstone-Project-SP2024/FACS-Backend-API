@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Firebase.Auth;
 using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.DTOs.Response;
 using FireDetection.Backend.Domain.DTOs.State;
@@ -14,6 +15,7 @@ using FireDetection.Backend.Infrastructure.UnitOfWork;
 using Google.Api.Gax.ResourceNames;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -383,13 +385,13 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         public async Task NotificationFakeAlarm(string locationName)
         {
             List<Guid> users = await _locationScopeService.GetUserInLocation(locationName, 1);
+            users.Add(Guid.Parse("3c9a2a1b-f4dc-4468-a89c-f6be8ca3b541"));
             NotficationDetailResponse data = await NotificationHandler.Get(8);
             //? notification one time
             foreach (var item in users)
             {
-                Console.WriteLine(item);
+               
                 string token = await RealtimeDatabaseHandlers.GetFCMTokenByUserID(item);
-
                 await CloudMessagingHandlers.CloudMessaging(data.Title,data.Context,
                           token.Replace("\"", ""));
             }

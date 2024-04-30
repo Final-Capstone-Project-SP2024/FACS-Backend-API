@@ -224,20 +224,22 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             else
             {
                 List<Guid> users = await _locationScopeService.GetUserInLocation(locationName, 1);
+                users.Add(Guid.Parse("3c9a2a1b-f4dc-4468-a89c-f6be8ca3b541"));
                 NotficationDetailResponse data = await NotificationHandler.Get(11);
                 //? notification one time
-                foreach (var item in users)
-                {
-                    Console.WriteLine(item);
-                    Console.WriteLine(HandleTextUtil.HandleTitle(data.Title, camera.CameraDestination));
-                    Console.WriteLine(HandleTextUtil.HandleContext(data.Context, locationName, camera.CameraDestination));
-                    string token = await RealtimeDatabaseHandlers.GetFCMTokenByUserID(item);
-
-                    await CloudMessagingHandlers.CloudMessaging(
-                               HandleTextUtil.HandleTitle(data.Title, camera.CameraDestination),
-                               HandleTextUtil.HandleContext(data.Context, locationName, camera.CameraDestination),
-                              token.Replace("\"", ""));
-                }
+              
+                    foreach (var item in users)
+                    {
+                        Console.WriteLine(item);
+                        Console.WriteLine(HandleTextUtil.HandleTitle(data.Title, camera.CameraDestination));
+                        Console.WriteLine(HandleTextUtil.HandleContext(data.Context, locationName, camera.CameraDestination));
+                        string token = await RealtimeDatabaseHandlers.GetFCMTokenByUserID(item);
+                        string tokenReduce = token.Replace("\"", "");
+                        await CloudMessagingHandlers.CloudMessaging(
+                                   HandleTextUtil.HandleTitle(data.Title, camera.CameraDestination),
+                                   HandleTextUtil.HandleContext(data.Context, locationName, camera.CameraDestination), tokenReduce
+                                  );
+                    }
             }
 
 
