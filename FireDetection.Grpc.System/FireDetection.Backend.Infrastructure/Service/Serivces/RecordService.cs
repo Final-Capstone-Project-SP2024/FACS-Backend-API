@@ -331,7 +331,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         {
             var response = await _unitOfWork.RecordRepository.RecordDetailResponse(recordID);
             //? check this Id in system
-            if( await _unitOfWork.RecordRepository.GetById(recordID) == null)
+            if (await _unitOfWork.RecordRepository.GetById(recordID) == null)
             {
                 throw new Exception();
             }
@@ -342,7 +342,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             if (response.RecordType == 3)
             {
                 var record = await _unitOfWork.RecordRepository.GetById(recordID);
-                var user =  await _unitOfWork.UserRepository.GetById(record.CreatedBy);
+                var user = await _unitOfWork.UserRepository.GetById(record.CreatedBy);
                 UserInLocationResponse response1 = new UserInLocationResponse()
                 {
                     Name = user.Name,
@@ -390,10 +390,14 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             //? notification one time
             foreach (var item in users)
             {
-               
+                Console.WriteLine(item);
+
                 string token = await RealtimeDatabaseHandlers.GetFCMTokenByUserID(item);
-                await CloudMessagingHandlers.CloudMessaging(data.Title,data.Context,
-                          token.Replace("\"", ""));
+                string tokenReduce = token.Replace("\"", "");
+                await CloudMessagingHandlers.CloudMessaging(
+                          data.Title,
+                          data.Context, tokenReduce
+                          );
             }
         }
         public async Task AddEvidence(IFormFile file, Guid RecordId)
