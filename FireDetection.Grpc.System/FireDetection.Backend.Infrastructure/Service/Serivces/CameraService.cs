@@ -171,10 +171,26 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             return true;
         }
 
+        private async Task<bool> CheckCameraIsConnected(Guid id)
+        {
+            Camera camera = await _unitOfWork.CameraRepository.GetById(id);
+            if(camera.Status == CameraType.Disconnect)
+            {
+                return false;
+            }
+            return true;
+
+        } 
+
         public async Task<DetectResponse> DetectFire(Guid id, TakeAlarmRequest request, int alarmType)
         {
 
             if (await _unitOfWork.CameraRepository.GetById(id) is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "CameraId is invalid");
+            //? check is Disconnected 
+            if(await CheckCameraIsConnected(id) is false)
+            {
+                throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Camera is disconnected");
+            }
             int DangerRecord = await IsDangerRecord(request.PredictedPercent);
             //TODO: Check camera in system 
             Camera camera = await _unitOfWork.CameraRepository.GetById(id);
