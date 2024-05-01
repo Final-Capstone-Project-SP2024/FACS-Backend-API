@@ -21,7 +21,6 @@ namespace FireDetection.Backend.Domain.DTOs.Request
         [Required]
         public string Name { get; set; } = null!;
 
-        [JsonIgnore]
         [Required]
         public string Password { get; set; } = 12345678.ToString();
 
