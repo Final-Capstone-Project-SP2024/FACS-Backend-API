@@ -9,6 +9,7 @@ namespace FireDetection.Backend.Domain.DTOs.Response
     public class NotificationAlarmResponse
     {
         public  Guid RecordId { get; set; }
+        public Guid CameraId { get; set; }
         public string LocationName { get; set; }
         public string CameraName { get; set; }
         public string CameraDestination { get; set; }

@@ -31,9 +31,8 @@ end_date = datetime(2024, 4, 1)
 data = []
 for _ in range(200):
     camera_ids = [
-        "a1183a6d-0f81-4b46-9fa4-6da368fa3429",
-        "a9d51bba-1d56-4748-ab15-2c44a6e9a0d0",
-        "0c1dff32-7819-4531-8811-86f4ef6765cf"
+        "cc18e343-a971-41e9-9f18-6cfe2a86e4cf",
+        "549ed98f-7abb-4e77-8e6e-e3e6f74aa407",
     ]
     
     recommend_alarm = [

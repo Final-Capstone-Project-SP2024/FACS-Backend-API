@@ -59,6 +59,7 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
             .Select(record => new NotificationAlarmResponse
             {
                 RecordType = record.RecordTypeID,
+                CameraId = record.CameraID,
                 occurrenceTime = record.RecordTime.ToString("HH:mm:ss dd-MM-yyyy"),
                 CameraDestination = record.Camera.CameraDestination,
                 CameraName = record.Camera.CameraName,
@@ -74,6 +75,7 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
                  .Where(x => x.Status != RecordState.InFinish)
                  .Select(record => new NotificationAlarmResponse
                  {
+                     CameraId = record.CameraID,
                      CameraDestination = record.Camera.CameraDestination,
                      CameraName = record.Camera.CameraName,
                      LocationName = record.Camera.Location.LocationName,
@@ -117,11 +119,11 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
                       RecordType = x.RecordTypeID,
                       userRatings = x.AlarmRates
                                       .Where(x => x.RecordID == recordId)
-                                      .Select(m => new UserRating {SecurityCode = m.User.SecurityCode, Rating = m.LevelID, userId = m.UserID, Name = m.Level.Name })
+                                      .Select(m => new UserRating { SecurityCode = m.User.SecurityCode, Rating = m.LevelID, userId = m.UserID, Name = m.Level.Name })
                                       .ToList(),
                       userVoting = x.RecordProcesses
                                     .Where(x => x.RecordID == recordId)
-                                    .Select(m => new UserVoting {SecurityCode = m.User.SecurityCode, userId = m.UserID, VoteLevel = m.ActionTypeId, VoteType = m.ActionType.ActionName })
+                                    .Select(m => new UserVoting { SecurityCode = m.User.SecurityCode, userId = m.UserID, VoteLevel = m.ActionTypeId, VoteType = m.ActionType.ActionName })
                                     .ToList(),
                       ImageRecord = x.MediaRecords
                           .Where(m => m.MediaTypeId == 2 && m.RecordId == recordId)
