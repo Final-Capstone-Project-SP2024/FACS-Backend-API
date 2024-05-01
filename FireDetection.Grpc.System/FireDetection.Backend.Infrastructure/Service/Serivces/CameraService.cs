@@ -69,9 +69,10 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
             if (!await CheckDuplicateCameraName(request.CameraName)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Camera Name have already add in system");
 
+            Camera camera = _mapper.Map<Camera>(request);
+            camera.CameraImage = request.CameraImage.FileName.ToString();
 
-
-            _unitOfWork.CameraRepository.InsertAsync(_mapper.Map<Camera>(request));
+            _unitOfWork.CameraRepository.InsertAsync(camera);
 
             await _unitOfWork.SaveChangeAsync();
 
