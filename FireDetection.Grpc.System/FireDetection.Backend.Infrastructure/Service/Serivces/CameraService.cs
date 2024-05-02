@@ -351,7 +351,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         public async Task EnableReconnect()
         {
             apiEnabled = true;
-            timer = new Timer(DisableAPI, null, 60000, Timeout.Infinite);
+            timer = new Timer(DisableAPI, null, 900000, Timeout.Infinite);
             ///900000
         }
 
