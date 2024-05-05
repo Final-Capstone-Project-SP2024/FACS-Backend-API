@@ -15,7 +15,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public AlarmConfigurationService(IUnitOfWork unitOfWork,IMapper mapper)
+        public AlarmConfigurationService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -23,22 +23,32 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         public async Task<bool> AddNewConfiguration(AddAlarmConfigurationRequest request)
         {
             AlarmConfiguration alarm = _mapper.Map<AlarmConfiguration>(request);
-          await _unitOfWork.AlarmConfigurationRepository.AddAlarmConfiguration(alarm);
+            await _unitOfWork.AlarmConfigurationRepository.AddAlarmConfiguration(alarm);
             await _unitOfWork.SaveChangeAsync();
             return true;
         }
 
         public async Task<IEnumerable<AlarmConfiguration>> GetAlarmConfigurations()
         {
-           return  await _unitOfWork.AlarmConfigurationRepository.GetAlarmConfigurations();
+            return await _unitOfWork.AlarmConfigurationRepository.GetAlarmConfigurations();
         }
 
         public async Task<bool> UpdateAlarmConfiguration(int AlarmConfigurationId, AddAlarmConfigurationRequest request)
         {
-           AlarmConfiguration alarm = await _unitOfWork.AlarmConfigurationRepository.GetAlarmConfigurationDetail(AlarmConfigurationId);
-           _mapper.Map<AlarmConfiguration,AddAlarmConfigurationRequest>(alarm, request);
+            AlarmConfiguration alarm = await _unitOfWork.AlarmConfigurationRepository.GetAlarmConfigurationDetail(AlarmConfigurationId);
+            _mapper.Map<AlarmConfiguration, AddAlarmConfigurationRequest>(alarm, request);
+
             await _unitOfWork.AlarmConfigurationRepository.UpdateAlarmConfiguration(alarm);
+            await UpdateStart(AlarmConfigurationId, request.End);
+
             return true;
+        }
+
+        private async Task UpdateStart(int nextAlarmConfigurationId, decimal end)
+        {
+            AlarmConfiguration alarm = await _unitOfWork.AlarmConfigurationRepository.GetAlarmConfigurationDetail(nextAlarmConfigurationId++);
+            alarm.Start = (decimal)end;
+            await _unitOfWork.AlarmConfigurationRepository.UpdateAlarmConfiguration(alarm);
         }
     }
 }

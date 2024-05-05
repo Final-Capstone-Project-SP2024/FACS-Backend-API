@@ -23,5 +23,6 @@ namespace FireDetection.Backend.Domain.Entity
         public Record Record { get; set; }
 
         public Guid RecordId { get; set; }
+        public DateTime DeletedDate { get ; set ; }
     }
 }

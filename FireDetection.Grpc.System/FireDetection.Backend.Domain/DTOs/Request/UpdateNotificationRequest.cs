@@ -7,13 +7,12 @@ using System.Threading.Tasks;
 
 namespace FireDetection.Backend.Domain.DTOs.Request
 {
-    public class AddAlarmConfigurationRequest
+    public class UpdateNotificationRequest
     {
-        [Range(0,100)]
-        public decimal Start { get; set; }
+        [Required]
+        public string Title { get; set; } = null!;
+        [Required]
+        public string Context { get; set; } = null!;
 
-        [Range(0, 100)]
-        public decimal End { get; set; }
-     
     }
 }

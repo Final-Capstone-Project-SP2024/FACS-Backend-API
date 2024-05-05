@@ -3,6 +3,7 @@ using System;
 using FireDetection.Backend.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FireDetection.Backend.Domain.Migrations
 {
     [DbContext(typeof(FireDetectionDbContext))]
-    partial class FireDetectionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240504102910_Migrate50")]
+    partial class Migrate50
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -145,6 +148,41 @@ namespace FireDetection.Backend.Domain.Migrations
                         });
                 });
 
+            modelBuilder.Entity("FireDetection.Backend.Domain.Entity.AlarmRate", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("LevelID")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("RecordID")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Time")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid>("UserID")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LevelID");
+
+                    b.HasIndex("RecordID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("AlarmRates");
+                });
+
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.Camera", b =>
                 {
                     b.Property<Guid>("Id")
@@ -217,6 +255,65 @@ namespace FireDetection.Backend.Domain.Migrations
                     b.HasIndex("UserID");
 
                     b.ToTable("ControlCameras");
+                });
+
+            modelBuilder.Entity("FireDetection.Backend.Domain.Entity.Level", b =>
+                {
+                    b.Property<int>("LevelID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("LevelID"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("LevelID");
+
+                    b.ToTable("Levels");
+
+                    b.HasData(
+                        new
+                        {
+                            LevelID = 1,
+                            Description = "Small Fire",
+                            Name = "Level 1"
+                        },
+                        new
+                        {
+                            LevelID = 2,
+                            Description = "Fire ",
+                            Name = "Level 2"
+                        },
+                        new
+                        {
+                            LevelID = 3,
+                            Description = "Fire ",
+                            Name = "Level 3"
+                        },
+                        new
+                        {
+                            LevelID = 4,
+                            Description = "Fire ",
+                            Name = "Level 4"
+                        },
+                        new
+                        {
+                            LevelID = 5,
+                            Description = "Fire ",
+                            Name = "Level 5"
+                        },
+                        new
+                        {
+                            LevelID = 6,
+                            Description = "Fake Alarm",
+                            Name = "Fake Alarm"
+                        });
                 });
 
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.Location", b =>
@@ -677,6 +774,33 @@ namespace FireDetection.Backend.Domain.Migrations
                     b.ToTable("userReponsibilities");
                 });
 
+            modelBuilder.Entity("FireDetection.Backend.Domain.Entity.AlarmRate", b =>
+                {
+                    b.HasOne("FireDetection.Backend.Domain.Entity.Level", "Level")
+                        .WithMany("AlarmRates")
+                        .HasForeignKey("LevelID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FireDetection.Backend.Domain.Entity.Record", "Record")
+                        .WithMany("AlarmRates")
+                        .HasForeignKey("RecordID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FireDetection.Backend.Domain.Entity.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Level");
+
+                    b.Navigation("Record");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.Camera", b =>
                 {
                     b.HasOne("FireDetection.Backend.Domain.Entity.Location", "Location")
@@ -844,6 +968,11 @@ namespace FireDetection.Backend.Domain.Migrations
                     b.Navigation("Records");
                 });
 
+            modelBuilder.Entity("FireDetection.Backend.Domain.Entity.Level", b =>
+                {
+                    b.Navigation("AlarmRates");
+                });
+
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.Location", b =>
                 {
                     b.Navigation("Cameras");
@@ -863,6 +992,8 @@ namespace FireDetection.Backend.Domain.Migrations
 
             modelBuilder.Entity("FireDetection.Backend.Domain.Entity.Record", b =>
                 {
+                    b.Navigation("AlarmRates");
+
                     b.Navigation("MediaRecords");
 
                     b.Navigation("NotificationLogs");

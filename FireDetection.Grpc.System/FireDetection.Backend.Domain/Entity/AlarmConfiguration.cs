@@ -16,6 +16,7 @@ namespace FireDetection.Backend.Domain.Entity
         public decimal End { get; set; } 
 
         public int? NumberOfNotification { get; set; }
+        public string AlarmNameConfiguration { get; set; }
 
         public ICollection<Record> Records { get; set; }
     }

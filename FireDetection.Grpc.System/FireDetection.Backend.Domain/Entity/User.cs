@@ -26,13 +26,11 @@ namespace FireDetection.Backend.Domain.Entity
         public int RoleId { get; set; }
         public Role Role { get; set; }
 
-        public Contract  UserTransaction { get; set; }
         public ICollection<ControlCamera> ControlCameras { get; set; } 
         public ICollection<RecordProcess> RecordProcesses { get; set; }
-        public ICollection<Transaction> Transactions { get; set; }
-        public ICollection<BugsReport> BugsReports { get; set; }
 
-        public ICollection<Feedback> Feedbacks { get; set; }
-   
+        public ICollection<UserReponsibility> UserReponsibilities { get; set; }
+
+        public DateTime DeletedDate { get ; set; }
     }
 }

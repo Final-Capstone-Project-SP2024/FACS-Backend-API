@@ -26,6 +26,7 @@ using System.Security;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using Firebase.Auth;
 using User = FireDetection.Backend.Domain.Entity.User;
+using FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler;
 
 namespace FireDetection.Backend.Infrastructure.Service.Serivces
 {
@@ -61,9 +62,8 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             if(! await CheckUserInSystem(userId) ) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Not have UserId in system");
             if (!await CheckUserStatus(userId, UserState.Active)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Have already actived in system");
             User user = await GetUserById(userId);
-            user.LastModified = DateTime.UtcNow;
+            user.LastModified = DateTime.UtcNow.AddHours(7);
             user.Status = UserState.Active;
-
             _unitOfWork.UserRepository.Update(user);
             await _unitOfWork.SaveChangeAsync();
 
@@ -137,11 +137,26 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             User user = await GetUserById(userId);
             user.LastModified = DateTime.UtcNow;
             user.Status = UserState.Inactive;
-
+            user.RefreshToken = null;
+            user.DeletedDate = DateTime.UtcNow.AddHours(7);
             _unitOfWork.UserRepository.Update(user);
             await _unitOfWork.SaveChangeAsync();
-
+            await DeleteUserInLocation(userId);
+            //? change user token to be null
+            await RealtimeDatabaseHandlers.DeleteFCMToken(userId);
             return true;
+        }
+
+        private async Task DeleteUserInLocation(Guid userId) { 
+        
+        var controlCameras = _unitOfWork.ControlCameraRepository.Where(x => x.UserID == userId).ToList();
+            foreach (var item in controlCameras)
+            {
+                _unitOfWork.ControlCameraRepository.HardDelete(item);
+                
+            }
+            await _unitOfWork.SaveChangeAsync();
+
         }
 
         public async Task<UserLoginResponse> Login(UserLoginRequest req)
@@ -357,11 +372,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             if (!await CheckUserInSystem(userId)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Not have UserId in system");
             UserInformationDetailResponse userDetail = new UserInformationDetailResponse();
             var user = await _unitOfWork.UserRepository.GetById(userId);
-            var userContract = await _unitOfWork.ContractRepository.Where(x => x.UserID == userId).FirstOrDefaultAsync();
-            var userTransaction = _unitOfWork.TransactionRepository.Where(x => x.UserID == userId).ToList();
             _mapper.Map(user, userDetail);
-            userDetail.UserContract = _mapper.Map<ContractDetailResponse>(userContract);
-            userDetail.UserTransaction = userTransaction.Select(x => _mapper.Map<TransactionGeneralResponse>(x)).ToList();
 
             return userDetail;
         }

@@ -13,7 +13,7 @@ namespace FireDetection.Backend.Infrastructure.Repository.IRepositories
         public IEnumerable<RecordResponse> Get();
 
         public Task<RecordDetailResponse> RecordDetailResponse(Guid recordId);
-        public Task<IEnumerable<NotificationAlarmResponse>> NotificationAlarmResponse();
+        public Task<IEnumerable<NotificationAlarmResponse>> NotificationAlarmResponse(Guid userID);
 
         public Task<IEnumerable<NotificationAlarmResponse>> NotificationDisconnected();
 

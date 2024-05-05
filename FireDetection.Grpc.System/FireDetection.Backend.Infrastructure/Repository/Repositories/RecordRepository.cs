@@ -32,9 +32,13 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
             return GetRecordCompiledQuery(_context, recordId);
         }
 
-        public async Task<IEnumerable<NotificationAlarmResponse>> NotificationAlarmResponse()
+        public async Task<IEnumerable<NotificationAlarmResponse>> NotificationAlarmResponse(Guid userID)
         {
-            return GetRecordInAlarm(_context).AsEnumerable();
+            List<Guid> recordTakeByUser = _context.userReponsibilities.Where(x => x.UserId == userID).Select(x => x.RecordId).ToList();
+            IEnumerable<NotificationAlarmResponse> record = GetRecordInAlarm(_context).AsEnumerable();
+
+            return record.Where(x => recordTakeByUser.Contains(x.RecordId));
+
         }
 
         public async Task<IEnumerable<NotificationAlarmResponse>> NotificationDisconnected()
@@ -117,10 +121,6 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
                       FinishTime = x.FinishAlarmTime.ToString("HH:mm:ss dd-MM-yyyy"),
                       Status = x.Status,
                       RecordType = x.RecordTypeID,
-                      userRatings = x.AlarmRates
-                                      .Where(x => x.RecordID == recordId)
-                                      .Select(m => new UserRating { SecurityCode = m.User.SecurityCode, Rating = m.LevelID, userId = m.UserID, Name = m.Level.Name })
-                                      .ToList(),
                       userVoting = x.RecordProcesses
                                     .Where(x => x.RecordID == recordId)
                                     .Select(m => new UserVoting { SecurityCode = m.User.SecurityCode, userId = m.UserID, VoteLevel = m.ActionTypeId, VoteType = m.ActionType.ActionName })
@@ -133,6 +133,9 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
                           .Where(m => m.MediaTypeId == 1 && m.RecordId == recordId)
                           .Select(m => new VideoRecord { VideoUrl = m.Url })
                           .FirstOrDefault(),
+                      userResponsibilities = x.userReponsibilities.Where(x => x.RecordId == recordId).
+                                            Select(user => new UserResponsibility { UserId = user.UserId, UserName = user.User.Name })
+                                              .ToList()
 
                   })
                   .FirstOrDefault());

@@ -7,6 +7,7 @@ using FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using static Google.Apis.Requests.BatchRequest;
 
 namespace FireDetection.Backend.API.Controllers
@@ -27,6 +28,14 @@ namespace FireDetection.Backend.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(AddNotificationRequest request)
         {
+            if (!ModelState.IsValid)
+            {
+                var details = new ValidationProblemDetails(ModelState);
+                details.Extensions["traceId"] = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+                details.Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1";
+                details.Status = StatusCodes.Status400BadRequest;
+                return new BadRequestObjectResult(details);
+            }
             await NotificationHandler.AddNewNotification(request.Title, request.Context, request.Header);
             return Ok("Add Sucessfully ");
 
@@ -43,6 +52,13 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
+        [HttpPatch("{id}")]
+        public async Task<ActionResult> Update(int id, UpdateNotificationRequest request )
+        {
+            await NotificationHandler.UpdateNotification(id, request.Title,request.Context);
+            return Ok("Add Sucessfully ");
+        }
+
         [Authorize(Roles = UserRole.Manager)]
         [HttpGet("{id}")]
         public async Task<ActionResult<RestDTO<NotficationDetailResponse>>> GetDetail(int id)
@@ -54,6 +70,8 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
+
+        [Authorize(Roles = Roles.Manager + "," + Roles.User)]
         [HttpGet("firealarms")]
         public async Task<ActionResult<RestDTO<IEnumerable<NotificationAlarmResponse>>>> GetNotify()
         {

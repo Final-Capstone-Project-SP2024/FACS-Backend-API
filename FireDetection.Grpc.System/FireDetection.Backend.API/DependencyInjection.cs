@@ -7,7 +7,6 @@ using FireDetection.Backend.Infrastructure.Repository.IRepositories;
 using FireDetection.Backend.Infrastructure.Repository.Repositories;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using FireDetection.Backend.Infrastructure.Service.Serivces;
-using FireDetection.Backend.Infrastructure.Service.Serivces.Future;
 using FireDetection.Backend.Infrastructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -36,7 +35,6 @@ namespace FireDetection.Backend.API
             services.AddScoped<IRecordRepository, RecordRepository>();
             //Alarm 
             services.AddScoped<IAlarmService, AlarmService>();
-            services.AddScoped<IAlarmRepository, AlarmRepository>();
             //Location
             services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<ILocationRepository, LocationRepository>();
@@ -46,7 +44,6 @@ namespace FireDetection.Backend.API
 
             services.AddScoped<IControlCameraRepository, ControlCameraRepository>();
             //Alarm Rate
-            services.AddScoped<IAlarmRateRepository, AlarmRateRepository>();
             services.AddScoped<IRecordService, RecordService>();
             // Record
             //services.AddScoped<IRecordRepository, RecordRepository>();
@@ -61,22 +58,7 @@ namespace FireDetection.Backend.API
 
             services.AddScoped<IClaimsService, ClaimsService>();
 
-            services.AddScoped<IBugsReportRepository, BugsReportRepository>();
-            services.AddScoped<IBugsReportService, BugsReportService>();
-
-            services.AddScoped<IFeedbackRepository, FeedbackRepository>();
-            services.AddScoped<IFeedbackService, FeedbackService>();    
-
-            services.AddScoped<ITransactionRepository, TransactionRepository>();
-            services.AddScoped<ITransactionService ,TransactionService>();
-
-
-            services.AddScoped<IManualPlanRepository, ManualPlanRepository>();
-            services.AddScoped<IManualPlanService, ManualPlanService>();
-
-
-            services.AddScoped<IContractRepository, ContractRepository>();
-            services.AddScoped<IContractService, ContractService>();
+          
 
             services.AddScoped<IAlarmConfigurationRepository, AlarmConfigurationRepository>();
             services.AddScoped<IAlarmConfigurationService, AlarmConfigurationService>();

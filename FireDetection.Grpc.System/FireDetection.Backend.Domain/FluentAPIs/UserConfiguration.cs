@@ -20,9 +20,7 @@ namespace FireDetection.Backend.Domain.FluentAPIs
 
             builder.HasMany(x => x.ControlCameras).WithOne(x => x.User).HasForeignKey(x => x.UserID);
             builder.HasMany(x => x.RecordProcesses).WithOne(x => x.User).HasForeignKey(x => x.UserID);
-            builder.HasMany(x => x.Transactions).WithOne(x => x.User).HasForeignKey(x => x.UserID);
-            builder.HasMany(x => x.BugsReports).WithOne(x => x.User).HasForeignKey(x => x.UserID);
-            builder.HasMany(x => x.Feedbacks).WithOne(x => x.User).HasForeignKey(x => x.UserId);
+            builder.HasMany(x => x.UserReponsibilities).WithOne(x => x.User).HasForeignKey(x => x.UserId);
             builder.HasData(new User
             {
                 Name = "Admin",

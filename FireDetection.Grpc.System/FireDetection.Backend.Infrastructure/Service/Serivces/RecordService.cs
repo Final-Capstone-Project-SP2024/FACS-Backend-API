@@ -34,8 +34,9 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         private readonly INotificationLogService _log;
         private readonly IClaimsService _claimService;
         private readonly ILocationScopeService _locationScopeService;
+        private readonly IUserResponsibilityService _userResponsibilityService;
 
-        public RecordService(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCacheService memoryCacheService, ITimerService timerService, INotificationLogService log, IClaimsService claimService, ILocationScopeService locationScopeService)
+        public RecordService(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCacheService memoryCacheService, ITimerService timerService, INotificationLogService log, IClaimsService claimService, ILocationScopeService locationScopeService, IUserResponsibilityService userResponsibilityService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -44,6 +45,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             _log = log;
             _claimService = claimService;
             _locationScopeService = locationScopeService;
+            _userResponsibilityService = userResponsibilityService;
         }
         public async Task<bool> ActionInAlarm(Guid recordID, AddRecordActionRequest request)
         {
@@ -60,12 +62,17 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 await _memoryCacheService.Create(recordID, setKey(request.ActionId));
                 await _memoryCacheService.Create(recordID, CacheType.Voting);
                 await _memoryCacheService.Create(recordID, CacheType.IsFinish);
+                string LocationName =  await _unitOfWork.RecordRepository.GetLocationName(recordID);
+                List<Guid> users = await _locationScopeService.GetUserInLocation(LocationName, request.ActionId);
+                users.Add(Guid.Parse("3c9a2a1b-f4dc-4468-a89c-f6be8ca3b541"));
+                Console.WriteLine(users);
+                foreach (var user in users)
+                {
+                   await  _userResponsibilityService.SaveUserInNotification(recordID, user);
 
-                List<Guid> user = await _locationScopeService.GetUserInLocation(await _unitOfWork.RecordRepository.GetLocationName(recordID), request.ActionId);
-                user.Add(Guid.Parse("3c9a2a1b-f4dc-4468-a89c-f6be8ca3b541"));
-                Console.WriteLine(user);
+                }
                 string cameraDestination = _unitOfWork.CameraRepository.GetById(_unitOfWork.RecordRepository.GetById(recordID).Result.CameraID).Result.CameraDestination;
-                _timerService.SpamNotification(recordID, request.ActionId, user, cameraDestination);
+                _timerService.SpamNotification(recordID, request.ActionId, users, cameraDestination, LocationName);
             }
 
 
@@ -88,6 +95,11 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 }
                 await _unitOfWork.SaveChangeAsync();
 
+                //? save who is finish
+                RecordProcess recordProcessEnding = _mapper.Map<RecordProcess>(request);
+                recordProcessEnding.RecordID = recordID;
+                _unitOfWork.RecordProcessRepository.InsertAsync(recordProcessEnding);
+                await _unitOfWork.SaveChangeAsync();
                 await updateRecordToEnd(recordID);
                 return true;
             }
@@ -112,6 +124,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
             RecordProcess recordProcess = _mapper.Map<RecordProcess>(request);
             recordProcess.RecordID = recordID;
+            recordProcess.UserID = Guid.Parse("3c9a2a1b-f4dc-4468-a89c-f6be8ca3b541");
             _unitOfWork.RecordProcessRepository.InsertAsync(recordProcess);
             await _unitOfWork.SaveChangeAsync();
 
@@ -144,61 +157,61 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<bool> VoteAlarmLevel(Guid recordID, RateAlarmRequest request)
         {
-            var userId = _claimService.GetCurrentUserId;
-            if (_unitOfWork.AlarmRateRepository.Where(x => x.RecordID == recordID && x.UserID == userId).FirstOrDefault() is not null)
-            {
-                throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "You have voted before");
-            }
-            //Create Voting Point for RecordId 
-            if (_unitOfWork.AlarmRepository.Where(x => x.RecordID == recordID).FirstOrDefault() is null)
-            {
+            throw new NotImplementedException();
+            //var userId = _claimService.GetCurrentUserId;
+            //if (_unitOfWork.AlarmRateRepository.Where(x => x.RecordID == recordID && x.UserID == userId).FirstOrDefault() is not null)
+            //{
+            //    throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "You have voted before");
+            //}
+            ////Create Voting Point for RecordId 
+            //if (_unitOfWork.AlarmRepository.Where(x => x.RecordID == recordID).FirstOrDefault() is null)
+            //{
 
-                //? to get the biggest value : create
-                //wait _memoryCacheService.Create(recordID, CacheType.VotingLevel);
+            //    //? to get the biggest value : create
+            //    //wait _memoryCacheService.Create(recordID, CacheType.VotingLevel);
 
-                await _memoryCacheService.Create(recordID, CacheType.VotingValue, request.LevelRating);
+            //    await _memoryCacheService.Create(recordID, CacheType.VotingValue, request.LevelRating);
 
-                //? to count how many vote in this record 
-                await _memoryCacheService.Create(recordID, CacheType.VotingCount, 1);
-
-
-            }
-            else
-            {
-                //? to get the biggest value : set 
-                await _memoryCacheService.SettingCount(recordID, CacheType.VotingLevel, request.LevelRating);
+            //    //? to count how many vote in this record 
+            //    await _memoryCacheService.Create(recordID, CacheType.VotingCount, 1);
 
 
-                //? to count how many vote in this record 
-                await _memoryCacheService.IncreaseQuantity(recordID, CacheType.VotingCount);
-            }
-
-            //todo after 5 vote or 2 minutes it will auto user can not voting for this userId
-            //? set voteCount
-            //? start 2 minutes to end 
-            //_timerService.EndVotePhase(recordID);
+            //}
+            //else
+            //{
+            //    //? to get the biggest value : set 
+            //    await _memoryCacheService.SettingCount(recordID, CacheType.VotingLevel, request.LevelRating);
 
 
-            //todo check and create action checking 
-            await _memoryCacheService.UnCheck(recordID, CacheType.IsVoting);
-            await _memoryCacheService.Create(recordID, CacheType.Action);
-            List<Guid> users = await _locationScopeService.GetUserInLocation(await _unitOfWork.RecordRepository.GetLocationName(recordID), 1);
-            users.Add(Guid.Parse("3c9a2a1b-f4dc-4468-a89c-f6be8ca3b541"));
-            _timerService.CheckIsAction(recordID, users);
+            //    //? to count how many vote in this record 
+            //    await _memoryCacheService.IncreaseQuantity(recordID, CacheType.VotingCount);
+            //}
+
+            ////todo after 5 vote or 2 minutes it will auto user can not voting for this userId
+            ////? set voteCount
+            ////? start 2 minutes to end 
+            ////_timerService.EndVotePhase(recordID);
 
 
-            //Console.WriteLine(await _memoryCacheService.GetResult(recordID, CacheType.FireNotify));
+            ////todo check and create action checking 
+            //await _memoryCacheService.UnCheck(recordID, CacheType.IsVoting);
+            //await _memoryCacheService.Create(recordID, CacheType.Action);
+            //List<Guid> users = await _locationScopeService.GetUserInLocation(await _unitOfWork.RecordRepository.GetLocationName(recordID), 1);
+            //users.Add(Guid.Parse("3c9a2a1b-f4dc-4468-a89c-f6be8ca3b541"));
+            //_timerService.CheckIsAction(recordID, users);
 
-            //? update to another in Record (InVote)
-            await RecordInVote(recordID);
-            //todo save log the fireNotify Task
-            await _log.SaveNotificationFireNotifyLog(recordID, await _memoryCacheService.GetResult(recordID, CacheType.FireNotify));
-            request.LevelRating = request.LevelRating == 0 ? 6 : request.LevelRating;
-            AlarmRate alarmRate = _mapper.Map<AlarmRate>(request);
-            alarmRate.RecordID = recordID;
-            alarmRate.UserID = userId;
-            _unitOfWork.AlarmRateRepository.InsertAsync(alarmRate);
-            return await _unitOfWork.SaveChangeAsync() > 0;
+
+            ////Console.WriteLine(await _memoryCacheService.GetResult(recordID, CacheType.FireNotify));
+
+            ////? update to another in Record (InVote)
+            //await RecordInVote(recordID);
+            ////todo save log the fireNotify Task
+            //await _log.SaveNotificationFireNotifyLog(recordID, await _memoryCacheService.GetResult(recordID, CacheType.FireNotify));
+            //request.LevelRating = request.LevelRating == 0 ? 6 : request.LevelRating;
+            //alarmRate.RecordID = recordID;
+            //alarmRate.UserID = userId;
+            //_unitOfWork.AlarmRateRepository.InsertAsync(alarmRate);
+            //return await _unitOfWork.SaveChangeAsync() > 0;
 
         }
 
@@ -289,7 +302,6 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
             var query = await _unitOfWork.RecordRepository.GetAll();
             query = query
-                .Include(alarm => alarm.AlarmRates) //TODO user rating
                 .Include(noti => noti.NotificationLogs)
                 .Include(recordProcess => recordProcess.RecordProcesses) /*TODO User Voting*/
                     .ThenInclude(action => action.ActionType)
@@ -379,7 +391,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public async Task<IEnumerable<NotificationAlarmResponse>> GetNotificationAlarm()
         {
-            var data = await _unitOfWork.RecordRepository.NotificationAlarmResponse();
+            var data = await _unitOfWork.RecordRepository.NotificationAlarmResponse(_claimService.GetCurrentUserId);
             return data;
         }
         public async Task NotificationFakeAlarm(string locationName)

@@ -25,25 +25,16 @@ namespace FireDetection.Backend.Domain
 
         public DbSet<MediaType> MediaTypes { get; set; }
 
-        public DbSet<Level> Levels { get; set; }
         public DbSet<MediaRecord> MediaRecords { get; set; }
 
         public DbSet<ControlCamera> ControlCameras { get; set; }
         public DbSet<ActionType> ActionTypes { get; set; }
         public DbSet<Camera> Cameras { get; set; }
-        public DbSet<AlarmRate> AlarmRates { get; set; }    
         public DbSet<NotificationLog>  NotificationLogs { get; set; }   
         public DbSet<RecordType> RecordTypes { get; set; }
 
-        public DbSet<BugsReport> BugsReports { get; set; }
 
-        public DbSet<Feedback> Feedbacks { get; set; }
-
-        public DbSet<ManualPlan> ManualPlans { get; set; }
-
-        public DbSet<Contract> Contracts { get; set; }
-
-        public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<UserReponsibility> userReponsibilities { get; set; }
 
         public DbSet<AlarmConfiguration> AlarmConfigurations { get; set; }
 

@@ -24,6 +24,7 @@ namespace FireDetection.Backend.Domain.DTOs.Response
         public List<UserVoting> userVoting { get; set; } = null!;
         public List<string> evidences { get; set; } = null!;
         public UserInLocationResponse AlarmUser { get; set;} = null!;
+        public List<UserResponsibility> userResponsibilities { get; set; } = null!;
     }
 
    
@@ -38,6 +39,12 @@ namespace FireDetection.Backend.Domain.DTOs.Response
         public string? ImageUrl { get; set; }
     }
 
+    public class UserResponsibility
+    {
+        public Guid UserId { get; set; }
+
+        public string? UserName { get; set; }
+    }
 
     public class UserRating
     {

@@ -15,5 +15,6 @@ namespace FireDetection.Backend.Domain.EntitySetting
         public Guid? DeleteBy { get; set; }
 
         public bool IsDeleted { get; set; }
+        public  DateTime DeletedDate { get; set; }
     }
 }

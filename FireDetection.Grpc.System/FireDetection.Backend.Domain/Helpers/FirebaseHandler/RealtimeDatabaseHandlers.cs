@@ -8,8 +8,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Linq.Dynamic.Core.Tokenizer;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using Object = System.Object;
 
 namespace FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler
 {
@@ -43,11 +46,27 @@ namespace FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler
             response.Body.ToString();
         }
 
+        public static async Task Update(Object newObject,string nameObject)
+        {
+            _client = new FireSharp.FirebaseClient(config);
+            FirebaseResponse response = await _client.UpdateAsync($@"Notifications/{nameObject}", newObject);
+            response.Body.ToString();
+        }
+
 
         public static async Task AddFCMToken(Guid userId,string token)
         {
             _client = new FireSharp.FirebaseClient(config);
             FirebaseResponse response = await _client.SetAsync($@"FCMToken/{userId}", token);
+            
+            response.Body.ToString();
+        }
+
+        public static async Task DeleteFCMToken(Guid userId)
+        {
+            _client = new FireSharp.FirebaseClient(config);
+            FirebaseResponse response = await _client.DeleteAsync($@"FCMToken/{userId}");
+
             response.Body.ToString();
         }
 
@@ -111,6 +130,35 @@ namespace FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler
             await RealtimeDatabaseHandlers.AddNew(newNotification, NotificationName);
         }
 
+        public static async Task UpdateNotification(int id,string Title , string Context)
+        {
+            string numberString = null;
+            switch (id)
+            {
+                case 1:
+                    numberString = AlarmType.Level1;
+                    break;
+                case 2:
+                    numberString = AlarmType.Level2;
+                    break;
+                case 3:
+                    numberString = AlarmType.Level3;
+                    break;
+                case 4:
+                    numberString = AlarmType.Level4;
+                    break;
+                case 5:
+                    numberString = AlarmType.Level5;
+                    break;
+            }
+
+            var updateNotification = new
+            {
+                title = Title,
+                context = Context
+            };
+            await RealtimeDatabaseHandlers.Update(updateNotification, numberString);
+        }
 
         public static async Task<NotificationListResponse> GetAll()
         {

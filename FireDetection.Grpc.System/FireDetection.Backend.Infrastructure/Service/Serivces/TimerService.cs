@@ -54,9 +54,9 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             Task.Run(async () => await CheckAndSendNotification(recordId, cameraDestination, cameraLocation,users));
         }
 
-        public void SpamNotification(Guid recordId, int alarmLevel, List<Guid> users, string cameraDestination)
+        public void SpamNotification(Guid recordId, int alarmLevel, List<Guid> users, string cameraDestination, string locationName)
         {
-            Task.Run(async () => await SpamNotificationAndCheckFinish(recordId, alarmLevel,users,cameraDestination));
+            Task.Run(async () => await SpamNotificationAndCheckFinish(recordId, alarmLevel,users,cameraDestination,locationName));
         }
 
         public void DisconnectionNotification(Guid recordId, string cameraDestination, string cameraLocation)
@@ -210,7 +210,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         }
 
 
-        protected async Task SpamNotificationAndCheckFinish(Guid recordId, int alarmLevel, List<Guid> users, string cameraDestination)
+        protected async Task SpamNotificationAndCheckFinish(Guid recordId, int alarmLevel, List<Guid> users, string cameraDestination, string locationName)
         {
             /*
              Variable have been create before 
@@ -231,10 +231,10 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                         {
                             NotficationDetailResponse data = await NotificationHandler.Get(alarmLevel);
                             Console.WriteLine(item);
-                            Console.WriteLine(data.Context);
-                            Console.WriteLine(data.Title);
+                            Console.WriteLine(HandleTextUtil.HandleTitle(data.Title, locationName));
+                            Console.WriteLine(HandleTextUtil.HandleContext(data.Context, locationName, cameraDestination));
                             string token = await RealtimeDatabaseHandlers.GetFCMTokenByUserID(item);
-                            await CloudMessagingHandlers.CloudMessaging(data.Title +" " + cameraDestination, data.Context, token.Replace("\"", ""));
+                            await CloudMessagingHandlers.CloudMessaging(HandleTextUtil.HandleTitle(data.Title,locationName), HandleTextUtil.HandleContext(data.Context,locationName,cameraDestination), token.Replace("\"", ""));
                         }
 
                         await _memorycachedservice.IncreaseQuantity(recordId, TransferCacheType(alarmLevel));

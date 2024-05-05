@@ -11,14 +11,14 @@ namespace FireDetection.Backend.Domain.Utils
         public static string HandleTitle(string text, string location)
         {
             // Fire Detect in {destination}
-            return text.Replace("{destination}", location); ;
+            return text.Replace("destination", location); ;
         }
 
         public static string HandleContext(string text, string location, string destination)
         {
             // Go to {destination} belong to {location}
-            text = text.Replace("{destination}", destination);
-            text = text.Replace("{location}", location);
+            text = text.Replace("destination", destination);
+            text = text.Replace("location", location);
             return text;
         }
     }
