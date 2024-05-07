@@ -154,7 +154,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             }
             if (check > 0)
             {
-                throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, $"Some user have already in this location {duplicateGuid.ToString()}");
+                throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, $"Some user have been registered in  location");
             }
 
             var data = await _context.LocationRepository.GetStaffInLocation(locationId);
@@ -173,7 +173,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         private async Task<bool> CheckDuplicateUserInControlCamera(Guid locationId, Guid userId)
         {
-            var check = _context.ControlCameraRepository.Where(x => x.LocationID == locationId && x.UserID == userId).Count();
+            var check = _context.ControlCameraRepository.Where(x => x.UserID == userId).Count();
             if (check == 0)
             {
                 return false;

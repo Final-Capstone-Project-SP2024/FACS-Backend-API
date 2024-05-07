@@ -24,7 +24,7 @@ namespace FireDetection.Backend.API.Controllers
             _recordService = recordService;
         }
 
-       
+
         [HttpPost]
         public async Task<IActionResult> Add(AddNotificationRequest request)
         {
@@ -37,7 +37,10 @@ namespace FireDetection.Backend.API.Controllers
                 return new BadRequestObjectResult(details);
             }
             await NotificationHandler.AddNewNotification(request.Title, request.Context, request.Header);
-            return Ok("Add Sucessfully ");
+            return Ok(new
+            {
+                message = "Add New Sucessfully"
+            });
 
         }
 
@@ -53,10 +56,21 @@ namespace FireDetection.Backend.API.Controllers
         }
 
         [HttpPatch("{id}")]
-        public async Task<ActionResult> Update(int id, UpdateNotificationRequest request )
+        public async Task<ActionResult> Update(int id, UpdateNotificationRequest request)
         {
-            await NotificationHandler.UpdateNotification(id, request.Title,request.Context);
-            return Ok("Add Sucessfully ");
+            if (!ModelState.IsValid)
+            {
+                var details = new ValidationProblemDetails(ModelState);
+                details.Extensions["traceId"] = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+                details.Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1";
+                details.Status = StatusCodes.Status400BadRequest;
+                return new BadRequestObjectResult(details);
+            }
+            await NotificationHandler.UpdateNotification(id, request.Title, request.Context);
+            return Ok(new
+            {
+                message = "Add Sucessfully "
+            });
         }
 
         [Authorize(Roles = UserRole.Manager)]

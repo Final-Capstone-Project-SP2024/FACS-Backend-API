@@ -10,8 +10,11 @@ namespace FireDetection.Backend.Domain.DTOs.Request
     public class UpdateNotificationRequest
     {
         [Required]
+        [RegularExpression(@"^(?=.*\blocation\b).*$", ErrorMessage = "Must contain the word 'Location'")]
         public string Title { get; set; } = null!;
+      
         [Required]
+        [RegularExpression(@"^(?=.*\blocation\b)(?=.*\bdestination\b).*$", ErrorMessage = "Must contain both 'Location' and 'Destination'")]
         public string Context { get; set; } = null!;
 
     }
