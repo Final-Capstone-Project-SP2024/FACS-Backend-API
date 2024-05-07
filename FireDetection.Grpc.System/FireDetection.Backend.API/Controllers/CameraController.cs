@@ -156,7 +156,7 @@ namespace FireDetection.Backend.API.Controllers
             TakeAlarmRequest takeAlarm = new TakeAlarmRequest
             {
                 PictureUrl = "alarmByUserImage.png",
-                PredictedPercent = 20,
+                PredictedPercent = 50,
                 VideoUrl = "alarmByUserVideo.mp4"
             };
             DetectResponse response = await _cameraService.DetectFire(id, takeAlarm,3);

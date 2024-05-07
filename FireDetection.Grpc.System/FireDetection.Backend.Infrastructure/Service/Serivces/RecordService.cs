@@ -124,7 +124,6 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
             RecordProcess recordProcess = _mapper.Map<RecordProcess>(request);
             recordProcess.RecordID = recordID;
-            recordProcess.UserID = Guid.Parse("3c9a2a1b-f4dc-4468-a89c-f6be8ca3b541");
             _unitOfWork.RecordProcessRepository.InsertAsync(recordProcess);
             await _unitOfWork.SaveChangeAsync();
 

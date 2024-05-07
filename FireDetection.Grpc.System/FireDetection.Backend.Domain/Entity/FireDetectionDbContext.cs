@@ -34,7 +34,7 @@ namespace FireDetection.Backend.Domain
         public DbSet<RecordType> RecordTypes { get; set; }
 
 
-        public DbSet<UserReponsibility> userReponsibilities { get; set; }
+        public DbSet<UserReponsibility> UserReponsibilities { get; set; }
 
         public DbSet<AlarmConfiguration> AlarmConfigurations { get; set; }
 

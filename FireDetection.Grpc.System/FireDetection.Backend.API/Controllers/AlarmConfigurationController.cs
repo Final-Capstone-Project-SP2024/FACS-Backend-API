@@ -4,6 +4,7 @@ using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.Entity;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace FireDetection.Backend.API.Controllers
 {
@@ -40,6 +41,16 @@ namespace FireDetection.Backend.API.Controllers
         [HttpPatch]
         public async Task<ActionResult<RestDTO<AlarmConfiguration>>> UpdateAlarmConfiguration(int id,AddAlarmConfigurationRequest request)
         {
+            request.AlarmConfigurationId = id;
+            if(!ModelState.IsValid)
+            {
+                var details = new ValidationProblemDetails(ModelState);
+                details.Extensions["traceId"] = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+                details.Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1";
+                details.Status = StatusCodes.Status400BadRequest;
+                return new BadRequestObjectResult(details);
+
+            }
             await _alarmConfigurationService.UpdateAlarmConfiguration(id, request);
             return new RestDTO<AlarmConfiguration>()
             {

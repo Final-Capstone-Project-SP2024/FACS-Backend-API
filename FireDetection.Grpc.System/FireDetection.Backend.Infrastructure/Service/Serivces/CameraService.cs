@@ -61,7 +61,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             await _unitOfWork.SaveChangeAsync();
             return _mapper.Map<CameraInformationResponse>(camera);
         }
-        
+
         public async Task<CameraInformationResponse> Add(AddCameraRequest request)
         {
 
@@ -219,7 +219,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             await _unitOfWork.SaveChangeAsync();
 
             if (DangerRecord == 0) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "The Alarm Is Fake");
-            if ( alarmType == 3 && DangerRecord == 3)
+            if (alarmType == 3 && DangerRecord == 3)
             {
                 //? add tp check 
                 await _memoryCacheService.Create(record.Id, CacheType.FireNotify);
@@ -235,7 +235,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 _timerService.CheckIsVoting(record.Id, camera.CameraDestination, locationName, users);
 
             }
-            else if( alarmType == 3 )
+            else if (alarmType == 3)
             {
                 List<Guid> users = await _locationScopeService.GetUserInLocation(locationName, 1);
                 users.Add(Guid.Parse("3c9a2a1b-f4dc-4468-a89c-f6be8ca3b541"));
@@ -258,11 +258,14 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             // 4. save image and video to database 
             await _mediaRecordService.AddImage(request.PictureUrl.ToString(), record.Id);
             await _mediaRecordService.Addvideo(request.VideoUrl.ToString(), record.Id);
-            await _recordServie.ActionInAlarm(record.Id, new AddRecordActionRequest
+            if (alarmType != 3)
             {
-                ActionId = TransferLevel(record.RecommendAlarmLevel),
-     
-            }) ;
+                await _recordServie.ActionInAlarm(record.Id, new AddRecordActionRequest
+                {
+                    ActionId = TransferLevel(record.RecommendAlarmLevel),
+
+                });
+            }
             return _mapper.Map<DetectResponse>(record);
         }
 

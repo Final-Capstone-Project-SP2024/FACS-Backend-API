@@ -38,7 +38,10 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             AlarmConfiguration alarm = await _unitOfWork.AlarmConfigurationRepository.GetAlarmConfigurationDetail(AlarmConfigurationId);
             _mapper.Map<AlarmConfiguration, AddAlarmConfigurationRequest>(alarm, request);
 
-            await _unitOfWork.AlarmConfigurationRepository.UpdateAlarmConfiguration(alarm);
+            if (AlarmConfigurationId != 3)
+            {
+                await _unitOfWork.AlarmConfigurationRepository.UpdateAlarmConfiguration(alarm);
+            }
             await UpdateStart(AlarmConfigurationId, request.End);
 
             return true;

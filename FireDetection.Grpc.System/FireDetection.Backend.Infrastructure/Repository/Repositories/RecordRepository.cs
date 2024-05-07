@@ -34,7 +34,7 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
 
         public async Task<IEnumerable<NotificationAlarmResponse>> NotificationAlarmResponse(Guid userID)
         {
-            List<Guid> recordTakeByUser = _context.userReponsibilities.Where(x => x.UserId == userID).Select(x => x.RecordId).ToList();
+            List<Guid> recordTakeByUser = _context.UserReponsibilities .Where(x => x.UserId == userID).Select(x => x.RecordId).ToList();
             IEnumerable<NotificationAlarmResponse> record = GetRecordInAlarm(_context).AsEnumerable();
 
             return record.Where(x => recordTakeByUser.Contains(x.RecordId));
