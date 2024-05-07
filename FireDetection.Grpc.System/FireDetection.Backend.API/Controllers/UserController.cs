@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Security;
-using static Google.Apis.Requests.BatchRequest;
 namespace FireDetection.Backend.API.Controllers
 {
     [ApiController]
