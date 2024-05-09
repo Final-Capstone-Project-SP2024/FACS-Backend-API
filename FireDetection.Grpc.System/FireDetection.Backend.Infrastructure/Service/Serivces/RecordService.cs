@@ -112,6 +112,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 recordProcessEnding.RecordID = recordID;
                 _unitOfWork.RecordProcessRepository.InsertAsync(recordProcessEnding);
                 await _unitOfWork.SaveChangeAsync();
+              
 
 
                 // updateRecordToEnd(recordID, 1);

@@ -154,7 +154,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             }
             if (check > 0)
             {
-                throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, $"Some user have been registered in  location");
+                throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, $"Some user has been registered in another location");
             }
 
             var data = await _context.LocationRepository.GetStaffInLocation(locationId);
