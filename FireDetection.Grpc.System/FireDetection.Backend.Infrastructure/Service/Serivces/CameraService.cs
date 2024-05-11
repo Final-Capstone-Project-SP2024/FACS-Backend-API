@@ -300,10 +300,11 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             if (camera is null) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "CameraId is invalid");
             Location location = await _unitOfWork.LocationRepository.GetById(camera.LocationID);
 
-
+            List<Guid> users = await _locationScopeService.GetUserInLocation(location.LocationName, 1);
+            users.Add(Guid.Parse("3c9a2a1b-f4dc-4468-a89c-f6be8ca3b541"));
             //todo Spam disconnect action
             //? after 1 minutes end the action return to finish
-            _timerService.DisconnectionNotification(id, camera.CameraDestination, location.LocationName);
+            _timerService.DisconnectionNotification(users,id, camera.CameraDestination, location.LocationName);
             //todo Send notification about where have the fire belong to where location
             /*     NotficationDetailResponse data = await NotificationHandler.Get(7);
                  await CloudMessagingHandlers.CloudMessaging(

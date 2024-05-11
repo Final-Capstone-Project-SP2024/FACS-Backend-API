@@ -59,24 +59,24 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             Task.Run(async () => await SpamNotificationAndCheckFinish(recordId, alarmLevel,users,cameraDestination,locationName));
         }
 
-        public void DisconnectionNotification(Guid recordId, string cameraDestination, string cameraLocation)
+        public void DisconnectionNotification(List<Guid> users,Guid recordId, string cameraDestination, string cameraLocation)
         {
-            Task.Run(async () => await DisconnectedNotificiationAlert(recordId, cameraDestination, cameraLocation));
+            Task.Run(async () => await DisconnectedNotificiationAlert(users,recordId, cameraDestination, cameraLocation));
         }
 
-        protected async Task DisconnectedNotificiationAlert(Guid recordId, string cameraDestination, string cameraLocation)
+        protected async Task DisconnectedNotificiationAlert(List<Guid> users,Guid recordId, string cameraDestination, string cameraLocation)
         {
             DateTime start = DateTime.Now;
             while ((DateTime.UtcNow - start).TotalMinutes <= 0.30)
             {
                 NotficationDetailResponse data = await NotificationHandler.Get(7);
-                Dictionary<string, string> tokens = JsonConvert.DeserializeObject<Dictionary<string, string>>(await RealtimeDatabaseHandlers.GetFCMToken());
-                List<string> values = new List<string>(tokens.Values);
+                //Dictionary<string, string> tokens = JsonConvert.DeserializeObject<Dictionary<string, string>>(await RealtimeDatabaseHandlers.GetFCMToken());
+                //List<string> values = new List<string>(tokens.Values);
 
                 // Print the values
-                foreach (var value in values)
+                foreach (var value in users)
                 {
-
+                    string token = await RealtimeDatabaseHandlers.GetFCMTokenByUserID(value);
                     Console.WriteLine(value);
                     Console.WriteLine(HandleTextUtil.HandleTitle(data.Title, cameraDestination));
                     Console.WriteLine(HandleTextUtil.HandleContext(data.Context, cameraLocation, cameraDestination));
@@ -84,7 +84,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                     await CloudMessagingHandlers.CloudMessaging(
                              HandleTextUtil.HandleTitle(data.Title, cameraDestination),
                              HandleTextUtil.HandleContext(data.Context, cameraLocation, cameraDestination),
-                            value.Replace("\"", ""));
+                            token.Replace("\"", ""));
                     //await CloudMessagingHandlers.CloudMessaging(data.Title, data.Context, value);
                 }
                await  Task.Delay(5000);
