@@ -4,6 +4,7 @@ using FireDetection.Backend.Domain.Entity;
 using FireDetection.Backend.Infrastructure.Service.IServices;
 using FireDetection.Backend.Infrastructure.UnitOfWork;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -36,21 +37,36 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         public async Task<bool> UpdateAlarmConfiguration(int AlarmConfigurationId, AddAlarmConfigurationRequest request)
         {
             AlarmConfiguration alarm = await _unitOfWork.AlarmConfigurationRepository.GetAlarmConfigurationDetail(AlarmConfigurationId);
-            _mapper.Map<AlarmConfiguration, AddAlarmConfigurationRequest>(alarm, request);
+            alarm.Start = request.Start;
+            alarm.End = request.End;
+            await _unitOfWork.AlarmConfigurationRepository.UpdateAlarmConfiguration(alarm);
 
-            if (AlarmConfigurationId != 3)
+            if (AlarmConfigurationId == 1)
             {
-                await _unitOfWork.AlarmConfigurationRepository.UpdateAlarmConfiguration(alarm);
+                await UpdateStart(AlarmConfigurationId, request.End);
             }
-            await UpdateStart(AlarmConfigurationId, request.End);
+            else if (AlarmConfigurationId == 2)
+            {
+                await UpdateStart(AlarmConfigurationId, request.End);
+                await UpdateEnd(AlarmConfigurationId, request.Start);
+            }
 
             return true;
         }
 
         private async Task UpdateStart(int nextAlarmConfigurationId, decimal end)
         {
-            AlarmConfiguration alarm = await _unitOfWork.AlarmConfigurationRepository.GetAlarmConfigurationDetail(nextAlarmConfigurationId++);
+
+            AlarmConfiguration alarm = await _unitOfWork.AlarmConfigurationRepository.GetAlarmConfigurationDetail(nextAlarmConfigurationId + 1);
             alarm.Start = (decimal)end;
+            await _unitOfWork.AlarmConfigurationRepository.UpdateAlarmConfiguration(alarm);
+        }
+
+
+        private async Task UpdateEnd(int previouseAlarmConfigurationId, decimal start)
+        {
+            AlarmConfiguration alarm = await _unitOfWork.AlarmConfigurationRepository.GetAlarmConfigurationDetail(previouseAlarmConfigurationId -1);
+            alarm.Start = (decimal)start;
             await _unitOfWork.AlarmConfigurationRepository.UpdateAlarmConfiguration(alarm);
         }
     }

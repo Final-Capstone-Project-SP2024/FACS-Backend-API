@@ -147,12 +147,13 @@ namespace FireDetection.Backend.API.Controllers
             //};
         }
 
-        [Authorize(Roles = Roles.Manager + "," + Roles.User)]
+      //  [Authorize(Roles = Roles.Manager + "," + Roles.User)]
         [HttpPost("{id}/alert")]
         public async Task<ActionResult<RestDTO<DetectResponse>>> FireAlarmAlert(Guid id)
         {
-           //await StorageHandlers.UploadFileAsync(request.video,"VideoRecord");
+            //await StorageHandlers.UploadFileAsync(request.video,"VideoRecord");
             //await StorageHandlers.UploadFileAsync(request.image, "ImageRecord");
+            await RealtimeDatabaseHandlers.ModifyMessage(DateTime.UtcNow);
             TakeAlarmRequest takeAlarm = new TakeAlarmRequest
             {
                 PictureUrl = "alarmByUserImage.png",

@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Linq.Dynamic.Core.Tokenizer;
+using System.Net;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -26,13 +28,14 @@ namespace FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler
         {
             AuthSecret = authSecret,
             BasePath = basePath
-
         };
+
+     
         public static async Task<string> GetFCMTokenByUserID(Guid userId = new Guid())
         {
             _client = new FireSharp.FirebaseClient(config);
             FirebaseResponse response = await _client.GetAsync($@"FCMToken/{userId}");
-            if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
                 return "NotUserloginInthis Account";
             }
@@ -46,7 +49,7 @@ namespace FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler
             response.Body.ToString();
         }
 
-        public static async Task Update(Object newObject,string nameObject)
+        public static async Task Update(Object newObject, string nameObject)
         {
             _client = new FireSharp.FirebaseClient(config);
             FirebaseResponse response = await _client.UpdateAsync($@"Notifications/{nameObject}", newObject);
@@ -54,11 +57,11 @@ namespace FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler
         }
 
 
-        public static async Task AddFCMToken(Guid userId,string token)
+        public static async Task AddFCMToken(Guid userId, string token)
         {
             _client = new FireSharp.FirebaseClient(config);
             FirebaseResponse response = await _client.SetAsync($@"FCMToken/{userId}", token);
-            
+
             response.Body.ToString();
         }
 
@@ -70,11 +73,11 @@ namespace FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler
             response.Body.ToString();
         }
 
-        public static async Task<string> GetFCMToken(Guid? userId = default )
+        public static async Task<string> GetFCMToken(Guid? userId = default)
         {
             _client = new FireSharp.FirebaseClient(config);
             FirebaseResponse response = await _client.GetAsync($@"FCMToken/{userId}");
-             return response.Body.ToString();
+            return response.Body.ToString();
 
         }
         public static async Task<NotificationListResponse> GetNotifications()
@@ -98,7 +101,23 @@ namespace FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler
             };
         }
 
+        public static async Task ModifyMessage(DateTime dateTime)
+        {
+            string notification = $"Fire detected! At {dateTime.Hour + 7} hours {dateTime.Minute} minutes and {dateTime.Second} seconds";
+            _client = new FireSharp.FirebaseClient(config);
 
+            // Update existing message
+            FirebaseResponse response = await _client.SetAsync("Messages/message", notification);
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                Console.WriteLine("Message updated successfully!");
+            }
+            else
+            {
+                Console.WriteLine($"Error updating message: {response.StatusCode}");
+            }
+        }
         public static async Task<NotficationDetailResponse> GetDetail(string header)
         {
             _client = new FireSharp.FirebaseClient(config);
@@ -130,7 +149,7 @@ namespace FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler
             await RealtimeDatabaseHandlers.AddNew(newNotification, NotificationName);
         }
 
-        public static async Task UpdateNotification(int id,string Title , string Context)
+        public static async Task UpdateNotification(int id, string Title, string Context)
         {
             string numberString = null;
             switch (id)
