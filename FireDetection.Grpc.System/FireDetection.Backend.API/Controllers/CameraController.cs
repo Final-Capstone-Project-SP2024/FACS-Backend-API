@@ -29,21 +29,21 @@ namespace FireDetection.Backend.API.Controllers
         [HttpPost("{cameraId}/reconnect")]
         public async Task<ActionResult<RestDTO<string>>> ReconnectCamera(Guid cameraId)
         {
-            if (! await _cameraService.CheckIsEnable())
+            if (!await _cameraService.CheckIsEnable())
             {
                 return BadRequest(new
                 {
-                    message =  "Api Not Enable"
+                    message = "Api Not Enable"
                 });
             }
-         await _cameraService.ReconnectCamera(cameraId);
+            await _cameraService.ReconnectCamera(cameraId);
             return new RestDTO<string>()
             {
                 Message = "Reconnect CameraSucessfully",
                 Data = "",
             };
         }
- 
+
         [HttpGet]
         public async Task<ActionResult<RestDTO<IQueryable<CameraInformationResponse>>>> Get()
         {
@@ -61,7 +61,7 @@ namespace FireDetection.Backend.API.Controllers
 
         [Authorize(Roles = UserRole.Manager)]
         [HttpPost]
-        public async Task<ActionResult<RestDTO<CameraInformationResponse>>> Add([FromForm]AddCameraRequest request)
+        public async Task<ActionResult<RestDTO<CameraInformationResponse>>> Add([FromForm] AddCameraRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -121,7 +121,7 @@ namespace FireDetection.Backend.API.Controllers
                 details.Status = StatusCodes.Status400BadRequest;
                 return new BadRequestObjectResult(details);
             }
-            DetectResponse response = await _cameraService.DetectFire(id, request,1);
+            DetectResponse response = await _cameraService.DetectFire(id, request, 1);
             return new RestDTO<DetectResponse>()
             {
                 Message = "Detect Fire  Successfully",
@@ -147,20 +147,21 @@ namespace FireDetection.Backend.API.Controllers
             //};
         }
 
-      //  [Authorize(Roles = Roles.Manager + "," + Roles.User)]
+        //  [Authorize(Roles = Roles.Manager + "," + Roles.User)]
         [HttpPost("{id}/alert")]
         public async Task<ActionResult<RestDTO<DetectResponse>>> FireAlarmAlert(Guid id)
         {
             //await StorageHandlers.UploadFileAsync(request.video,"VideoRecord");
             //await StorageHandlers.UploadFileAsync(request.image, "ImageRecord");
-            await RealtimeDatabaseHandlers.ModifyMessage(DateTime.UtcNow);
+            var camera = await _cameraService.GetCameraDetail(id);
+            await RealtimeDatabaseHandlers.ModifyMessage(DateTime.UtcNow,camera.CameraDestination,camera.LocationName);
             TakeAlarmRequest takeAlarm = new TakeAlarmRequest
             {
                 PictureUrl = "alarmByUserImage.png",
                 PredictedPercent = 50,
                 VideoUrl = "alarmByUserVideo.mp4"
             };
-            DetectResponse response = await _cameraService.DetectFire(id, takeAlarm,3);
+            DetectResponse response = await _cameraService.DetectFire(id, takeAlarm, 3);
             return new RestDTO<DetectResponse>()
             {
                 Message = "Detect Fire  Successfully",

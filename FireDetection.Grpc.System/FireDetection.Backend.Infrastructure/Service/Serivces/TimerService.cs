@@ -56,7 +56,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         public void SpamNotification(Guid recordId, int alarmLevel, List<Guid> users, string cameraDestination, string locationName)
         {
-            Task.Run(async () => await SpamNotificationAndCheckFinish(recordId, alarmLevel,users,cameraDestination,locationName));
+            Task.Run(async () => await  SpamNotificationAndCheckFinish(recordId, alarmLevel,users,cameraDestination,locationName));
         }
 
         public void DisconnectionNotification(List<Guid> users,Guid recordId, string cameraDestination, string cameraLocation)

@@ -101,9 +101,9 @@ namespace FireDetection.Backend.Infrastructure.Helpers.FirebaseHandler
             };
         }
 
-        public static async Task ModifyMessage(DateTime dateTime)
+        public static async Task ModifyMessage(DateTime dateTime,string DestinationCamera, string locationName)
         {
-            string notification = $"Fire detected! At {dateTime.Hour + 7} hours {dateTime.Minute} minutes and {dateTime.Second} seconds";
+            string notification = $"Fire detected! At {dateTime.Hour + 7} hours {dateTime.Minute} minutes and {dateTime.Second} seconds at {DestinationCamera} of {locationName}";
             _client = new FireSharp.FirebaseClient(config);
 
             // Update existing message
