@@ -362,6 +362,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         {
 
             Camera camera = await _unitOfWork.CameraRepository.GetById(cameraId);
+            Location location = await _unitOfWork.LocationRepository.GetById(camera.LocationID);
             if (camera is null)
             {
                 throw new Exception();
@@ -373,7 +374,8 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 CameraImage = camera.CameraImage,
                 CameraName = camera.CameraName,
                 RecordCount = _unitOfWork.RecordRepository.Where(x => x.CameraID == cameraId).Count(),
-                Status = camera.Status
+                Status = camera.Status,
+                LocationName = location.LocationName
             };
 
         }
