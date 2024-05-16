@@ -21,23 +21,15 @@ namespace FireDetection.Backend.Domain.FluentAPIs
                 Start = 0,
                 End = 20,
                 AlarmNameConfiguration = "Fake Alarm",
-                NumberOfNotification = 0,
             },
             new AlarmConfiguration
             {
                 AlarmConfigurationId = 2,
                 Start = 20,
-                End = 60,
-                AlarmNameConfiguration =  "Small Fire",
-                NumberOfNotification = 1
-            }, new AlarmConfiguration
-            {
-                AlarmConfigurationId = 3,
-                Start = 60,
-                End = 40,
-                AlarmNameConfiguration = "Big Fire",
-                NumberOfNotification = 99
-            }) ;
+                End = 10,
+                AlarmNameConfiguration = "Fire",
+          
+            });
         }
     }
 }

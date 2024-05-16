@@ -178,7 +178,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             {
                 return false;
             }
-            var check = _context.ControlCameraRepository.Where(x => x.UserID == userId).Count();
+            var check = _context.ControlCameraRepository.Where(x => x.UserID == userId && x.LocationID == locationId).Count();
             if (check == 0)
             {
                 return false;

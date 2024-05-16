@@ -206,6 +206,8 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
             //? Check IsDanger
             int DangerRecord = await IsDangerRecord(request.PredictedPercent);
+
+            if (DangerRecord == 0 && alarmType != 3) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "The Alarm Is Fake");
             //TODO: save record to database
             record.RecommendAlarmLevel = recommentActionAlarm(request.PredictedPercent);
             record.AlarmConfigurationId = DangerRecord;
@@ -218,7 +220,6 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             _unitOfWork.RecordRepository.InsertAsync(record);
             await _unitOfWork.SaveChangeAsync();
 
-            if (DangerRecord == 0) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "The Alarm Is Fake");
             if (alarmType == 3 && DangerRecord == 3)
             {
                 //? add tp check 
@@ -281,11 +282,6 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         protected async Task<int> IsDangerRecord(decimal predictedAI)
         {
             AlarmConfiguration alarmPhase1 = await _unitOfWork.AlarmConfigurationRepository.GetAlarmConfigurationDetail(1);
-            if (predictedAI >= alarmPhase1.Start && predictedAI < alarmPhase1.End)
-            {
-                return 0;
-            }
-            AlarmConfiguration alarmPhase2 = await _unitOfWork.AlarmConfigurationRepository.GetAlarmConfigurationDetail(2);
             if (predictedAI >= alarmPhase1.Start && predictedAI < alarmPhase1.End)
             {
                 return 1;

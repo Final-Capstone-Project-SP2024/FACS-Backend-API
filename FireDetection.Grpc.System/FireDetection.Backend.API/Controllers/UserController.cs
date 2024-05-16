@@ -207,13 +207,13 @@ namespace FireDetection.Backend.API.Controllers
 
         }
 
-        [HttpGet("unregistered")]
-        public async Task<ActionResult<RestDTO<IEnumerable<UserInformationResponse>>>> UnRegister(){
+        [HttpGet("{id}/unregistered")]
+        public async Task<ActionResult<RestDTO<IEnumerable<UserInformationResponse>>>> UnRegister(Guid id){
 
             return new RestDTO<IEnumerable<UserInformationResponse>>()
             {
                 Message = "Get list unregistered User to Location successfully!",
-                Data = await _userService.UnRegisterLocaiton(),
+                Data = await _userService.UnRegisterLocaiton(id),
             };
         }
 

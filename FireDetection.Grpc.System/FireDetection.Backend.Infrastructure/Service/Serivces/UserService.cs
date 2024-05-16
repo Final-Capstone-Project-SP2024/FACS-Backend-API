@@ -427,9 +427,9 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         }
 
 
-        public async Task<IEnumerable<UserInformationResponse>> UnRegisterLocaiton()
+        public async Task<IEnumerable<UserInformationResponse>> UnRegisterLocaiton(Guid locationId)
         {
-            return  await _unitOfWork.UserRepository.GetUsersUnRegisterd();
+            return  await _unitOfWork.UserRepository.GetUsersUnRegisterd(locationId);
 
         }
 

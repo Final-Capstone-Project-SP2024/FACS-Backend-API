@@ -4,6 +4,7 @@ using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.DTOs.Response;
 using FireDetection.Backend.Domain.Entity;
 using FireDetection.Backend.Infrastructure.Repository.IRepositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,13 +23,18 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<UserInformationResponse>> GetUsersUnRegisterd()
+        public async Task<IEnumerable<UserInformationResponse>> GetUsersUnRegisterd(Guid locationId)
         {
             List<UserInformationResponse> responses = new List<UserInformationResponse>();
             HashSet<Guid> users = _context.Users.Where(x => x.SecurityCode != "XAD_000").Select(x => x.Id).ToHashSet();
-            HashSet<Guid> usersInRegister = _context.ControlCameras.Select(x => x.UserID).ToHashSet();
+            //? take all user not in this location
+            //? list user non in location
+            //? user in location but not in this location
+            //? return list location not in this locationId
+            HashSet<Guid> usersInRegister = _context.ControlCameras.Where(x => x.LocationID == locationId).Select(x => x.UserID).ToHashSet();
 
             var nonMatchingRegister = users.Except(usersInRegister).AsEnumerable();
+           
             foreach (var item in nonMatchingRegister)
             {
                 UserInformationResponse user = _mapper.Map<UserInformationResponse>(_context.Users.Where(x => x.Id == item).FirstOrDefault());

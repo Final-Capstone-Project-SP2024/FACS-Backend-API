@@ -47,7 +47,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             }
             else if (AlarmConfigurationId == 2)
             {
-                await UpdateStart(AlarmConfigurationId, request.End);
+                //await UpdateStart(AlarmConfigurationId, request.End);
                 await UpdateEnd(AlarmConfigurationId, request.Start);
             }
 

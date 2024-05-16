@@ -21,19 +21,18 @@ namespace FireDetection.Backend.Domain.DTOs.Request
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
+            if(AlarmConfigurationId > 2)
+            {
+                yield return new ValidationResult("Prop1 must be larger than Prop2");
+            }
             switch (AlarmConfigurationId)
             {
                 case 1 when Start != 0 && End > 40:
                     yield return new ValidationResult("Must in 0- 40");
                     break;
-                case 2 when Start < 40 && End > 60:
+                case 2 when Start < 40 && End !=100:
                     yield return new ValidationResult("Must in 40-60");
                     break;
-                case 3 when Start < 60 && End != 100:
-                    yield return new ValidationResult("Must in 60-100");
-                    break;
-
-
             }
         }
     }

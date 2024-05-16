@@ -11,6 +11,6 @@ namespace FireDetection.Backend.Infrastructure.Repository.IRepositories
     public interface IUserRepository : IGenericRepository<User>
     {
 
-        Task<IEnumerable<UserInformationResponse>> GetUsersUnRegisterd();
+        Task<IEnumerable<UserInformationResponse>> GetUsersUnRegisterd(Guid LocationId);
     }
 }
