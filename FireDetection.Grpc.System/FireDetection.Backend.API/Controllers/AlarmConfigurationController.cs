@@ -38,12 +38,31 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
-        [HttpPatch]
+        [HttpPatch("{id}")]
         public async Task<ActionResult<RestDTO<AlarmConfiguration>>> UpdateAlarmConfiguration(int id,AddAlarmConfigurationRequest request)
         {
-            request.AlarmConfigurationId = id;
-            if(!ModelState.IsValid)
+           if(id == 1 )
             {
+               if(request.Start != 0 || request.End > 40) {
+                    return BadRequest(new
+                    {
+                        message = "Must in O-40"
+                    });
+                }
+            }
+            if (id == 2)
+            {
+                if (request.Start < 40 || request.End != 100)
+                {
+                    return BadRequest(new
+                    {
+                        message = "Must in 40-100"
+                    });
+                }
+            }
+            if (!ModelState.IsValid)
+            {
+                
                 var details = new ValidationProblemDetails(ModelState);
                 details.Extensions["traceId"] = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
                 details.Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1";

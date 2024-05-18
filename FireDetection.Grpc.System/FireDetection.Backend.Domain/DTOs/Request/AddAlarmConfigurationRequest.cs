@@ -27,10 +27,10 @@ namespace FireDetection.Backend.Domain.DTOs.Request
             }
             switch (AlarmConfigurationId)
             {
-                case 1 when Start != 0 && End > 40:
+                case 1 when Start != 0 || End > 40:
                     yield return new ValidationResult("Must in 0- 40");
                     break;
-                case 2 when Start < 40 && End !=100:
+                case 2 when Start < 40 || End !=100:
                     yield return new ValidationResult("Must in 40-60");
                     break;
             }

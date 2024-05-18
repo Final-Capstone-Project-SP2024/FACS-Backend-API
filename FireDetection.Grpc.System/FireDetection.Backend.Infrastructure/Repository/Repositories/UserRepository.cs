@@ -2,6 +2,7 @@
 using FireDetection.Backend.Domain;
 using FireDetection.Backend.Domain.DTOs.Request;
 using FireDetection.Backend.Domain.DTOs.Response;
+using FireDetection.Backend.Domain.DTOs.State;
 using FireDetection.Backend.Domain.Entity;
 using FireDetection.Backend.Infrastructure.Repository.IRepositories;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +27,7 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
         public async Task<IEnumerable<UserInformationResponse>> GetUsersUnRegisterd(Guid locationId)
         {
             List<UserInformationResponse> responses = new List<UserInformationResponse>();
-            HashSet<Guid> users = _context.Users.Where(x => x.SecurityCode != "XAD_000").Select(x => x.Id).ToHashSet();
+            HashSet<Guid> users = _context.Users.Where(x => x.SecurityCode != "XAD_000"&& x.Status == UserState.Active).Select(x => x.Id).ToHashSet();
             //? take all user not in this location
             //? list user non in location
             //? user in location but not in this location
