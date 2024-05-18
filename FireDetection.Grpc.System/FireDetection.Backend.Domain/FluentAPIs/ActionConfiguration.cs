@@ -19,31 +19,44 @@ namespace FireDetection.Backend.Domain.FluentAPIs
                 ID = 1,
                 ActionName = "Alarm Level 1",
                 ActionDescription = "Small fire can be extinguished immediately",
+                Min = 0,
+                Max = 60,
             }, new ActionType
             {
                 ID = 2,
                 ActionName = "Alarm Level 2",
-                ActionDescription = "the fire needs to mobilize more people in the nearby area"
+                ActionDescription = "the fire needs to mobilize more people in the nearby area",
+                Min = 60,
+                Max = 70
+
             },
           new ActionType
           {
               ID = 3,
               ActionName = "Alarm Level 3",
-              ActionDescription = "a large fire can affect and cause damage, mobilizing everyone"
+              ActionDescription = "a large fire can affect and cause damage, mobilizing everyone",
+              Min = 70,
+              Max = 80, 
+
           }
           ,
            new ActionType
            {
                ID = 4,
                ActionName = "Alarm Level 4",
-               ActionDescription = "a large fire can affect and cause damage, mobilizing everyone"
+               ActionDescription = "a large fire can affect and cause damage, mobilizing everyone",
+               Min= 80,
+               Max = 90,
+
            }
              ,
            new ActionType
            {
                ID = 5,
                ActionName = "Alarm Level 5",
-               ActionDescription = "a large fire can affect and cause damage, mobilizing everyone"
+               ActionDescription = "a large fire can affect and cause damage, mobilizing everyone",
+               Min = 90,
+               Max = 100,
            },
           new ActionType
           {

@@ -11,6 +11,8 @@ namespace FireDetection.Backend.Domain.Entity
        public int ID { get; set; }
 
         public string ActionName { get; set; } = null!;
+        public decimal Min { get; set; } = 0;
+        public decimal Max { get; set; } = 0;
 
         public string ActionDescription { get; set; } = null!;
 

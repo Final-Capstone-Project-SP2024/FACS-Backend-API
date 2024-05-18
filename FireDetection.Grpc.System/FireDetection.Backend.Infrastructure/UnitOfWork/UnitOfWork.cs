@@ -22,6 +22,7 @@ namespace FireDetection.Backend.Infrastructure.UnitOfWork
         private readonly INotificationLogRepository _notificationLogRepository;
         private readonly IAlarmConfigurationRepository _alarmConfigurationRepository;
         private readonly IUserResponsibilityRepository _userResponsibilityRepository;
+        private readonly IActionConfigurationRepository _actionConfigurationRepository;
 
         public UnitOfWork(FireDetectionDbContext context,
             IUserRepository userRepository,
@@ -33,7 +34,8 @@ namespace FireDetection.Backend.Infrastructure.UnitOfWork
             IRecordProcessRepository processRepository,
             INotificationLogRepository notificationLogRepository,
             IAlarmConfigurationRepository alarmConfigurationRepository,
-            IUserResponsibilityRepository userResponsibilityRepository)
+            IUserResponsibilityRepository userResponsibilityRepository,
+            IActionConfigurationRepository actionConfigurationRepository)
         {
             _context = context;
             _userRepository = userRepository;
@@ -46,6 +48,7 @@ namespace FireDetection.Backend.Infrastructure.UnitOfWork
             _notificationLogRepository = notificationLogRepository;
             _alarmConfigurationRepository = alarmConfigurationRepository;
             _userResponsibilityRepository = userResponsibilityRepository;
+            _actionConfigurationRepository = actionConfigurationRepository;
         }
         public IUserRepository UserRepository => _userRepository;
         public ILocationRepository LocationRepository => _locationRepository;
@@ -59,6 +62,8 @@ namespace FireDetection.Backend.Infrastructure.UnitOfWork
         public IAlarmConfigurationRepository AlarmConfigurationRepository => _alarmConfigurationRepository;
 
         public IUserResponsibilityRepository UserResponsibilityRepository => _userResponsibilityRepository;
+
+        public IActionConfigurationRepository ActionConfigurationRepository => _actionConfigurationRepository;
 
         public async Task<int> SaveChangeAsync()
         {

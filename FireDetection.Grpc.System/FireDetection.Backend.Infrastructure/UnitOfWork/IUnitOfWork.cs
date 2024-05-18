@@ -20,6 +20,8 @@ namespace FireDetection.Backend.Infrastructure.UnitOfWork
         public IControlCameraRepository ControlCameraRepository { get; }
         public INotificationLogRepository NotificationLogRepository { get; }
 
+        public IActionConfigurationRepository ActionConfigurationRepository { get; }
+
 
         public Task<int> SaveChangeAsync();
     }

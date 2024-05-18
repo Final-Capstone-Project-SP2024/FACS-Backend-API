@@ -58,7 +58,8 @@ namespace FireDetection.Backend.API
 
             services.AddScoped<IClaimsService, ClaimsService>();
 
-          
+            services.AddScoped<IActionConfigurationRepository, ActionConfigurationRepository>();
+            services.AddScoped<IActionService, ActionService>();
 
             services.AddScoped<IAlarmConfigurationRepository, AlarmConfigurationRepository>();
             services.AddScoped<IAlarmConfigurationService, AlarmConfigurationService>();
