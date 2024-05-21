@@ -105,6 +105,21 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
+
+        [Authorize(Roles = UserRole.Manager)]
+        [HttpPost("{id}/active")]
+        public async Task<ActionResult<RestDTO<CameraInformationResponse>>> ActiveCamera(Guid id)
+        {
+            CameraInformationResponse response = await _cameraService.Active(id);
+
+            return new RestDTO<CameraInformationResponse>()
+            {
+                Message = "Active Camera Successfully",
+                Data = response,
+            };
+        }
+
+
         //  [Authorize(Roles = Roles.Manager + "," + Roles.User)]
 
 

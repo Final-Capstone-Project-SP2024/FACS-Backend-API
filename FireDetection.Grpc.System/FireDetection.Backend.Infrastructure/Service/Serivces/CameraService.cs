@@ -301,7 +301,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             users.Add(Guid.Parse("3c9a2a1b-f4dc-4468-a89c-f6be8ca3b541"));
             //todo Spam disconnect action
             //? after 1 minutes end the action return to finish
-            _timerService.DisconnectionNotification(users,id, camera.CameraDestination, location.LocationName);
+            _timerService.DisconnectionNotification(users, id, camera.CameraDestination, location.LocationName);
             //todo Send notification about where have the fire belong to where location
             /*     NotficationDetailResponse data = await NotificationHandler.Get(7);
                  await CloudMessagingHandlers.CloudMessaging(
@@ -330,7 +330,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
             return _mapper.Map<DetectResponse>(record);
         }
-   
+
         private async Task<string> recommendActionAlarm(decimal predictedNumber)
         {
             var data = await _unitOfWork.ActionConfigurationRepository.GetActionConfig();
@@ -443,6 +443,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         private async Task SetFinishRecord(Guid cameraId)
         {
             Record record = await _unitOfWork.RecordRepository.Where(x => x.Status == RecordState.InAlram && x.CameraID == cameraId).FirstOrDefaultAsync();
+            if (record.Status != RecordState.InFinish) { throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "CameraId is invalid"); }
             record.Status = RecordState.InFinish;
             record.FinishAlarmTime = DateTime.UtcNow.AddHours(7);
             _unitOfWork.RecordRepository.Update(record);
