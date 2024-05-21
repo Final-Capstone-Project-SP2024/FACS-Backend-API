@@ -13,6 +13,7 @@ using Google.Api.Gax.ResourceNames;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Linq.Dynamic.Core.Tokenizer;
@@ -209,7 +210,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
             if (DangerRecord == 0 && alarmType != 3) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "The Alarm Is Fake");
             //TODO: save record to database
-            record.RecommendAlarmLevel = recommentActionAlarm(request.PredictedPercent);
+            record.RecommendAlarmLevel = await recommendActionAlarm(request.PredictedPercent);
             record.AlarmConfigurationId = DangerRecord;
             record.CameraID = id;
             if (alarmType == 3)
@@ -329,14 +330,13 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
             return _mapper.Map<DetectResponse>(record);
         }
-        private static string recommentActionAlarm(decimal predictedNumber) => predictedNumber switch
+   
+        private async Task<string> recommendActionAlarm(decimal predictedNumber)
         {
-            var num when (num >= 0 && num < 60) => "Alarm Level 1",
-            var num when (num >= 60 && num < 70) => "Alarm Level 2",
-            var num when (num >= 70 && num < 80) => "Alarm Level 3",
-            var num when (num >= 80 && num < 90) => "Alarm Level 4",
-            var num when (num >= 90 && num < 100) => "Alarm Level 5",
-        };
+            var data = await _unitOfWork.ActionConfigurationRepository.GetActionConfig();
+            var actionType = data.FirstOrDefault(x => predictedNumber >= x.Min && x.Max > predictedNumber);
+            return actionType.ActionConfigurationName;
+        }
 
 
         private async Task SaveRecord(Record record)
