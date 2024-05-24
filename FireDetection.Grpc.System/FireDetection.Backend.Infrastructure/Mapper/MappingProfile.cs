@@ -36,7 +36,8 @@ namespace FireDetection.Backend.API.Mapper
                 .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role))
                 .ForPath(dest => dest.Role.RoleName,opt => opt.MapFrom(src => src.Role.RoleName))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
-                .ForMember(dest => dest.LocationName, opt => opt.MapFrom(src => src.ControlCameras.FirstOrDefault().Location.LocationName))
+                .ForMember(dest => dest.Locations, opt => opt.MapFrom(src => src.ControlCameras.Select(cc => cc.Location)))
+                //.ForMember(dest => dest.LocationName, opt => opt.MapFrom(src => src.ControlCameras.FirstOrDefault().Location.LocationName))
                 .ReverseMap();
 
 
@@ -168,6 +169,11 @@ namespace FireDetection.Backend.API.Mapper
                     .ForMember(x => x.LocationImage, src => src.MapFrom(x => x.LocationImage))
                     .ForMember(x => x.IsDeleted, src => src.MapFrom(x => x.IsDeleted))
                    .ReverseMap();
+
+            CreateMap<LocationResponse, Location>()
+                .ForMember(x => x.Id, src => src.MapFrom(x => x.LocationId))
+                .ForMember(x => x.LocationName, src => src.MapFrom(x => x.LocationName))
+                .ReverseMap();
 
 
             CreateMap<AddAlarmConfigurationRequest, AlarmConfiguration>()
