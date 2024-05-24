@@ -166,6 +166,7 @@ namespace FireDetection.Backend.API.Mapper
                    .ForMember(x => x.Id, src => src.MapFrom(x => x.LocationId))
                    .ForMember(x => x.LocationName, src => src.MapFrom(x => x.LocationName))
                     .ForMember(x => x.LocationImage, src => src.MapFrom(x => x.LocationImage))
+                    .ForMember(x => x.IsDeleted, src => src.MapFrom(x => x.IsDeleted))
                    .ReverseMap();
 
 

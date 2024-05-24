@@ -25,14 +25,15 @@ def generate_AlarmConfig():
 
 # Specify the desired date range
 start_date = datetime(2023, 10, 1)
-end_date = datetime(2024, 4, 1)
+end_date = datetime(2024, 5, 24)
 
 # Generate 10,000 data records
 data = []
 for _ in range(200):
     camera_ids = [
-        "cc18e343-a971-41e9-9f18-6cfe2a86e4cf",
-        "549ed98f-7abb-4e77-8e6e-e3e6f74aa407",
+        "68fdad3a-88e3-435a-b47a-d3359fb0fc6c",
+        "f3532097-5d00-40b3-b38a-9d9659dd201d",
+        "3f5f18af-0650-4dee-874a-989aa3a66d05"
     ]
     
     recommend_alarm = [
@@ -59,7 +60,7 @@ for _ in range(200):
     data.append(record)
 
 # Specify the file path
-filename = 'C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\recordList.csv'
+filename = 'D:\\FACS\\FACS-Backend-API\\FireDetection.Grpc.System\\recordList.csv'
 
 # Write to CSV file
 with open(filename, 'w', newline='') as file:

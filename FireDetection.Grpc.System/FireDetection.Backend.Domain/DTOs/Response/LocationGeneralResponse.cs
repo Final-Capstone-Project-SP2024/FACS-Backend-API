@@ -14,5 +14,6 @@ namespace FireDetection.Backend.Domain.DTOs.Response
 
         public int? NumberOfSecurity { get; set; } = 0;
         public string LocationImage { get; set; } = null!;
+        public bool IsDeleted { get; set; }
     }
 }

@@ -45,7 +45,8 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
                 LocationName = x.LocationName,
                 NumberOfCamera = x.Cameras.Count,
                 NumberOfSecurity = x.ControlCameras.Count(),
-                LocationImage = x.LocationImage
+                LocationImage = x.LocationImage,
+                IsDeleted = x.IsDeleted
             }).AsEnumerable();
 
             return result;
