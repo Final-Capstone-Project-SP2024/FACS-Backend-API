@@ -11137,19 +11137,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\manda\\.nuget\\packages\\": {}
+    "C:\\Users\\ducan\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.API\\FireDetection.Backend.API.csproj",
+      "projectUniqueName": "D:\\FACS\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.API\\FireDetection.Backend.API.csproj",
       "projectName": "FireDetection.Backend.API",
-      "projectPath": "C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.API\\FireDetection.Backend.API.csproj",
-      "packagesPath": "C:\\Users\\manda\\.nuget\\packages\\",
-      "outputPath": "C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.API\\obj\\",
+      "projectPath": "D:\\FACS\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.API\\FireDetection.Backend.API.csproj",
+      "packagesPath": "C:\\Users\\ducan\\.nuget\\packages\\",
+      "outputPath": "D:\\FACS\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.API\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\manda\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\ducan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -11157,14 +11162,15 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Infrastructure\\FireDetection.Backend.Infrastructure.csproj": {
-              "projectPath": "C:\\Code\\code\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Infrastructure\\FireDetection.Backend.Infrastructure.csproj"
+            "D:\\FACS\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Infrastructure\\FireDetection.Backend.Infrastructure.csproj": {
+              "projectPath": "D:\\FACS\\FACS-Backend-API\\FireDetection.Grpc.System\\FireDetection.Backend.Infrastructure\\FireDetection.Backend.Infrastructure.csproj"
             }
           }
         }
@@ -11173,6 +11179,11 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -11251,6 +11262,24 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[7.0.17, 7.0.17]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Host.win-x64",
+            "version": "[7.0.17, 7.0.17]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[7.0.17, 7.0.17]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[7.0.17, 7.0.17]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -11259,7 +11288,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202\\RuntimeIdentifierGraph.json"
       }
     }
   },
