@@ -1,5 +1,6 @@
 ﻿using FireDetection.Backend.Domain;
 using FireDetection.Backend.Domain.DTOs.Response;
+using FireDetection.Backend.Domain.DTOs.State;
 using FireDetection.Backend.Domain.Entity;
 using FireDetection.Backend.Infrastructure.Repository.IRepositories;
 using FireDetection.Backend.Infrastructure.UnitOfWork;
@@ -44,6 +45,19 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
                                           .FirstOrDefault()?.CameraID;
 
             return _context.Cameras.Where(x => x.Id == mostFrequentCameraID ).FirstOrDefault().CameraName;
+        }
+
+        public async Task DeleteCamera(Guid locationId)
+        {
+            _context.Cameras.Where(x => x.LocationID == locationId).ExecuteUpdate(x => x.SetProperty(x => x.Status, CameraType.Disconnect));
+            _context.ControlCameras.Where(x => x.LocationID == locationId).ExecuteDelete();
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task ActiveCamera(Guid locationId)
+        {
+            _context.Cameras.Where(x => x.LocationID == locationId).ExecuteUpdate(x => x.SetProperty(x => x.Status, CameraType.Connect));
+            await _context.SaveChangesAsync();
         }
 
         private static readonly Func<FireDetectionDbContext, IEnumerable<CameraInformationResponse>>

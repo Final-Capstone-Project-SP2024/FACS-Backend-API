@@ -60,9 +60,22 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             if (!await ChecLocationId(id)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Not Found this LocationId in system");
             Location location = await _context.LocationRepository.GetById(id);
             location.IsDeleted = true;
+            await _context.CameraRepository.DeleteCamera(id);
             await _context.SaveChangeAsync();
             return true;
         }
+
+
+        public async Task<bool> ActiveLocation(Guid id)
+        {
+            if (!await ChecLocationId(id)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Not Found this LocationId in system");
+            Location location = await _context.LocationRepository.GetById(id);
+            location.IsDeleted = false;
+            await _context.CameraRepository.ActiveCamera(id);
+            await _context.SaveChangeAsync();
+            return true;
+        }
+
 
         public async Task<IQueryable<LocationGeneralResponse>> GetLocation()
         {

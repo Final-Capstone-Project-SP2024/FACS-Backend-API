@@ -95,6 +95,20 @@ namespace FireDetection.Backend.API.Controllers
             };
         }
 
+        [Authorize(Roles = UserRole.Manager)]
+        [HttpPost("{id}/active")]
+        public async Task<ActionResult<RestDTO<LocationInformationResponse>>> ActiveLocation(Guid id)
+        {
+
+            await _context.ActiveLocation(id);
+            return new RestDTO<LocationInformationResponse>()
+            {
+                Message = "Active Location Successfully",
+                Data = null,
+            };
+        }
+
+
         [Authorize(Roles = UserRole.Manager + "," + UserRole.User)]
         [HttpGet]
         public async Task<ActionResult<RestDTO<IQueryable<LocationGeneralResponse>>>> Get()

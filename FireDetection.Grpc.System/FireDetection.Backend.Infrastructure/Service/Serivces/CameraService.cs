@@ -95,7 +95,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
             camera.Status = CameraType.Disconnect;
             camera.LastModified = DateTime.UtcNow;
-
+            
             _unitOfWork.CameraRepository.Update(camera);
             await _unitOfWork.SaveChangeAsync();
 
