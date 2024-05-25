@@ -299,6 +299,8 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
             List<Guid> users = await _locationScopeService.GetUserInLocation(location.LocationName, 1);
             users.Add(Guid.Parse("3c9a2a1b-f4dc-4468-a89c-f6be8ca3b541"));
+            //todo  create checking user do the next task ( vote task) and sending notification 
+           
             //todo Spam disconnect action
             //? after 1 minutes end the action return to finish
             _timerService.DisconnectionNotification(users, id, camera.CameraDestination, location.LocationName);
@@ -327,7 +329,11 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             record.CreatedDate = DateTime.UtcNow.AddHours(7);
             _unitOfWork.RecordRepository.InsertAsync(record);
             await _unitOfWork.SaveChangeAsync();
-
+            foreach (var user in users)
+            {
+                //? Save to UserResponsibility
+                await _userResponsibilityService.SaveUserInNotification(record.Id, user);
+            }
             return _mapper.Map<DetectResponse>(record);
         }
 
