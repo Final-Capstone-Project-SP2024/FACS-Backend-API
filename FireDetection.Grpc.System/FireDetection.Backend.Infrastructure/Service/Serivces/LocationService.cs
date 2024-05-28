@@ -146,7 +146,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             if (cameraCount == 0) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Add Camera to this Location ");
            
             if (!await ChecLocationId(locationId)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Not Found this LocationId in system or have been banned");
-            if (await _context.LocationRepository.Where(x => x.Id == locationId && x.IsDeleted == true).FirstOrDefaultAsync() is null)
+            if (await _context.LocationRepository.Where(x => x.Id == locationId && x.IsDeleted == true).FirstOrDefaultAsync() is not null)
             {
                 throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Location have been banned");
             }
