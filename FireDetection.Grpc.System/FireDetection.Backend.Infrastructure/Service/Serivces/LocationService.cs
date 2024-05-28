@@ -9,6 +9,7 @@ using FireDetection.Backend.Infrastructure.Service.IServices;
 using FireDetection.Backend.Infrastructure.UnitOfWork;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -39,10 +40,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             {
                 return false;
             }
-            if(location.IsDeleted == true)
-            {
-                return false;
-            }
+           
             return true;
         }
         public async Task<LocationInformationResponse> AddNewLocation(AddLocationRequest request)
@@ -62,6 +60,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         public async Task<bool> DeleteLocation(Guid id)
         {
             if (!await ChecLocationId(id)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Not Found this LocationId in system");
+            
             Location location = await _context.LocationRepository.GetById(id);
             location.IsDeleted = true;
             await _context.CameraRepository.DeleteCamera(id);
@@ -106,6 +105,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             if (!await ChecLocationId(locationId)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Not Found this LocationId in system");
 
             if (!await checkDuplicateLocationName(request.LocationName)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "This name is exist in system");
+           
             Location location = await GetLocationByID(locationId);
             location.LocationName = request.LocationName;
             location.LastModified = DateTime.UtcNow;
@@ -146,6 +146,10 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
             if (cameraCount == 0) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Add Camera to this Location ");
            
             if (!await ChecLocationId(locationId)) throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Not Found this LocationId in system or have been banned");
+            if (await _context.LocationRepository.Where(x => x.Id == locationId && x.IsDeleted == true).FirstOrDefaultAsync() is null)
+            {
+                throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "Location have been banned");
+            }
             int check = 0;
             List<Guid> duplicateGuid = new List<Guid>();
             foreach (var staff in request.staff)
