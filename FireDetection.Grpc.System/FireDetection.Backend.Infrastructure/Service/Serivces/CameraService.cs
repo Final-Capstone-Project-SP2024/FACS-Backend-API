@@ -448,11 +448,14 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
 
         private async Task SetFinishRecord(Guid cameraId)
         {
-            Record record = await _unitOfWork.RecordRepository.Where(x => x.Status == RecordState.InAlram && x.CameraID == cameraId).FirstOrDefaultAsync();
-            if (record.Status != RecordState.InFinish) { throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "CameraId is invalid"); }
+            List<Record> records = await _unitOfWork.RecordRepository.Where(x => x.Status == RecordState.InAlram && x.CameraID == cameraId).ToListAsync();
+            foreach (var record in records)
+            {
+            if (record.Status == RecordState.InFinish) { throw new HttpStatusCodeException(System.Net.HttpStatusCode.BadRequest, "CameraId is invalid"); }
             record.Status = RecordState.InFinish;
             record.FinishAlarmTime = DateTime.UtcNow.AddHours(7);
             _unitOfWork.RecordRepository.Update(record);
+            }
             await _unitOfWork.SaveChangeAsync();
         }
 
