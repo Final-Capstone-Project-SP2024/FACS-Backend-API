@@ -62,13 +62,13 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 await _memoryCacheService.Create(recordID, setKey(request.ActionId));
                 await _memoryCacheService.Create(recordID, CacheType.Voting);
                 await _memoryCacheService.Create(recordID, CacheType.IsFinish);
-                string LocationName =  await _unitOfWork.RecordRepository.GetLocationName(recordID);
+                string LocationName = await _unitOfWork.RecordRepository.GetLocationName(recordID);
                 List<Guid> users = await _locationScopeService.GetUserInLocation(LocationName, request.ActionId);
                 users.Add(Guid.Parse("3c9a2a1b-f4dc-4468-a89c-f6be8ca3b541"));
                 Console.WriteLine(users);
                 foreach (var user in users)
                 {
-                   await  _userResponsibilityService.SaveUserInNotification(recordID, user);
+                    await _userResponsibilityService.SaveUserInNotification(recordID, user);
 
                 }
                 string cameraDestination = _unitOfWork.CameraRepository.GetById(_unitOfWork.RecordRepository.GetById(recordID).Result.CameraID).Result.CameraDestination;
@@ -112,7 +112,7 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 recordProcessEnding.RecordID = recordID;
                 _unitOfWork.RecordProcessRepository.InsertAsync(recordProcessEnding);
                 await _unitOfWork.SaveChangeAsync();
-              
+
 
 
                 // updateRecordToEnd(recordID, 1);
@@ -363,9 +363,31 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 };
                 response.AlarmUser = response1;
             }
+            else
+            {
+                await findingAIAction(response.userVoting);
+            }
+
             return response;
         }
 
+        public async ValueTask findingAIAction(List<UserVoting> userVotings)
+        {
+            UserVoting user;
+            if (userVotings.OrderBy(x => x.DateTime).Last() is not null)
+            {
+                user = userVotings.OrderBy(x => x.DateTime).Last();
+                user.SecurityCode = "AI_Predicted";
+
+            }
+            else
+            {
+                int minVoteLevel = userVotings.Where(x => x.userId == Guid.Parse("3c9a2a1b-f4dc-4468-a89c-f6be8ca3b541")).Min(x => x.VoteLevel);
+                user = userVotings.Where(x => x.userId == Guid.Parse("3c9a2a1b-f4dc-4468-a89c-f6be8ca3b541") && x.VoteLevel == minVoteLevel).FirstOrDefault();
+                user.SecurityCode = "AI_Predicted";
+
+            }
+        }
         public async Task AutoAction(Guid recordID, int actioTypeId)
         {
 

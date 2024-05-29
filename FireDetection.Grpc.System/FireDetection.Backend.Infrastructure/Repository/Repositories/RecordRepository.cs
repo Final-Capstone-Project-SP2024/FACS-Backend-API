@@ -123,7 +123,7 @@ namespace FireDetection.Backend.Infrastructure.Repository.Repositories
                       RecordType = x.RecordTypeID,
                       userVoting = x.RecordProcesses
                                     .Where(x => x.RecordID == recordId)
-                                    .Select(m => new UserVoting { SecurityCode = m.User.SecurityCode, userId = m.UserID, VoteLevel = m.ActionTypeId, VoteType = m.ActionType.ActionName })
+                                    .Select(m => new UserVoting { SecurityCode = m.User.SecurityCode, userId = m.UserID, VoteLevel = m.ActionTypeId, VoteType = m.ActionType.ActionName,DateTime = m.CreatedDate})
                                     .ToList(),
                       ImageRecord = x.MediaRecords
                           .Where(m => m.MediaTypeId == 2 && m.RecordId == recordId)

@@ -142,11 +142,18 @@ namespace FireDetection.Backend.API.Mapper
                 .ReverseMap();
 
      
-            CreateMap<RecordProcess, RecordProcessResponse>()
-                .ForMember(x => x.UserId, src => src.MapFrom(x => x.UserID))
-                .ForMember(x => x.VoteLevel, src => src.MapFrom(x => x.ActionTypeId))
-                .ForMember(x => x.VoteType, src => src.MapFrom(x => x.ActionType))
-                .ReverseMap();
+            //CreateMap<RecordProcess, RecordProcessResponse>()
+            //    .ForMember(x => x.UserId, src => src.MapFrom(x => x.UserID))
+            //    .ForMember(x => x.VoteLevel, src => src.MapFrom(x => x.ActionTypeId))
+            //    .ForMember(x => x.VoteType, src => src.MapFrom(x => x.ActionType))
+            //    .ForMember(x => DateTime.UtcNow.AddHours(7),src => src.MapFrom(x => x.CreatedDate))
+            //    .ReverseMap();
+            CreateMap<RecordProcessResponse, RecordProcess>()
+              .ForMember(x => x.UserID, src => src.MapFrom(x => x.UserId))
+              .ForMember(x => x.ActionTypeId, src => src.MapFrom(x => x.VoteLevel))
+              .ForMember(x => x.ActionType, src => src.MapFrom(x => x.VoteType))
+              .ForMember(x => x.CreatedDate, src => src.MapFrom(x => DateTime.UtcNow.AddHours(7)))
+              .ReverseMap();
 
             CreateMap<ActionType, ActionProcessResponse>()
                 .ForMember(x => x.ActionName, src => src.MapFrom(x => x.ActionName))

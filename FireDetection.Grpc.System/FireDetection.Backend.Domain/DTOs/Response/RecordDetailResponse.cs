@@ -61,7 +61,7 @@ namespace FireDetection.Backend.Domain.DTOs.Response
         public string? SecurityCode { get; set; }
         public Guid userId { get; set; }
         public int VoteLevel { get; set; }
-
+        public DateTime DateTime { get; set; }
         public string VoteType { get; set; } = null!;
     }
 
