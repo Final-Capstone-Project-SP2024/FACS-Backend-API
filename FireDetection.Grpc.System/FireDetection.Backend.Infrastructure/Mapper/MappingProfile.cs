@@ -126,6 +126,7 @@ namespace FireDetection.Backend.API.Mapper
             CreateMap<AddRecordActionRequest, RecordProcess>()
                 .ForMember(x => x.ActionTypeId, src => src.MapFrom(x => x.ActionId))
                 .ForMember(x => x.UserID, src => src.MapFrom(x => x.UserID))
+                .ForMember(x => x.CreatedDate,src => src.MapFrom(x => DateTime.UtcNow.AddHours(7)))
                 .ReverseMap();
 
             //CreateMap<AlarmRate, UserRating>

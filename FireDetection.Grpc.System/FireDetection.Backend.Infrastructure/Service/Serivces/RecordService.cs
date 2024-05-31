@@ -363,7 +363,8 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
                 };
                 response.AlarmUser = response1;
             }
-            else
+
+            if (response.RecordType == 1)
             {
                 await findingAIAction(response.userVoting);
             }
@@ -374,9 +375,9 @@ namespace FireDetection.Backend.Infrastructure.Service.Serivces
         public async ValueTask findingAIAction(List<UserVoting> userVotings)
         {
             UserVoting user;
-            if (userVotings.OrderBy(x => x.DateTime).Last() is not null)
+            if (userVotings.OrderBy(x => x.DateTime).First() is not null)
             {
-                user = userVotings.OrderBy(x => x.DateTime).Last();
+                user = userVotings.OrderBy(x => x.DateTime).First();
                 user.SecurityCode = "AI_Predicted";
 
             }
